@@ -5,7 +5,7 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './', // Ensures assets load properly on GitHub Pages under any path
+  base: process.env.NODE_ENV === 'production' ? '/DevConnect/' : '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
