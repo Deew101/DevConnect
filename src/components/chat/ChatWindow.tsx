@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Paperclip, Image, Smile, Hash, AlertCircle, Sparkles } from 'lucide-react';
-import { Conversation, Message, Profile } from '@/types/database.types';
+import { Send, Paperclip, Hash } from 'lucide-react';
+import { Conversation, Message } from '@/types/database.types';
 import { supabase } from '@/lib/supabase';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
@@ -177,9 +177,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     : conversation.name || 'Project Channel';
 
   return (
-    <div className="flex-1 h-full flex flex-col bg-[#080b12]">
+    <div className="flex-1 h-full flex flex-col bg-[#090C13]">
       {/* Header */}
-      <div className="h-14 px-5 border-b border-slate-800/80 flex items-center justify-between bg-[#07090e]/90 backdrop-blur-md">
+      <div className="h-14 px-5 border-b border-[#273249] flex items-center justify-between bg-[#0E1420]/90 backdrop-blur-md">
         <div className="flex items-center gap-3">
           {isDirect ? (
             <Avatar
@@ -190,14 +190,14 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
               className="w-8 h-8"
             />
           ) : (
-            <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-cyan-400">
+            <div className="w-8 h-8 rounded-lg bg-[#141C2B] border border-[#273249] flex items-center justify-center text-[#648BFF]">
               <Hash className="h-4 w-4" />
             </div>
           )}
 
           <div>
-            <h4 className="font-bold text-xs text-white">{title}</h4>
-            <p className="text-[11px] text-slate-400 font-mono">
+            <h4 className="font-bold text-xs text-[#F1F5FC]">{title}</h4>
+            <p className="text-[11px] text-[#929DB2] font-mono">
               {isDirect
                 ? (otherMember?.headline || 'Direct Conversation')
                 : 'Project Collaboration Stream'}
@@ -206,8 +206,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 text-[10px] text-emerald-400 font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live Realtime
+          <span className="flex items-center gap-1.5 text-[10px] text-[#35C98A] font-mono px-2 py-0.5 rounded-full bg-[#35C98A]/10 border border-[#35C98A]/20">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#35C98A] animate-pulse" /> Live Realtime
           </span>
         </div>
       </div>
@@ -215,12 +215,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       {/* Messages Stream */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
         {messages.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-slate-500 text-xs">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 mb-2">
+          <div className="h-full flex flex-col items-center justify-center text-[#929DB2] text-xs">
+            <div className="w-10 h-10 rounded-xl bg-[#141C2B] border border-[#273249] flex items-center justify-center text-[#929DB2] mb-2">
               <Hash className="w-5 h-5" />
             </div>
-            <p className="font-semibold text-slate-400 mb-1">Channel Initialized</p>
-            <p className="text-slate-500">Send a message below to coordinate with your team.</p>
+            <p className="font-semibold text-[#F1F5FC] mb-1">Channel Initialized</p>
+            <p className="text-[#929DB2]">Send a message below to coordinate with your team.</p>
           </div>
         ) : (
           messages.map((msg) => {
@@ -242,12 +242,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 <div
                   className={`max-w-[80%] sm:max-w-md rounded-2xl p-3.5 text-xs ${
                     isMe
-                      ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-tr-none shadow-md shadow-cyan-900/20'
-                      : 'bg-[#0e1422] border border-slate-800 text-slate-200 rounded-tl-none shadow-sm'
+                      ? 'bg-gradient-to-r from-[#648BFF] to-[#9B7BFF] text-white rounded-tr-none shadow-md shadow-[#648BFF]/20'
+                      : 'bg-[#141C2B] border border-[#273249] text-[#F1F5FC] rounded-tl-none shadow-sm'
                   }`}
                 >
                   {!isMe && (
-                    <div className="font-semibold text-[11px] text-cyan-300 mb-1">
+                    <div className="font-semibold text-[11px] text-[#648BFF] mb-1">
                       {msg.sender?.full_name || 'Member'}
                     </div>
                   )}
@@ -263,7 +263,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                           href={att.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 p-2 rounded-lg bg-slate-900/70 hover:bg-slate-900 border border-slate-700/60 text-cyan-300 underline font-mono text-[11px]"
+                          className="flex items-center gap-2 p-2 rounded-lg bg-[#0E1420] hover:bg-[#192338] border border-[#273249] text-[#648BFF] underline font-mono text-[11px]"
                         >
                           <Paperclip className="h-3 w-3" />
                           <span className="truncate">{att.name}</span>
@@ -274,7 +274,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
 
                   <div
                     className={`mt-1.5 text-[9px] font-mono ${
-                      isMe ? 'text-cyan-200/80 text-right' : 'text-slate-500'
+                      isMe ? 'text-white/80 text-right' : 'text-[#929DB2]'
                     }`}
                   >
                     {formatTimeAgo(msg.created_at)}
@@ -288,7 +288,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       </div>
 
       {/* Input area */}
-      <div className="p-3.5 border-t border-slate-800/80 bg-[#07090e]/90">
+      <div className="p-3.5 border-t border-[#273249] bg-[#0E1420]/90">
         <form onSubmit={handleSendMessage} className="flex items-center gap-2">
           <input
             type="file"
@@ -301,7 +301,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
+            className="p-2 rounded-lg bg-[#141C2B] hover:bg-[#192338] text-[#929DB2] hover:text-[#F1F5FC] border border-[#273249] transition-colors"
             title="Attach file"
           >
             <Paperclip className="h-4 w-4" />
@@ -312,7 +312,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Send a message or code snippet (Enter to send)..."
-            className="flex-1 h-9 px-3.5 rounded-lg bg-slate-900/90 border border-slate-800 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-sans"
+            className="flex-1 h-9 px-3.5 rounded-lg bg-[#141C2B] border border-[#273249] text-xs text-[#F1F5FC] placeholder:text-[#929DB2] focus:outline-none focus:border-[#648BFF] font-sans"
           />
 
           <Button
@@ -321,7 +321,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             size="sm"
             disabled={!inputMessage.trim() || sending}
             isLoading={sending}
-            className="h-9 px-3.5 rounded-lg font-semibold text-xs"
+            className="h-9 px-3.5 rounded-lg font-semibold text-xs shadow-md shadow-[#648BFF]/20"
           >
             <Send className="h-3.5 w-3.5 mr-1" /> Send
           </Button>

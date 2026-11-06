@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Save, User, ArrowLeft, Plus, X, Upload, Code2, Sparkles } from 'lucide-react';
+import { Save, ArrowLeft, Plus, X, Upload, Code2, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { Card, CardTitle } from '@/components/ui/Card';
 import { Avatar } from '@/components/ui/Avatar';
 import { useToast } from '@/components/ui/Toast';
 import { ExperienceLevel, AvailabilityStatus, Skill } from '@/types/database.types';
@@ -186,15 +186,15 @@ export const EditProfilePage: React.FC = () => {
             variant="ghost"
             size="sm"
             onClick={() => navigate(-1)}
-            className="p-2 h-9 w-9 rounded-lg"
+            className="p-2 h-9 w-9 rounded-lg border border-[#273249] text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#141C2B]"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-2xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl font-extrabold text-[#F1F5FC] tracking-tight">
               Edit Developer Profile
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-[#929DB2]">
               Customize your developer identity, skill endorsements, and collaboration availability.
             </p>
           </div>
@@ -203,22 +203,22 @@ export const EditProfilePage: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Details */}
-        <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-5">
-          <CardTitle className="text-sm font-bold text-white uppercase tracking-wider font-mono text-cyan-400">
+        <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-5">
+          <CardTitle className="text-sm font-bold text-[#F1F5FC] uppercase tracking-wider font-mono text-[#648BFF]">
             General Information
           </CardTitle>
 
           {/* Avatar Upload */}
           <div className="flex items-center gap-5 pt-1">
-            <Avatar src={avatarUrl} name={fullName} size="xl" className="ring-2 ring-cyan-500/20" />
+            <Avatar src={avatarUrl} name={fullName} size="xl" className="ring-2 ring-[#648BFF]/30" />
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-semibold text-[#929DB2] mb-1.5 font-mono">
                 PROFILE AVATAR
               </label>
               <div className="flex items-center gap-2">
                 <label className="cursor-pointer">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-700/80 transition-colors">
-                    <Upload className="h-3.5 w-3.5 text-cyan-400" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#141C2B] hover:bg-[#192338] text-xs font-semibold text-[#F1F5FC] border border-[#273249] transition-colors">
+                    <Upload className="h-3.5 w-3.5 text-[#648BFF]" />
                     {uploadingAvatar ? 'Uploading...' : 'Upload Image'}
                   </span>
                   <input
@@ -241,49 +241,49 @@ export const EditProfilePage: React.FC = () => {
                   </Button>
                 )}
               </div>
-              <p className="text-[11px] text-slate-500 mt-1 font-mono">PNG, JPG or WebP (max 5MB)</p>
+              <p className="text-[11px] text-[#929DB2] mt-1 font-mono">PNG, JPG or WebP (max 5MB)</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                 Full Name *
               </label>
               <Input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="h-10 text-xs"
+                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                 Username *
               </label>
               <Input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="h-10 text-xs"
+                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+            <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
               Professional Headline
             </label>
             <Input
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
               placeholder="e.g. Senior Full-Stack Engineer | Distributed Systems & Rust"
-              className="h-10 text-xs"
+              className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+            <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
               Engineering Biography
             </label>
             <Textarea
@@ -291,19 +291,19 @@ export const EditProfilePage: React.FC = () => {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Describe your tech background, current builds, and open source interests..."
               rows={4}
-              className="text-xs"
+              className="text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                 Experience Level
               </label>
               <select
                 value={experienceLevel}
                 onChange={(e) => setExperienceLevel(e.target.value as ExperienceLevel)}
-                className="w-full h-10 rounded-lg border border-slate-700/80 bg-slate-900/90 px-3 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
+                className="w-full h-10 rounded-lg border border-[#273249] bg-[#141C2B] px-3 text-xs text-[#F1F5FC] focus:outline-none focus:border-[#648BFF] font-mono cursor-pointer"
               >
                 <option value="Junior">Junior</option>
                 <option value="Mid-Level">Mid-Level</option>
@@ -314,13 +314,13 @@ export const EditProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                 Availability
               </label>
               <select
                 value={availabilityStatus}
                 onChange={(e) => setAvailabilityStatus(e.target.value as AvailabilityStatus)}
-                className="w-full h-10 rounded-lg border border-slate-700/80 bg-slate-900/90 px-3 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
+                className="w-full h-10 rounded-lg border border-[#273249] bg-[#141C2B] px-3 text-xs text-[#F1F5FC] focus:outline-none focus:border-[#648BFF] font-mono cursor-pointer"
               >
                 <option value="open_to_collaborate">Open to Collaborate</option>
                 <option value="available">Available</option>
@@ -330,7 +330,7 @@ export const EditProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                 Weekly Available Hours
               </label>
               <Input
@@ -339,54 +339,54 @@ export const EditProfilePage: React.FC = () => {
                 max={60}
                 value={weeklyHours}
                 onChange={(e) => setWeeklyHours(Number(e.target.value))}
-                className="h-10 text-xs font-mono"
+                className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                 Location
               </label>
               <Input
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="San Francisco, CA / Remote"
-                className="h-10 text-xs"
+                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                 GitHub Handle
               </label>
               <Input
                 value={githubUsername}
                 onChange={(e) => setGithubUsername(e.target.value)}
                 placeholder="torvalds"
-                className="h-10 text-xs font-mono"
+                className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                 Portfolio URL
               </label>
               <Input
                 value={websiteUrl}
                 onChange={(e) => setWebsiteUrl(e.target.value)}
                 placeholder="https://yourportfolio.dev"
-                className="h-10 text-xs font-mono"
+                className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
               />
             </div>
           </div>
         </Card>
 
         {/* Technical Skills Catalog Management */}
-        <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-4">
-          <CardTitle className="text-sm font-bold text-white uppercase tracking-wider font-mono text-cyan-400 flex items-center gap-2">
-            <Code2 className="h-4 w-4 text-cyan-400" /> Technical Skills Catalog
+        <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-4">
+          <CardTitle className="text-sm font-bold text-[#F1F5FC] uppercase tracking-wider font-mono text-[#648BFF] flex items-center gap-2">
+            <Code2 className="h-4 w-4 text-[#648BFF]" /> Technical Skills Catalog
           </CardTitle>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-[#929DB2]">
             Select technologies from the canonical dictionary to showcase on your profile and boost your AI matching score.
           </p>
 
@@ -394,7 +394,7 @@ export const EditProfilePage: React.FC = () => {
             <select
               value={selectedSkillToAdd}
               onChange={(e) => setSelectedSkillToAdd(e.target.value)}
-              className="flex-1 h-10 rounded-lg border border-slate-700/80 bg-slate-900/90 px-3 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
+              className="flex-1 h-10 rounded-lg border border-[#273249] bg-[#141C2B] px-3 text-xs text-[#F1F5FC] focus:outline-none focus:border-[#648BFF] font-mono cursor-pointer"
             >
               <option value="">Select a skill to add...</option>
               {availableSkills
@@ -410,9 +410,9 @@ export const EditProfilePage: React.FC = () => {
               variant="secondary"
               onClick={handleAddSkill}
               disabled={!selectedSkillToAdd}
-              className="text-xs font-semibold h-10 px-4"
+              className="text-xs font-semibold h-10 px-4 bg-[#141C2B] border-[#273249] text-[#F1F5FC] hover:bg-[#192338]"
             >
-              <Plus className="h-4 w-4 mr-1 text-cyan-400" /> Add Skill
+              <Plus className="h-4 w-4 mr-1 text-[#648BFF]" /> Add Skill
             </Button>
           </div>
 
@@ -422,13 +422,13 @@ export const EditProfilePage: React.FC = () => {
               return (
                 <div
                   key={skillId}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 border border-slate-700/80 text-xs font-mono text-cyan-300"
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#141C2B] border border-[#273249] text-xs font-mono text-[#648BFF]"
                 >
                   <span>{skillObj?.name || 'Skill'}</span>
                   <button
                     type="button"
                     onClick={() => handleRemoveSkill(skillId)}
-                    className="text-slate-400 hover:text-rose-400 ml-1 transition-colors"
+                    className="text-[#929DB2] hover:text-rose-400 ml-1 transition-colors"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -439,9 +439,9 @@ export const EditProfilePage: React.FC = () => {
         </Card>
 
         {/* Interests */}
-        <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-4">
-          <CardTitle className="text-sm font-bold text-white uppercase tracking-wider font-mono text-cyan-400 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-violet-400" /> Focus Areas & Topics
+        <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-4">
+          <CardTitle className="text-sm font-bold text-[#F1F5FC] uppercase tracking-wider font-mono text-[#648BFF] flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-[#9B7BFF]" /> Focus Areas & Topics
           </CardTitle>
           <div>
             <Input
@@ -449,7 +449,7 @@ export const EditProfilePage: React.FC = () => {
               onChange={(e) => setInterestInput(e.target.value)}
               onKeyDown={handleAddInterest}
               placeholder="Type a topic (e.g. AI Agents, Distributed Systems, Rust, WebGPU) and press Enter"
-              className="h-10 text-xs"
+              className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
             />
           </div>
 
@@ -457,13 +457,13 @@ export const EditProfilePage: React.FC = () => {
             {interests.map((item) => (
               <span
                 key={item}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#141C2B] border border-[#273249] text-xs text-[#F1F5FC]"
               >
                 {item}
                 <button
                   type="button"
                   onClick={() => handleRemoveInterest(item)}
-                  className="text-slate-500 hover:text-rose-400 transition-colors"
+                  className="text-[#929DB2] hover:text-rose-400 transition-colors"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -474,14 +474,14 @@ export const EditProfilePage: React.FC = () => {
 
         {/* Form Action */}
         <div className="flex items-center justify-end gap-3 pt-2">
-          <Button type="button" variant="outline" onClick={() => navigate(-1)} className="h-10 text-xs">
+          <Button type="button" variant="outline" onClick={() => navigate(-1)} className="h-10 text-xs border-[#273249] text-[#F1F5FC]">
             Cancel
           </Button>
           <Button
             type="submit"
             variant="primary"
             isLoading={saving}
-            className="px-6 font-semibold h-10 text-xs shadow-md shadow-cyan-500/20"
+            className="px-6 font-semibold h-10 text-xs shadow-md shadow-[#648BFF]/20"
           >
             <Save className="h-4 w-4 mr-1.5" /> Save Profile
           </Button>

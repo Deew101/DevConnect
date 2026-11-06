@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Layers, Mail, Lock, User, ArrowRight, Github, Sparkles, ShieldCheck } from 'lucide-react';
+import { Layers, Mail, Lock, User, ArrowRight, Github, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
@@ -12,7 +12,7 @@ import { GridPattern } from '@/components/ui/GridPattern';
 export const AuthPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithGitHub, isConfigured } = useAuth();
+  const { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithGitHub } = useAuth();
   const { toast } = useToast();
 
   const [isRegister, setIsRegister] = useState(searchParams.get('tab') === 'register');
@@ -88,10 +88,10 @@ export const AuthPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#07090e] flex flex-col justify-center items-center p-4 sm:p-6 text-slate-100 relative overflow-hidden">
-      <GridPattern className="opacity-25" />
+    <div className="min-h-screen bg-[#090C13] flex flex-col justify-center items-center p-4 sm:p-6 text-[#F1F5FC] relative overflow-hidden">
+      <GridPattern className="opacity-20" />
       {/* Background ambient lighting */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-to-tr from-cyan-500/10 to-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-to-tr from-[#648BFF]/15 to-[#9B7BFF]/15 rounded-full blur-[100px] pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
@@ -101,26 +101,26 @@ export const AuthPage: React.FC = () => {
       >
         {/* Brand Header */}
         <div className="text-center mb-7">
-          <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 items-center justify-center shadow-lg shadow-cyan-500/20 mb-3 border border-cyan-400/30">
+          <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-[#648BFF] to-[#9B7BFF] items-center justify-center shadow-lg shadow-[#648BFF]/25 mb-3 border border-white/20">
             <Layers className="h-6 w-6 text-white" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">DevConnect</h1>
-          <p className="text-xs text-slate-400 mt-1 font-mono">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#F1F5FC] tracking-tight">DevConnect</h1>
+          <p className="text-xs text-[#929DB2] mt-1 font-mono">
             GitHub + LinkedIn + Discord ecosystem for engineers
           </p>
         </div>
 
         {/* Card */}
-        <Card className="border-slate-800/80 bg-[#0c1017]/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+        <Card className="border-[#273249] bg-[#0E1420]/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
           {/* Tab selector */}
-          <div className="grid grid-cols-2 rounded-xl bg-slate-900 border border-slate-800 p-1 mb-6 text-xs font-semibold font-mono">
+          <div className="grid grid-cols-2 rounded-xl bg-[#141C2B] border border-[#273249] p-1 mb-6 text-xs font-semibold font-mono">
             <button
               type="button"
               onClick={() => setIsRegister(false)}
               className={`py-2 rounded-lg transition-all ${
                 !isRegister
-                  ? 'bg-slate-800 text-cyan-300 shadow-sm border border-slate-700/80'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#192338] text-[#648BFF] shadow-sm border border-[#273249]'
+                  : 'text-[#929DB2] hover:text-[#F1F5FC]'
               }`}
             >
               Sign In
@@ -130,8 +130,8 @@ export const AuthPage: React.FC = () => {
               onClick={() => setIsRegister(true)}
               className={`py-2 rounded-lg transition-all ${
                 isRegister
-                  ? 'bg-slate-800 text-cyan-300 shadow-sm border border-slate-700/80'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#192338] text-[#648BFF] shadow-sm border border-[#273249]'
+                  : 'text-[#929DB2] hover:text-[#F1F5FC]'
               }`}
             >
               Create Account
@@ -144,7 +144,7 @@ export const AuthPage: React.FC = () => {
               type="button"
               disabled={Boolean(oauthLoading)}
               onClick={handleGoogleAuth}
-              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-700/80 bg-slate-900/90 hover:bg-slate-800/90 text-xs font-semibold text-white transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-[#273249] bg-[#141C2B] hover:bg-[#192338] text-xs font-semibold text-[#F1F5FC] transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24">
                 <path
@@ -171,7 +171,7 @@ export const AuthPage: React.FC = () => {
               type="button"
               disabled={Boolean(oauthLoading)}
               onClick={handleGitHubAuth}
-              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-700/80 bg-slate-900/90 hover:bg-slate-800/90 text-xs font-semibold text-white transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-[#273249] bg-[#141C2B] hover:bg-[#192338] text-xs font-semibold text-[#F1F5FC] transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
             >
               <Github className="h-4 w-4" />
               <span>{oauthLoading === 'github' ? 'Redirecting...' : 'Continue with GitHub'}</span>
@@ -179,33 +179,33 @@ export const AuthPage: React.FC = () => {
           </div>
 
           <div className="relative flex items-center justify-center mb-6">
-            <div className="border-t border-slate-800 w-full" />
-            <span className="bg-[#0c1017] px-3 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+            <div className="border-t border-[#273249] w-full" />
+            <span className="bg-[#0E1420] px-3 text-[10px] font-mono text-[#929DB2] uppercase tracking-wider">
               Or with email credentials
             </span>
-            <div className="border-t border-slate-800 w-full" />
+            <div className="border-t border-[#273249] w-full" />
           </div>
 
           {/* Email / Password Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             {isRegister && (
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                   Full Name
                 </label>
                 <Input
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Guido van Rossum"
-                  icon={<User className="h-4 w-4" />}
-                  className="h-10 text-xs"
+                  icon={<User className="h-4 w-4 text-[#929DB2]" />}
+                  className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
                   required={isRegister}
                 />
               </div>
             )}
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                 Email Address
               </label>
               <Input
@@ -213,14 +213,14 @@ export const AuthPage: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="developer@domain.com"
-                icon={<Mail className="h-4 w-4" />}
-                className="h-10 text-xs"
+                icon={<Mail className="h-4 w-4 text-[#929DB2]" />}
+                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
                 Password
               </label>
               <Input
@@ -228,8 +228,8 @@ export const AuthPage: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                icon={<Lock className="h-4 w-4" />}
-                className="h-10 text-xs"
+                icon={<Lock className="h-4 w-4 text-[#929DB2]" />}
+                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
                 required
               />
             </div>
@@ -237,7 +237,7 @@ export const AuthPage: React.FC = () => {
             <Button
               type="submit"
               variant="primary"
-              className="w-full h-10 font-semibold text-xs mt-3 shadow-md shadow-cyan-500/20"
+              className="w-full h-10 font-semibold text-xs mt-3 shadow-md shadow-[#648BFF]/20"
               isLoading={loading}
             >
               {isRegister ? 'Create Developer Account' : 'Sign In to DevConnect'}
@@ -245,8 +245,8 @@ export const AuthPage: React.FC = () => {
             </Button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-center gap-1.5 text-[11px] text-slate-500 font-mono">
-            <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+          <div className="mt-6 pt-4 border-t border-[#273249] flex items-center justify-center gap-1.5 text-[11px] text-[#929DB2] font-mono">
+            <ShieldCheck className="h-3.5 w-3.5 text-[#35C98A]" />
             <span>Supabase PostgreSQL Row Level Security (RLS)</span>
           </div>
         </Card>

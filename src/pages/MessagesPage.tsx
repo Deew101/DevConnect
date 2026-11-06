@@ -142,7 +142,7 @@ export const MessagesPage: React.FC = () => {
   const activeConv = conversations.find((c) => c.id === activeConversationId);
 
   return (
-    <div className="h-[calc(100vh-8rem)] rounded-2xl border border-slate-800 bg-[#070b13] shadow-2xl flex overflow-hidden">
+    <div className="h-[calc(100vh-8rem)] rounded-2xl border border-[#273249] bg-[#0E1420] shadow-2xl flex overflow-hidden">
       {/* Conversations List Sidebar */}
       <ChatSidebar
         conversations={conversations}
@@ -153,21 +153,21 @@ export const MessagesPage: React.FC = () => {
       />
 
       {/* Active Conversation Main Stream */}
-      <div className="flex-1 h-full flex flex-col bg-[#090d16]">
+      <div className="flex-1 h-full flex flex-col bg-[#090C13]">
         {activeConv && user ? (
           <ChatWindow conversation={activeConv} currentUserId={user.id} />
         ) : (
-          <div className="h-full flex flex-col items-center justify-center p-8 text-center text-slate-500">
-            <MessageSquare className="h-12 w-12 text-slate-700 mb-3" />
-            <h3 className="text-base font-bold text-white mb-1">Select a conversation</h3>
-            <p className="text-xs text-slate-400 max-w-sm mb-4">
+          <div className="h-full flex flex-col items-center justify-center p-8 text-center text-[#929DB2]">
+            <MessageSquare className="h-12 w-12 text-[#273249] mb-3" />
+            <h3 className="text-base font-bold text-[#F1F5FC] mb-1">Select a conversation</h3>
+            <p className="text-xs text-[#929DB2] max-w-sm mb-4">
               Choose a direct developer chat or project workspace stream from the left, or start a new direct message.
             </p>
             <Button
               variant="primary"
               size="sm"
               onClick={() => setIsNewChatModalOpen(true)}
-              className="text-xs font-semibold"
+              className="text-xs font-semibold shadow-md shadow-[#648BFF]/20"
             >
               <Plus className="h-4 w-4 mr-1" /> New Direct Message
             </Button>
@@ -188,18 +188,19 @@ export const MessagesPage: React.FC = () => {
             value={searchDevQuery}
             onChange={(e) => handleSearchDevelopers(e.target.value)}
             placeholder="Search by developer name or @username..."
-            icon={<Search className="h-4 w-4" />}
+            icon={<Search className="h-4 w-4 text-[#929DB2]" />}
             autoFocus
+            className="bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
           />
 
-          <div className="max-h-60 overflow-y-auto space-y-1.5 divide-y divide-slate-800/40">
+          <div className="max-h-60 overflow-y-auto space-y-1.5 divide-y divide-[#273249]/40">
             {searchingDevs ? (
-              <div className="py-4 text-center text-xs text-slate-400">Searching...</div>
+              <div className="py-4 text-center text-xs text-[#929DB2]">Searching...</div>
             ) : searchDevResults.length === 0 ? (
               searchDevQuery.trim() ? (
-                <div className="py-4 text-center text-xs text-slate-500">No developers found.</div>
+                <div className="py-4 text-center text-xs text-[#929DB2]">No developers found.</div>
               ) : (
-                <div className="py-4 text-center text-xs text-slate-500">
+                <div className="py-4 text-center text-xs text-[#929DB2]">
                   Type a name to search developers
                 </div>
               )
@@ -208,7 +209,7 @@ export const MessagesPage: React.FC = () => {
                 <div
                   key={dev.id}
                   onClick={() => handleStartDirectChat(dev)}
-                  className="p-2.5 rounded-xl hover:bg-slate-800/60 cursor-pointer flex items-center justify-between transition-colors pt-2"
+                  className="p-2.5 rounded-xl hover:bg-[#141C2B] cursor-pointer flex items-center justify-between transition-colors pt-2"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <Avatar
@@ -218,11 +219,11 @@ export const MessagesPage: React.FC = () => {
                       status={dev.availability_status}
                     />
                     <div className="min-w-0 text-xs">
-                      <p className="font-semibold text-white truncate">{dev.full_name}</p>
-                      <p className="text-cyan-400 font-mono text-[11px]">@{dev.username}</p>
+                      <p className="font-semibold text-[#F1F5FC] truncate">{dev.full_name}</p>
+                      <p className="text-[#648BFF] font-mono text-[11px]">@{dev.username}</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="h-7 text-xs">
+                  <Button variant="outline" size="sm" className="h-7 text-xs border-[#273249] text-[#F1F5FC]">
                     Chat
                   </Button>
                 </div>

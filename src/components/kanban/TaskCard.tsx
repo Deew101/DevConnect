@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Calendar, User, Tag, GripVertical } from 'lucide-react';
+import { Calendar, GripVertical } from 'lucide-react';
 import { Task, TaskPriority } from '@/types/database.types';
 import { Badge } from '@/components/ui/Badge';
 import { Avatar } from '@/components/ui/Avatar';
@@ -46,8 +46,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
     <div
       ref={setNodeRef}
       style={style}
-      className={`group rounded-xl border border-slate-800 bg-[#0d1527]/95 p-3.5 shadow-md hover:border-slate-700 hover:shadow-lg transition-all ${
-        isDragging ? 'opacity-40 border-cyan-500 scale-95' : ''
+      className={`group rounded-xl border border-[#273249] bg-[#141C2B] p-3.5 shadow-md hover:border-[#648BFF]/40 hover:shadow-lg transition-all ${
+        isDragging ? 'opacity-40 border-[#648BFF] scale-95' : ''
       }`}
     >
       <div className="flex items-start justify-between gap-2">
@@ -57,7 +57,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
         <button
           {...attributes}
           {...listeners}
-          className="cursor-grab active:cursor-grabbing text-slate-600 group-hover:text-slate-400 p-0.5 rounded hover:bg-slate-800"
+          className="cursor-grab active:cursor-grabbing text-[#929DB2] group-hover:text-[#F1F5FC] p-0.5 rounded hover:bg-[#192338]"
           title="Drag task"
         >
           <GripVertical className="h-4 w-4" />
@@ -66,13 +66,13 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
 
       <h5
         onClick={() => onEdit(task)}
-        className="font-semibold text-xs text-white mt-2 mb-1.5 hover:text-cyan-400 cursor-pointer line-clamp-2"
+        className="font-semibold text-xs text-[#F1F5FC] mt-2 mb-1.5 hover:text-[#648BFF] cursor-pointer line-clamp-2 transition-colors"
       >
         {task.title}
       </h5>
 
       {task.description && (
-        <p className="text-[11px] text-slate-400 line-clamp-2 mb-3 leading-relaxed">
+        <p className="text-[11px] text-[#929DB2] line-clamp-2 mb-3 leading-relaxed">
           {task.description}
         </p>
       )}
@@ -82,7 +82,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
           {task.tags.slice(0, 3).map((tag, idx) => (
             <span
               key={idx}
-              className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800/80 text-slate-300 font-mono"
+              className="text-[10px] px-1.5 py-0.5 rounded bg-[#0E1420] text-[#929DB2] border border-[#273249] font-mono"
             >
               #{tag}
             </span>
@@ -90,25 +90,23 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
         </div>
       )}
 
-      <div className="flex items-center justify-between pt-2 border-t border-slate-800/60 text-[11px] text-slate-400">
+      <div className="flex items-center justify-between pt-2 border-t border-[#273249] text-[11px] text-[#929DB2]">
         {task.due_date ? (
           <span className="flex items-center gap-1 font-mono text-[10px]">
-            <Calendar className="h-3 w-3 text-slate-500" />
+            <Calendar className="h-3 w-3 text-[#929DB2]" />
             {formatDate(task.due_date)}
           </span>
         ) : (
           <span />
         )}
 
-        {task.assignee ? (
-          <Avatar
-            src={task.assignee.avatar_url}
-            name={task.assignee.full_name}
-            size="sm"
-            className="w-5 h-5 text-[9px]"
-          />
-        ) : (
-          <span className="text-[10px] text-slate-500 italic">Unassigned</span>
+        {task.assignee && (
+          <div className="flex items-center gap-1.5" title={`Assigned to ${task.assignee.full_name}`}>
+            <span className="text-[10px] text-[#929DB2] font-mono hidden sm:inline">
+              {task.assignee.full_name?.split(' ')[0]}
+            </span>
+            <Avatar src={task.assignee.avatar_url} name={task.assignee.full_name} size="xs" />
+          </div>
         )}
       </div>
     </div>

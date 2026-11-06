@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface DialogProps {
+export interface DialogProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
@@ -55,7 +55,7 @@ export const Dialog: React.FC<DialogProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-[#090C13]/85 backdrop-blur-sm transition-opacity"
           />
 
           {/* Dialog Container */}
@@ -65,22 +65,22 @@ export const Dialog: React.FC<DialogProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              'relative w-full z-10 rounded-2xl border border-slate-800/80 bg-[#0c1017] p-6 shadow-2xl text-slate-100',
+              'relative w-full z-10 rounded-2xl border border-[#273249] bg-[#141C2B] p-6 shadow-2xl text-[#F1F5FC]',
               maxW[maxWidth],
               className
             )}
           >
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="absolute right-4 top-4 rounded-lg p-1.5 text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#192338] transition-colors"
             >
               <X className="h-5 w-5" />
             </button>
 
             {title && (
               <div className="mb-4">
-                <h3 className="text-xl font-bold text-white tracking-tight">{title}</h3>
-                {description && <p className="mt-1 text-sm text-slate-400">{description}</p>}
+                <h3 className="text-xl font-bold text-[#F1F5FC] tracking-tight">{title}</h3>
+                {description && <p className="mt-1 text-sm text-[#929DB2]">{description}</p>}
               </div>
             )}
 
@@ -91,3 +91,23 @@ export const Dialog: React.FC<DialogProps> = ({
     </AnimatePresence>
   );
 };
+
+export interface DialogContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  showCloseButton?: boolean;
+}
+
+export const DialogContent: React.FC<DialogContentProps> = ({ className, children, showCloseButton, ...props }) => (
+  <div className={cn('p-4', className)} {...props}>{children}</div>
+);
+
+export const DialogHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => (
+  <div className={cn('mb-4 flex flex-col space-y-1.5', className)} {...props}>{children}</div>
+);
+
+export const DialogTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({ className, children, ...props }) => (
+  <h3 className={cn('text-lg font-bold text-white', className)} {...props}>{children}</h3>
+);
+
+export const DialogDescription: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({ className, children, ...props }) => (
+  <p className={cn('text-xs text-slate-400', className)} {...props}>{children}</p>
+);

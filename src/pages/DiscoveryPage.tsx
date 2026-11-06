@@ -11,8 +11,7 @@ import {
   MapPin,
   Github,
   ArrowUpDown,
-  Code2,
-  Check,
+  RotateCcw,
 } from 'lucide-react';
 import { Profile, ExperienceLevel } from '@/types/database.types';
 import { supabase } from '@/lib/supabase';
@@ -30,7 +29,9 @@ export const DiscoveryPage: React.FC = () => {
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
 
-  const [developers, setDevelopers] = useState<(Profile & { skillsList?: string[]; isConnected?: boolean; isPending?: boolean; connectionId?: string })[]>([]);
+  const [developers, setDevelopers] = useState<
+    (Profile & { skillsList?: string[]; isConnected?: boolean; isPending?: boolean; connectionId?: string })[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   // Filters & Sorting
@@ -222,29 +223,30 @@ export const DiscoveryPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#F1F5FC] tracking-tight flex items-center gap-2.5">
             Discover Developers
-            <Badge variant="cyan" dot className="font-mono text-xs">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-[#141C2B] border border-[#273249] text-[#648BFF] inline-flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#35C98A] animate-pulse" />
               {developers.length} Available
-            </Badge>
+            </span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Connect with skilled engineers, open-source maintainers, and potential project teammates.
+          <p className="text-xs sm:text-sm text-[#929DB2] mt-1">
+            Connect with verified software engineers, system architects, and collaborative teammates.
           </p>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-2xl border border-white/[0.08] bg-[#0c1017] shadow-xl space-y-4">
+      <div className="p-4 rounded-2xl border border-[#273249] bg-[#0E1420] shadow-xl space-y-4">
         <form onSubmit={handleSearchSubmit} className="flex gap-2">
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by name, @username, or technology (e.g. React, Rust, Python)..."
-            icon={<Search className="h-4 w-4" />}
-            className="h-10 text-xs sm:text-sm"
+            placeholder="Search by name, @username, or technology (e.g. React, Rust, Python, Go)..."
+            icon={<Search className="h-4 w-4 text-[#929DB2]" />}
+            className="h-10 text-xs sm:text-sm bg-[#141C2B] border-[#273249] text-[#F1F5FC] placeholder-[#929DB2]"
           />
-          <Button type="submit" variant="primary" className="h-10 px-5 font-semibold text-xs">
+          <Button type="submit" variant="primary" className="h-10 px-5 font-semibold text-xs shadow-md shadow-[#648BFF]/20">
             Search
           </Button>
         </form>
@@ -252,14 +254,14 @@ export const DiscoveryPage: React.FC = () => {
         {/* Filter Controls Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
           <div className="flex flex-wrap items-center gap-2.5">
-            <div className="flex items-center gap-1.5 text-slate-400 font-semibold font-mono text-[11px]">
-              <Filter className="h-3 w-3 text-sky-400" /> FILTERS:
+            <div className="flex items-center gap-1.5 text-[#929DB2] font-semibold font-mono text-[11px]">
+              <Filter className="h-3 w-3 text-[#648BFF]" /> FILTERS:
             </div>
 
             <select
               value={selectedExperience}
               onChange={(e) => setSelectedExperience(e.target.value)}
-              className="h-8 rounded-lg bg-[#090d15] border border-white/[0.08] px-2.5 text-xs text-slate-200 focus:outline-none focus:border-sky-500/50"
+              className="h-8 rounded-lg bg-[#141C2B] border border-[#273249] px-2.5 text-xs text-[#F1F5FC] focus:outline-none focus:border-[#648BFF]/60 cursor-pointer"
             >
               <option value="all">All Seniority</option>
               {experienceLevels.map((lvl) => (
@@ -272,7 +274,7 @@ export const DiscoveryPage: React.FC = () => {
             <select
               value={selectedAvailability}
               onChange={(e) => setSelectedAvailability(e.target.value)}
-              className="h-8 rounded-lg bg-[#090d15] border border-white/[0.08] px-2.5 text-xs text-slate-200 focus:outline-none focus:border-sky-500/50"
+              className="h-8 rounded-lg bg-[#141C2B] border border-[#273249] px-2.5 text-xs text-[#F1F5FC] focus:outline-none focus:border-[#648BFF]/60 cursor-pointer"
             >
               <option value="all">All Availability</option>
               <option value="open_to_collaborate">Open to Collaborate</option>
@@ -280,12 +282,12 @@ export const DiscoveryPage: React.FC = () => {
               <option value="busy">Busy</option>
             </select>
 
-            <div className="flex items-center gap-1 pl-2 border-l border-white/[0.08]">
-              <ArrowUpDown className="h-3 w-3 text-slate-500" />
+            <div className="flex items-center gap-1 pl-2 border-l border-[#273249]">
+              <ArrowUpDown className="h-3 w-3 text-[#929DB2]" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="h-8 rounded-lg bg-[#090d15] border border-white/[0.08] px-2 text-xs text-slate-200 focus:outline-none focus:border-sky-500/50"
+                className="h-8 rounded-lg bg-[#141C2B] border border-[#273249] px-2 text-xs text-[#F1F5FC] focus:outline-none focus:border-[#648BFF]/60 cursor-pointer"
               >
                 <option value="recent">Sort by: Recently Joined</option>
                 <option value="seniority">Sort by: Seniority</option>
@@ -300,8 +302,8 @@ export const DiscoveryPage: React.FC = () => {
               onClick={() => setSelectedLanguage('all')}
               className={`px-2.5 py-1 rounded-md text-[11px] font-mono transition-all ${
                 selectedLanguage === 'all'
-                  ? 'bg-sky-500 text-slate-950 font-bold'
-                  : 'bg-slate-900 text-slate-400 hover:text-white border border-white/[0.06]'
+                  ? 'bg-[#648BFF] text-[#090C13] font-bold shadow-sm'
+                  : 'bg-[#141C2B] text-[#929DB2] hover:text-[#F1F5FC] border border-[#273249]'
               }`}
             >
               All Skills
@@ -312,8 +314,8 @@ export const DiscoveryPage: React.FC = () => {
                 onClick={() => setSelectedLanguage(lang)}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-mono transition-all ${
                   selectedLanguage.toLowerCase() === lang.toLowerCase()
-                    ? 'bg-sky-500 text-slate-950 font-bold'
-                    : 'bg-slate-900 text-slate-400 hover:text-white border border-white/[0.06]'
+                    ? 'bg-[#648BFF] text-[#090C13] font-bold shadow-sm'
+                    : 'bg-[#141C2B] text-[#929DB2] hover:text-[#F1F5FC] border border-[#273249]'
                 }`}
               >
                 {lang}
@@ -331,10 +333,10 @@ export const DiscoveryPage: React.FC = () => {
           ))}
         </div>
       ) : developers.length === 0 ? (
-        <div className="p-12 text-center border border-dashed border-white/[0.08] rounded-2xl bg-[#0c1017]">
-          <Sparkles className="h-10 w-10 text-slate-600 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-white mb-1">No Developers Found</h3>
-          <p className="text-xs text-slate-400 max-w-sm mx-auto mb-4">
+        <div className="p-12 text-center border border-dashed border-[#273249] rounded-2xl bg-[#0E1420]">
+          <Sparkles className="h-10 w-10 text-[#929DB2] mx-auto mb-3 opacity-60" />
+          <h3 className="text-base font-bold text-[#F1F5FC] mb-1">No Developers Found</h3>
+          <p className="text-xs text-[#929DB2] max-w-sm mx-auto mb-4">
             Try adjusting your search criteria or resetting filters to discover more developers.
           </p>
           <Button
@@ -348,8 +350,9 @@ export const DiscoveryPage: React.FC = () => {
               setSortBy('recent');
               loadDevelopers();
             }}
+            className="border-[#273249] text-[#F1F5FC] hover:bg-[#141C2B]"
           >
-            Reset Filters
+            <RotateCcw className="h-3.5 w-3.5 mr-1.5" /> Reset Filters
           </Button>
         </div>
       ) : (
@@ -367,24 +370,29 @@ export const DiscoveryPage: React.FC = () => {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
               >
-                <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4">
+                <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[#273249] bg-[#141C2B]">
                   <div>
                     {/* Top Status & GitHub Link */}
                     <div className="flex items-center justify-between mb-3">
-                      <Badge
-                        variant={dev.availability_status === 'open_to_collaborate' ? 'cyan' : 'secondary'}
-                        dot
-                        className="text-[10px]"
-                      >
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono border border-[#273249] bg-[#0E1420] text-[#929DB2] flex items-center gap-1.5">
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${
+                            dev.availability_status === 'open_to_collaborate'
+                              ? 'bg-[#35C98A]'
+                              : dev.availability_status === 'available'
+                              ? 'bg-[#648BFF]'
+                              : 'bg-[#929DB2]'
+                          }`}
+                        />
                         {dev.availability_status.replace(/_/g, ' ')}
-                      </Badge>
+                      </span>
 
                       {dev.github_username && (
                         <a
                           href={`https://github.com/${dev.github_username}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+                          className="p-1 rounded-lg text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#192338] transition-colors"
                           title={`github.com/${dev.github_username}`}
                         >
                           <Github className="h-3.5 w-3.5" />
@@ -401,48 +409,48 @@ export const DiscoveryPage: React.FC = () => {
                         status={dev.availability_status}
                       />
                       <div className="min-w-0 flex-1">
-                        <h4 className="font-bold text-sm text-white group-hover:text-sky-300 transition-colors truncate">
+                        <h4 className="font-bold text-sm text-[#F1F5FC] group-hover:text-[#648BFF] transition-colors truncate">
                           {dev.full_name}
                         </h4>
-                        <p className="text-xs text-sky-400 font-mono">@{dev.username}</p>
-                        <span className="text-[10px] text-slate-400 font-mono block mt-0.5">
+                        <p className="text-xs text-[#648BFF] font-mono">@{dev.username}</p>
+                        <span className="text-[10px] text-[#929DB2] font-mono block mt-0.5">
                           {dev.experience_level}
                         </span>
                       </div>
                     </Link>
 
                     {/* Headline & Bio */}
-                    <p className="text-xs font-medium text-slate-200 mt-3 line-clamp-1">
+                    <p className="text-xs font-medium text-[#F1F5FC] mt-3 line-clamp-1">
                       {dev.headline || 'Software Engineer'}
                     </p>
-                    <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-[#929DB2] mt-1 line-clamp-2 leading-relaxed">
                       {dev.bio || 'Building modern software and open-source projects on DevConnect.'}
                     </p>
 
                     {/* Metadata: Location & Hours */}
-                    <div className="flex items-center gap-4 text-[11px] text-slate-500 font-mono mt-3">
+                    <div className="flex items-center gap-4 text-[11px] text-[#929DB2] font-mono mt-3">
                       {dev.location && (
                         <span className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3 text-slate-500" /> {dev.location}
+                          <MapPin className="h-3 w-3 text-[#929DB2]" /> {dev.location}
                         </span>
                       )}
                       <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3 text-sky-400" /> {dev.weekly_hours_available}h/wk
+                        <Clock className="h-3 w-3 text-[#648BFF]" /> {dev.weekly_hours_available}h/wk
                       </span>
                     </div>
 
                     {/* Technical Skills Pills */}
-                    <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-white/[0.06]">
+                    <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-[#273249]">
                       {(dev.skillsList || []).slice(0, 4).map((sk) => (
                         <span
                           key={sk}
-                          className="text-[10px] px-2 py-0.5 rounded-md bg-slate-900 border border-white/[0.06] text-slate-300 font-mono"
+                          className="text-[10px] px-2 py-0.5 rounded-md bg-[#0E1420] border border-[#273249] text-[#F1F5FC] font-mono"
                         >
                           {sk}
                         </span>
                       ))}
                       {(dev.skillsList || []).length > 4 && (
-                        <span className="text-[10px] text-slate-500 font-mono px-1">
+                        <span className="text-[10px] text-[#929DB2] font-mono px-1">
                           +{dev.skillsList!.length - 4}
                         </span>
                       )}
@@ -450,9 +458,9 @@ export const DiscoveryPage: React.FC = () => {
                   </div>
 
                   {/* Actions Footer */}
-                  <div className="flex items-center justify-between gap-2 pt-3 border-t border-white/[0.06]">
+                  <div className="flex items-center justify-between gap-2 pt-3 border-t border-[#273249]">
                     <Link to={`/profile/${dev.username}`} className="flex-1">
-                      <Button variant="outline" size="sm" className="w-full text-xs font-semibold h-8">
+                      <Button variant="outline" size="sm" className="w-full text-xs font-semibold h-8 border-[#273249] text-[#F1F5FC] hover:bg-[#192338]">
                         View Portfolio
                       </Button>
                     </Link>
@@ -466,11 +474,11 @@ export const DiscoveryPage: React.FC = () => {
                       className="flex-1 text-xs font-semibold h-8"
                     >
                       {dev.isConnected ? (
-                        <span className="flex items-center gap-1 text-emerald-400">
+                        <span className="flex items-center gap-1 text-[#35C98A]">
                           <UserCheck className="h-3.5 w-3.5" /> Connected
                         </span>
                       ) : dev.isPending ? (
-                        <span className="flex items-center gap-1 text-amber-400">
+                        <span className="flex items-center gap-1 text-[#9B7BFF]">
                           <Clock className="h-3.5 w-3.5" /> Pending
                         </span>
                       ) : (
