@@ -65,7 +65,7 @@ export const Dialog: React.FC<DialogProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              'relative w-full z-10 rounded-2xl border border-slate-700/80 bg-[#0d1527] p-6 shadow-2xl text-slate-100',
+              'relative w-full z-10 rounded-2xl border border-slate-800/80 bg-[#0c1017] p-6 shadow-2xl text-slate-100',
               maxW[maxWidth],
               className
             )}
