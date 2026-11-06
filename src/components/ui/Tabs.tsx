@@ -1,9 +1,11 @@
 import * as React from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface TabsContextValue {
   activeTab: string;
   setActiveTab: (val: string) => void;
+  layoutId?: string;
 }
 
 const TabsContext = React.createContext<TabsContextValue | undefined>(undefined);
@@ -23,6 +25,7 @@ export function Tabs({
 }) {
   const [internalTab, setInternalTab] = React.useState(defaultValue || '');
   const activeTab = value !== undefined ? value : internalTab;
+  const layoutId = React.useId();
 
   const setActiveTab = (val: string) => {
     if (value === undefined) {
@@ -32,7 +35,7 @@ export function Tabs({
   };
 
   return (
-    <TabsContext.Provider value={{ activeTab, setActiveTab }}>
+    <TabsContext.Provider value={{ activeTab, setActiveTab, layoutId }}>
       <div className={cn('w-full', className)}>{children}</div>
     </TabsContext.Provider>
   );
@@ -42,7 +45,7 @@ export function TabsList({ className, children }: { className?: string; children
   return (
     <div
       className={cn(
-        'inline-flex h-11 items-center justify-center rounded-xl bg-slate-900/80 p-1 border border-slate-800 text-slate-400',
+        'inline-flex h-10 items-center justify-center rounded-xl bg-[#090d15] p-1 border border-white/[0.08] text-slate-400 gap-1',
         className
       )}
     >
@@ -70,13 +73,18 @@ export function TabsTrigger({
       type="button"
       onClick={() => context.setActiveTab(value)}
       className={cn(
-        'inline-flex items-center justify-center whitespace-nowrap rounded-lg px-3.5 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
-        isActive
-          ? 'bg-slate-800 text-cyan-300 shadow-sm border border-slate-700/60'
-          : 'hover:text-slate-200 hover:bg-slate-800/40',
+        'relative inline-flex items-center justify-center whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 select-none z-10',
+        isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200',
         className
       )}
     >
+      {isActive && (
+        <motion.div
+          layoutId={`tab-pill-${context.layoutId}`}
+          className="absolute inset-0 rounded-lg bg-slate-800 border border-white/[0.1] shadow-sm -z-10"
+          transition={{ type: 'spring', bounce: 0.15, duration: 0.4 }}
+        />
+      )}
       {children}
     </button>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FolderGit2, ArrowLeft, Plus, X, Sparkles } from 'lucide-react';
+import { FolderGit2, ArrowLeft, Plus, X, Sparkles, Layers, Calendar, Users, GitBranch } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
@@ -102,8 +103,8 @@ export const CreateProjectPage: React.FC = () => {
       if (error) throw error;
 
       toast({
-        title: 'Project Created!',
-        description: 'Your project workspace and Kanban board are ready.',
+        title: 'Project Workspace Initialized!',
+        description: 'Your project repository, Kanban board, and channels are ready.',
         type: 'success',
       });
 
@@ -120,49 +121,71 @@ export const CreateProjectPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="max-w-3xl mx-auto space-y-6 pb-16"
+    >
       <div className="flex items-center gap-3">
-        <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="p-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate(-1)}
+          className="p-2 h-9 w-9 rounded-lg"
+        >
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-extrabold text-white">Create Collaborative Project</h1>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">
+            Launch Collaborative Workspace
+          </h1>
           <p className="text-xs text-slate-400">
-            Publish your project to recruit teammates and collaborate seamlessly.
+            Publish your project vision, assemble engineering teammates, and coordinate deliverables.
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl space-y-4">
-          <CardTitle className="text-base font-bold text-white">Project Overview</CardTitle>
+        <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-4">
+          <CardTitle className="text-sm font-bold text-white uppercase tracking-wider font-mono text-cyan-400">
+            Project Overview
+          </CardTitle>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Project Title *</label>
+            <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              Project Title *
+            </label>
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Distributed Task Orchestrator"
+              placeholder="e.g. Distributed Task Orchestrator & Edge Mesh"
+              className="h-10 text-xs"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Tagline</label>
+            <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              Tagline
+            </label>
             <Input
               value={tagline}
               onChange={(e) => setTagline(e.target.value)}
-              placeholder="A one-sentence summary of the vision"
+              placeholder="A high-impact one-liner explaining the core value proposition"
+              className="h-10 text-xs"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Category</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                Category
+              </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full h-10 rounded-lg border border-slate-700/80 bg-slate-900/70 px-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500"
+                className="w-full h-10 rounded-lg border border-slate-700/80 bg-slate-900/90 px-3 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
               >
                 <option value="Web Application">Web Application</option>
                 <option value="AI & Machine Learning">AI & Machine Learning</option>
@@ -174,7 +197,7 @@ export const CreateProjectPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
                 Target Team Size
               </label>
               <Input
@@ -183,35 +206,39 @@ export const CreateProjectPage: React.FC = () => {
                 max={15}
                 value={teamSizeNeeded}
                 onChange={(e) => setTeamSizeNeeded(Number(e.target.value))}
+                className="h-10 text-xs font-mono"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Full Description *</label>
+            <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              Full Architecture & Description *
+            </label>
             <Textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe the architecture, problem being solved, roadmap, and expectations..."
+              placeholder="Outline the core problem, expected technical stack, roadmap sprints, and engineering culture..."
               rows={5}
+              className="text-xs"
               required
             />
           </div>
         </Card>
 
         {/* Required Skills for AI Teammate Matching */}
-        <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl space-y-4">
+        <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-4">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-cyan-400" />
-            <CardTitle className="text-base font-bold text-white">
-              Required Technical Stack
+            <CardTitle className="text-sm font-bold text-white uppercase tracking-wider font-mono text-cyan-400">
+              Required Technical Stack (AI Matching)
             </CardTitle>
           </div>
           <p className="text-xs text-slate-400">
-            Our AI matchmaking engine will evaluate candidates against these technical requirements.
+            Our AI matchmaking engine will rank and recommend developers based on their proficiency with these selected skills.
           </p>
 
-          <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-1">
+          <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto p-1">
             {availableSkills.slice(0, 24).map((sk) => {
               const isSelected = requiredSkills.includes(sk.name);
               return (
@@ -219,10 +246,10 @@ export const CreateProjectPage: React.FC = () => {
                   key={sk.id}
                   type="button"
                   onClick={() => handleToggleSkill(sk.name)}
-                  className={`px-3 py-1 rounded-lg text-xs font-mono border transition-all ${
+                  className={`px-2.5 py-1 rounded-lg text-xs font-mono border transition-all ${
                     isSelected
-                      ? 'bg-cyan-500 border-cyan-400 text-slate-950 font-bold'
-                      : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                      ? 'bg-cyan-500/20 border-cyan-400/80 text-cyan-200 font-semibold shadow-[0_0_8px_rgba(56,189,248,0.2)]'
+                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
                   }`}
                 >
                   {isSelected && '✓ '}
@@ -233,28 +260,29 @@ export const CreateProjectPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
-              Add Custom Skill (Press Enter)
+            <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              Add Custom Technology (Press Enter)
             </label>
             <Input
               value={customSkill}
               onChange={(e) => setCustomSkill(e.target.value)}
               onKeyDown={handleAddCustomSkill}
-              placeholder="Type a technology and press Enter (e.g. WebRTC, Tailwind, Redis)"
+              placeholder="e.g. WebRTC, GraphQL, Prisma, Redis, Docker"
+              className="h-10 text-xs font-mono"
             />
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 pt-1">
             {requiredSkills.map((sk) => (
               <span
                 key={sk}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 font-mono text-xs"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-950/40 border border-cyan-500/30 text-cyan-300 font-mono text-xs"
               >
                 {sk}
                 <button
                   type="button"
                   onClick={() => handleToggleSkill(sk)}
-                  className="text-slate-400 hover:text-rose-400"
+                  className="text-slate-400 hover:text-rose-400 transition-colors"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -264,61 +292,76 @@ export const CreateProjectPage: React.FC = () => {
         </Card>
 
         {/* Links & Collaboration Requirements */}
-        <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl space-y-4">
-          <CardTitle className="text-base font-bold text-white">Repository & Collaboration</CardTitle>
+        <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-4">
+          <CardTitle className="text-sm font-bold text-white uppercase tracking-wider font-mono text-cyan-400">
+            Repository & Collaboration Cadence
+          </CardTitle>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">GitHub Repo URL</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                GitHub Repository URL
+              </label>
               <Input
                 value={githubRepoUrl}
                 onChange={(e) => setGithubRepoUrl(e.target.value)}
-                placeholder="https://github.com/owner/repo"
+                placeholder="https://github.com/organization/repo"
+                className="h-10 text-xs font-mono"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Live Demo URL</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                Live Demo / Preview URL
+              </label>
               <Input
                 value={liveDemoUrl}
                 onChange={(e) => setLiveDemoUrl(e.target.value)}
-                placeholder="https://myproject.dev"
+                placeholder="https://preview.dev"
+                className="h-10 text-xs font-mono"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
                 Target Deadline (Optional)
               </label>
               <Input
                 type="date"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
+                className="h-10 text-xs font-mono"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
                 Collaboration Commitment
               </label>
               <Input
                 value={collaborationRequirements}
                 onChange={(e) => setCollaborationRequirements(e.target.value)}
-                placeholder="e.g. 5-10 hours/week, async on Discord"
+                placeholder="e.g. 5-10 hours/week, async sprints on Discord"
+                className="h-10 text-xs"
               />
             </div>
           </div>
         </Card>
 
         <div className="flex items-center justify-end gap-3 pt-2">
-          <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+          <Button type="button" variant="outline" onClick={() => navigate(-1)} className="h-10 text-xs">
             Cancel
           </Button>
-          <Button type="submit" variant="glow" isLoading={saving} className="px-6 font-semibold">
-            Create Project & Open Workspace
+          <Button
+            type="submit"
+            variant="glow"
+            isLoading={saving}
+            className="px-6 font-semibold h-10 text-xs shadow-md shadow-cyan-500/20"
+          >
+            Create Workspace & Kanban Board
           </Button>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };

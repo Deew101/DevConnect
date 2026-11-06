@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Save, User, ArrowLeft, Plus, X, Upload, Code2 } from 'lucide-react';
+import { Save, User, ArrowLeft, Plus, X, Upload, Code2, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/Button';
@@ -173,35 +174,51 @@ export const EditProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="max-w-4xl mx-auto space-y-6 pb-16"
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="p-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate(-1)}
+            className="p-2 h-9 w-9 rounded-lg"
+          >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-2xl font-extrabold text-white">Edit Profile & Skills</h1>
-            <p className="text-xs text-slate-400">Keep your developer profile fresh and accurate.</p>
+            <h1 className="text-2xl font-extrabold text-white tracking-tight">
+              Edit Developer Profile
+            </h1>
+            <p className="text-xs text-slate-400">
+              Customize your developer identity, skill endorsements, and collaboration availability.
+            </p>
           </div>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Details */}
-        <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl space-y-5">
-          <CardTitle className="text-base font-bold text-white">General Information</CardTitle>
+        <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-5">
+          <CardTitle className="text-sm font-bold text-white uppercase tracking-wider font-mono text-cyan-400">
+            General Information
+          </CardTitle>
 
           {/* Avatar Upload */}
-          <div className="flex items-center gap-5">
-            <Avatar src={avatarUrl} name={fullName} size="xl" />
+          <div className="flex items-center gap-5 pt-1">
+            <Avatar src={avatarUrl} name={fullName} size="xl" className="ring-2 ring-cyan-500/20" />
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Profile Avatar
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
+                PROFILE AVATAR
               </label>
               <div className="flex items-center gap-2">
                 <label className="cursor-pointer">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition-colors">
-                    <Upload className="h-3.5 w-3.5" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-700/80 transition-colors">
+                    <Upload className="h-3.5 w-3.5 text-cyan-400" />
                     {uploadingAvatar ? 'Uploading...' : 'Upload Image'}
                   </span>
                   <input
@@ -218,61 +235,75 @@ export const EditProfilePage: React.FC = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => setAvatarUrl('')}
-                    className="text-xs text-rose-400"
+                    className="text-xs text-rose-400 h-8"
                   >
                     Remove
                   </Button>
                 )}
               </div>
-              <p className="text-[11px] text-slate-500 mt-1">PNG, JPG or WebP (max 5MB)</p>
+              <p className="text-[11px] text-slate-500 mt-1 font-mono">PNG, JPG or WebP (max 5MB)</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name *</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                Full Name *
+              </label>
               <Input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                className="h-10 text-xs"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Username *</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                Username *
+              </label>
               <Input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                className="h-10 text-xs"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Professional Headline</label>
+            <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              Professional Headline
+            </label>
             <Input
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
-              placeholder="e.g. Senior Full-Stack Engineer | Distributed Systems"
+              placeholder="e.g. Senior Full-Stack Engineer | Distributed Systems & Rust"
+              className="h-10 text-xs"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Bio</label>
+            <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              Engineering Biography
+            </label>
             <Textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              placeholder="Tell other developers about your engineering journey, interests, and what projects you want to build..."
+              placeholder="Describe your tech background, current builds, and open source interests..."
               rows={4}
+              className="text-xs"
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Experience Level</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                Experience Level
+              </label>
               <select
                 value={experienceLevel}
                 onChange={(e) => setExperienceLevel(e.target.value as ExperienceLevel)}
-                className="w-full h-10 rounded-lg border border-slate-700/80 bg-slate-900/70 px-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500"
+                className="w-full h-10 rounded-lg border border-slate-700/80 bg-slate-900/90 px-3 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
               >
                 <option value="Junior">Junior</option>
                 <option value="Mid-Level">Mid-Level</option>
@@ -283,11 +314,13 @@ export const EditProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Availability Status</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                Availability
+              </label>
               <select
                 value={availabilityStatus}
                 onChange={(e) => setAvailabilityStatus(e.target.value as AvailabilityStatus)}
-                className="w-full h-10 rounded-lg border border-slate-700/80 bg-slate-900/70 px-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500"
+                className="w-full h-10 rounded-lg border border-slate-700/80 bg-slate-900/90 px-3 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
               >
                 <option value="open_to_collaborate">Open to Collaborate</option>
                 <option value="available">Available</option>
@@ -297,48 +330,60 @@ export const EditProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Hours / Week</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                Weekly Available Hours
+              </label>
               <Input
                 type="number"
                 min={1}
                 max={60}
                 value={weeklyHours}
                 onChange={(e) => setWeeklyHours(Number(e.target.value))}
+                className="h-10 text-xs font-mono"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Location</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                Location
+              </label>
               <Input
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g. San Francisco, CA / Remote"
+                placeholder="San Francisco, CA / Remote"
+                className="h-10 text-xs"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">GitHub Username</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                GitHub Handle
+              </label>
               <Input
                 value={githubUsername}
                 onChange={(e) => setGithubUsername(e.target.value)}
-                placeholder="e.g. torvalds"
+                placeholder="torvalds"
+                className="h-10 text-xs font-mono"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Portfolio / Website</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                Portfolio URL
+              </label>
               <Input
                 value={websiteUrl}
                 onChange={(e) => setWebsiteUrl(e.target.value)}
                 placeholder="https://yourportfolio.dev"
+                className="h-10 text-xs font-mono"
               />
             </div>
           </div>
         </Card>
 
         {/* Technical Skills Catalog Management */}
-        <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl space-y-4">
-          <CardTitle className="text-base font-bold text-white flex items-center gap-2">
+        <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-4">
+          <CardTitle className="text-sm font-bold text-white uppercase tracking-wider font-mono text-cyan-400 flex items-center gap-2">
             <Code2 className="h-4 w-4 text-cyan-400" /> Technical Skills Catalog
           </CardTitle>
           <p className="text-xs text-slate-400">
@@ -349,7 +394,7 @@ export const EditProfilePage: React.FC = () => {
             <select
               value={selectedSkillToAdd}
               onChange={(e) => setSelectedSkillToAdd(e.target.value)}
-              className="flex-1 h-10 rounded-lg border border-slate-700/80 bg-slate-900/70 px-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500"
+              className="flex-1 h-10 rounded-lg border border-slate-700/80 bg-slate-900/90 px-3 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
             >
               <option value="">Select a skill to add...</option>
               {availableSkills
@@ -365,9 +410,9 @@ export const EditProfilePage: React.FC = () => {
               variant="secondary"
               onClick={handleAddSkill}
               disabled={!selectedSkillToAdd}
-              className="text-xs font-semibold"
+              className="text-xs font-semibold h-10 px-4"
             >
-              <Plus className="h-4 w-4 mr-1" /> Add Skill
+              <Plus className="h-4 w-4 mr-1 text-cyan-400" /> Add Skill
             </Button>
           </div>
 
@@ -383,7 +428,7 @@ export const EditProfilePage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleRemoveSkill(skillId)}
-                    className="text-slate-400 hover:text-rose-400 ml-1"
+                    className="text-slate-400 hover:text-rose-400 ml-1 transition-colors"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -394,14 +439,17 @@ export const EditProfilePage: React.FC = () => {
         </Card>
 
         {/* Interests */}
-        <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl space-y-4">
-          <CardTitle className="text-base font-bold text-white">Interests & Topics</CardTitle>
+        <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-4">
+          <CardTitle className="text-sm font-bold text-white uppercase tracking-wider font-mono text-cyan-400 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-violet-400" /> Focus Areas & Topics
+          </CardTitle>
           <div>
             <Input
               value={interestInput}
               onChange={(e) => setInterestInput(e.target.value)}
               onKeyDown={handleAddInterest}
-              placeholder="Type an interest (e.g. AI Agents, Web3, Distributed Systems) and press Enter"
+              placeholder="Type a topic (e.g. AI Agents, Distributed Systems, Rust, WebGPU) and press Enter"
+              className="h-10 text-xs"
             />
           </div>
 
@@ -415,7 +463,7 @@ export const EditProfilePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleRemoveInterest(item)}
-                  className="text-slate-500 hover:text-rose-400"
+                  className="text-slate-500 hover:text-rose-400 transition-colors"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -426,14 +474,19 @@ export const EditProfilePage: React.FC = () => {
 
         {/* Form Action */}
         <div className="flex items-center justify-end gap-3 pt-2">
-          <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+          <Button type="button" variant="outline" onClick={() => navigate(-1)} className="h-10 text-xs">
             Cancel
           </Button>
-          <Button type="submit" variant="primary" isLoading={saving} className="px-6 font-semibold">
-            <Save className="h-4 w-4 mr-2" /> Save Profile
+          <Button
+            type="submit"
+            variant="primary"
+            isLoading={saving}
+            className="px-6 font-semibold h-10 text-xs shadow-md shadow-cyan-500/20"
+          >
+            <Save className="h-4 w-4 mr-1.5" /> Save Profile
           </Button>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };

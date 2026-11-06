@@ -16,7 +16,11 @@ import {
   Circle,
   Trash2,
   Share2,
+  ArrowLeft,
+  ChevronRight,
+  TrendingUp,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Project, Task, Milestone, ProjectMember, Conversation } from '@/types/database.types';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
@@ -32,6 +36,7 @@ import { Input } from '@/components/ui/Input';
 import { LoadingScreen } from '@/components/common/LoadingScreen';
 import { formatDate } from '@/lib/utils';
 import { useToast } from '@/components/ui/Toast';
+import { GridPattern } from '@/components/ui/GridPattern';
 
 export const ProjectWorkspacePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -111,7 +116,6 @@ export const ProjectWorkspacePage: React.FC = () => {
       if (convData) {
         setConversation(convData as Conversation);
       } else {
-        // Create conversation channel for project
         const { data: newConv } = await supabase
           .from('conversations')
           .insert({
@@ -227,9 +231,9 @@ export const ProjectWorkspacePage: React.FC = () => {
 
   if (!project) {
     return (
-      <div className="p-12 text-center border border-dashed border-slate-800 rounded-2xl max-w-lg mx-auto mt-12 bg-[#0d1527]">
+      <div className="p-12 text-center border border-dashed border-slate-800 rounded-2xl max-w-lg mx-auto mt-16 bg-[#0c1017]">
         <h3 className="text-xl font-bold text-white mb-2">Project Not Found</h3>
-        <p className="text-xs text-slate-400 mb-6">
+        <p className="text-xs text-slate-400 mb-6 leading-relaxed">
           The requested project does not exist or you do not have permission to view it.
         </p>
         <Link to="/projects">
@@ -245,100 +249,119 @@ export const ProjectWorkspacePage: React.FC = () => {
   const isOwner = user && project.owner_id === user.id;
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
-      {/* Workspace Header */}
-      <div className="rounded-2xl border border-slate-800 bg-[#0d1527]/95 p-6 shadow-2xl backdrop-blur-md">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1.5 max-w-2xl">
-            <div className="flex items-center gap-2.5">
-              <span className="p-2 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400">
-                <FolderGit2 className="h-5 w-5" />
-              </span>
-              <div>
-                <h1 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                  {project.title}
-                  <Badge variant="cyan" className="text-[10px] font-mono">
-                    {project.status.toUpperCase()}
-                  </Badge>
-                </h1>
-                <span className="text-xs text-cyan-400 font-mono">{project.category}</span>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-6 max-w-7xl mx-auto pb-12"
+    >
+      {/* Breadcrumb nav */}
+      <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+        <Link to="/projects" className="hover:text-cyan-400 transition-colors flex items-center gap-1">
+          <ArrowLeft className="w-3.5 h-3.5" /> Projects
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+        <span className="text-slate-200 truncate max-w-xs">{project.title}</span>
+      </div>
+
+      {/* Workspace Header Hero */}
+      <div className="relative rounded-2xl border border-slate-800/80 bg-[#0c1017] p-6 shadow-2xl overflow-hidden">
+        <GridPattern className="opacity-20" />
+        <div className="relative z-10">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+            <div className="space-y-2 max-w-2xl">
+              <div className="flex items-center gap-3">
+                <span className="p-2.5 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-inner">
+                  <FolderGit2 className="h-5 w-5" />
+                </span>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+                    {project.title}
+                    <Badge variant="cyan" className="text-[10px] font-mono capitalize">
+                      {project.status?.replace(/_/g, ' ')}
+                    </Badge>
+                  </h1>
+                  <span className="text-xs text-cyan-400 font-mono">{project.category}</span>
+                </div>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-300 pt-1 leading-relaxed">
+                {project.tagline || project.description}
+              </p>
+            </div>
+
+            {/* Action buttons & AI Teammate matching button */}
+            <div className="flex flex-wrap items-center gap-2.5 self-start md:self-center">
+              <Button
+                variant="glow"
+                size="sm"
+                onClick={() => setIsAIModalOpen(true)}
+                className="font-semibold text-xs shadow-cyan-500/20"
+              >
+                <Sparkles className="h-4 w-4 mr-1.5" /> AI Matchmaker
+              </Button>
+
+              {project.github_repo_url && (
+                <a
+                  href={project.github_repo_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-xs font-mono text-slate-200 transition-colors"
+                >
+                  <GitBranch className="h-3.5 w-3.5" /> Repo <ExternalLink className="h-3 w-3" />
+                </a>
+              )}
+
+              {isOwner && (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleDeleteProject}
+                  className="h-8 px-2.5"
+                  title="Delete project"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Workspace Metrics & Progress Bar */}
+          <div className="mt-6 pt-5 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-3 gap-5 items-center">
+            <div>
+              <div className="flex items-center justify-between text-xs mb-1.5 font-mono">
+                <span className="text-slate-400 flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5 text-cyan-400" /> Workspace Velocity
+                </span>
+                <span className="font-bold text-cyan-400">{progressPercent}%</span>
+              </div>
+              <div className="h-2 w-full rounded-full bg-slate-900 border border-slate-800 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-cyan-500 to-indigo-500 rounded-full transition-all duration-500"
+                  style={{ width: `${progressPercent}%` }}
+                />
               </div>
             </div>
-            <p className="text-xs sm:text-sm text-slate-400 pt-1 leading-relaxed">
-              {project.tagline || project.description}
-            </p>
-          </div>
 
-          {/* Action buttons & AI Teammate matching button */}
-          <div className="flex flex-wrap items-center gap-2.5 self-start md:self-center">
-            <Button
-              variant="glow"
-              size="sm"
-              onClick={() => setIsAIModalOpen(true)}
-              className="font-semibold text-xs shadow-cyan-500/20"
-            >
-              <Sparkles className="h-4 w-4 mr-1.5" /> AI Teammate Match
-            </Button>
-
-            {project.github_repo_url && (
-              <a
-                href={project.github_repo_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-mono text-slate-200 transition-colors"
-              >
-                <GitBranch className="h-3.5 w-3.5" /> Repo <ExternalLink className="h-3 w-3" />
-              </a>
-            )}
-
-            {isOwner && (
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={handleDeleteProject}
-                className="h-9 px-3"
-                title="Delete project"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Workspace Metrics & Progress Bar */}
-        <div className="mt-6 pt-4 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
-          <div>
-            <div className="flex items-center justify-between text-xs mb-1.5 font-mono">
-              <span className="text-slate-400">Workspace Progress</span>
-              <span className="font-bold text-cyan-400">{progressPercent}%</span>
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+              <CheckSquare className="h-4 w-4 text-emerald-400" />
+              <span>
+                {completedTasks} / {tasks.length} tasks completed
+              </span>
             </div>
-            <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-500"
-                style={{ width: `${progressPercent}%` }}
-              />
+
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-400 sm:justify-end">
+              <Users className="h-4 w-4 text-cyan-400" />
+              <span>
+                {members.length} / {project.team_size_needed} active contributors
+              </span>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-            <CheckSquare className="h-4 w-4 text-emerald-400" />
-            <span>
-              {completedTasks} / {tasks.length} tasks completed
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-400 sm:justify-end">
-            <Users className="h-4 w-4 text-cyan-400" />
-            <span>
-              {members.length} / {project.team_size_needed} team members
-            </span>
           </div>
         </div>
       </div>
 
       {/* Workspace Tabs: Kanban Board, Milestones, Team, Chat */}
       <Tabs defaultValue="kanban">
-        <TabsList className="w-full sm:w-auto grid grid-cols-4 sm:inline-flex">
+        <TabsList className="w-full sm:w-auto grid grid-cols-4 sm:inline-flex mb-2">
           <TabsTrigger value="kanban" className="text-xs gap-1.5">
             <CheckSquare className="h-3.5 w-3.5" /> Kanban Board
           </TabsTrigger>
@@ -365,37 +388,39 @@ export const ProjectWorkspacePage: React.FC = () => {
 
         {/* Tab 2: Project Milestones */}
         <TabsContent value="milestones" className="mt-4">
-          <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl space-y-6">
+          <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <CardTitle className="text-base font-bold text-white">Project Milestones</CardTitle>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Track high-level deliverables and sprint checkpoints.
+                <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
+                  <MilestoneIcon className="w-4 h-4 text-cyan-400" /> Sprint Deliverables & Milestones
+                </CardTitle>
+                <p className="text-xs text-slate-400 mt-1">
+                  Track project roadmaps, sprint checkpoints, and feature releases.
                 </p>
               </div>
             </div>
 
             {/* Add Milestone Form */}
-            <form onSubmit={handleAddMilestone} className="flex flex-wrap sm:flex-nowrap gap-2">
+            <form onSubmit={handleAddMilestone} className="flex flex-wrap sm:flex-nowrap gap-2.5">
               <Input
                 value={newMilestoneTitle}
                 onChange={(e) => setNewMilestoneTitle(e.target.value)}
-                placeholder="New milestone title (e.g. Complete Supabase Auth & RLS policies)"
-                className="flex-1"
+                placeholder="New milestone title (e.g. Supabase Realtime Channels & Schema Migration)"
+                className="flex-1 h-10 text-xs"
                 required
               />
               <Input
                 type="date"
                 value={newMilestoneDate}
                 onChange={(e) => setNewMilestoneDate(e.target.value)}
-                className="w-full sm:w-44"
+                className="w-full sm:w-44 h-10 text-xs"
               />
               <Button
                 type="submit"
                 variant="primary"
                 size="md"
                 isLoading={addingMilestone}
-                className="text-xs font-semibold"
+                className="h-10 text-xs font-semibold px-4"
               >
                 <Plus className="h-4 w-4 mr-1" /> Add Milestone
               </Button>
@@ -404,8 +429,8 @@ export const ProjectWorkspacePage: React.FC = () => {
             {/* Milestones Checklist */}
             <div className="space-y-2.5">
               {milestones.length === 0 ? (
-                <div className="py-8 text-center text-xs text-slate-500 border border-dashed border-slate-800 rounded-xl">
-                  No milestones added yet. Add key milestones above to keep the team aligned.
+                <div className="py-10 text-center text-xs text-slate-500 border border-dashed border-slate-800/80 rounded-xl">
+                  No sprint milestones configured yet. Add key milestones above to align the team.
                 </div>
               ) : (
                 milestones.map((ms) => (
@@ -413,8 +438,8 @@ export const ProjectWorkspacePage: React.FC = () => {
                     key={ms.id}
                     className={`p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 ${
                       ms.is_completed
-                        ? 'border-emerald-500/30 bg-emerald-950/20'
-                        : 'border-slate-800 bg-slate-900/60 hover:bg-slate-800/60'
+                        ? 'border-emerald-500/20 bg-emerald-950/15'
+                        : 'border-slate-800/80 bg-slate-900/40 hover:bg-slate-800/50 hover:border-slate-700/80'
                     }`}
                   >
                     <button
@@ -451,12 +476,14 @@ export const ProjectWorkspacePage: React.FC = () => {
 
         {/* Tab 3: Team Members */}
         <TabsContent value="team" className="mt-4">
-          <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl space-y-6">
+          <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-base font-bold text-white">Project Members</CardTitle>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Engineers currently contributing to this project.
+                <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
+                  <Users className="w-4 h-4 text-cyan-400" /> Active Contributors
+                </CardTitle>
+                <p className="text-xs text-slate-400 mt-1">
+                  Engineers currently building on this workspace.
                 </p>
               </div>
               <Button
@@ -473,7 +500,7 @@ export const ProjectWorkspacePage: React.FC = () => {
               {members.map((mem) => (
                 <div
                   key={mem.id}
-                  className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 flex items-center justify-between"
+                  className="p-4 rounded-xl border border-slate-800/80 bg-slate-900/40 flex items-center justify-between hover:border-slate-700/80 transition-colors"
                 >
                   <Link
                     to={`/profile/${mem.profile?.username}`}
@@ -495,7 +522,10 @@ export const ProjectWorkspacePage: React.FC = () => {
                     </div>
                   </Link>
 
-                  <Badge variant={mem.role === 'owner' ? 'cyan' : 'secondary'} className="capitalize text-[10px]">
+                  <Badge
+                    variant={mem.role === 'owner' ? 'cyan' : 'secondary'}
+                    className="capitalize text-[10px] font-mono"
+                  >
                     {mem.role}
                   </Badge>
                 </div>
@@ -506,11 +536,11 @@ export const ProjectWorkspacePage: React.FC = () => {
 
         {/* Tab 4: Team Chat */}
         <TabsContent value="chat" className="mt-4">
-          <div className="h-[650px] rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+          <div className="h-[650px] rounded-2xl border border-slate-800/80 overflow-hidden shadow-2xl bg-[#0c1017]">
             {conversation && user ? (
               <ChatWindow conversation={conversation} currentUserId={user.id} />
             ) : (
-              <div className="h-full flex items-center justify-center text-xs text-slate-400">
+              <div className="h-full flex items-center justify-center text-xs text-slate-400 font-mono">
                 Initializing team channel...
               </div>
             )}
@@ -525,6 +555,6 @@ export const ProjectWorkspacePage: React.FC = () => {
         project={project}
         onInviteSent={loadProjectData}
       />
-    </div>
+    </motion.div>
   );
 };

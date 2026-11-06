@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
   Filter,
   UserPlus,
   UserCheck,
-  Check,
   Clock,
   Sparkles,
   MapPin,
-  ExternalLink,
   Github,
+  ArrowUpDown,
+  Code2,
+  Check,
 } from 'lucide-react';
-import { Profile, ExperienceLevel, AvailabilityStatus } from '@/types/database.types';
+import { Profile, ExperienceLevel } from '@/types/database.types';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
-import { Card, CardContent } from '@/components/ui/Card';
+import { CardSpotlight } from '@/components/ui/CardSpotlight';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -26,16 +28,17 @@ import { useToast } from '@/components/ui/Toast';
 export const DiscoveryPage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
-  const [developers, setDevelopers] = useState<(Profile & { skillsList?: string[]; isConnected?: boolean; isPending?: boolean })[]>([]);
+  const [developers, setDevelopers] = useState<(Profile & { skillsList?: string[]; isConnected?: boolean; isPending?: boolean; connectionId?: string })[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Filters
+  // Filters & Sorting
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [selectedLanguage, setSelectedLanguage] = useState(searchParams.get('lang') || 'all');
   const [selectedExperience, setSelectedExperience] = useState<string>('all');
   const [selectedAvailability, setSelectedAvailability] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'recent' | 'seniority' | 'availability'>('recent');
   const [connectingId, setConnectingId] = useState<string | null>(null);
 
   const languagesList = [
@@ -55,7 +58,6 @@ export const DiscoveryPage: React.FC = () => {
   const loadDevelopers = async () => {
     setLoading(true);
     try {
-      // 1. Fetch profiles
       let query = supabase
         .from('profiles')
         .select(`
@@ -68,7 +70,7 @@ export const DiscoveryPage: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (user) {
-        query = query.neq('id', user.id); // Don't show current user in discovery
+        query = query.neq('id', user.id);
       }
 
       if (selectedExperience !== 'all') {
@@ -82,7 +84,6 @@ export const DiscoveryPage: React.FC = () => {
       const { data, error } = await query;
       if (error) throw error;
 
-      // 2. Fetch connections state for current user
       let connectionMap: Record<string, { status: string; id: string }> = {};
       if (user) {
         const { data: conns } = await supabase
@@ -98,7 +99,6 @@ export const DiscoveryPage: React.FC = () => {
         }
       }
 
-      // Map profiles with parsed skills & connection statuses
       const mapped = (data || []).map((p: any) => {
         const skillsList = (p.user_skills || []).map((us: any) => us.skill?.name).filter(Boolean);
         const conn = connectionMap[p.id];
@@ -111,7 +111,6 @@ export const DiscoveryPage: React.FC = () => {
         };
       });
 
-      // Filter by text search & language in memory for high responsiveness
       let filtered = mapped;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
@@ -130,6 +129,14 @@ export const DiscoveryPage: React.FC = () => {
         );
       }
 
+      // Sorting
+      if (sortBy === 'seniority') {
+        const weight: Record<string, number> = { Architect: 5, Lead: 4, Senior: 3, 'Mid-Level': 2, Junior: 1 };
+        filtered.sort((a, b) => (weight[b.experience_level] || 0) - (weight[a.experience_level] || 0));
+      } else if (sortBy === 'availability') {
+        filtered.sort((a, b) => (b.weekly_hours_available || 0) - (a.weekly_hours_available || 0));
+      }
+
       setDevelopers(filtered);
     } catch (err: any) {
       console.error('Error discovering developers:', err);
@@ -145,7 +152,7 @@ export const DiscoveryPage: React.FC = () => {
 
   useEffect(() => {
     loadDevelopers();
-  }, [user, selectedExperience, selectedAvailability]);
+  }, [user, selectedExperience, selectedAvailability, sortBy]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,7 +168,6 @@ export const DiscoveryPage: React.FC = () => {
     setConnectingId(targetDev.id);
     try {
       if (targetDev.isConnected || targetDev.isPending) {
-        // Disconnect or cancel request
         if (targetDev.connectionId) {
           await supabase.from('connections').delete().eq('id', targetDev.connectionId);
         } else {
@@ -178,7 +184,6 @@ export const DiscoveryPage: React.FC = () => {
           )
         );
       } else {
-        // Send connection request
         const { error } = await supabase.from('connections').insert({
           requester_id: user.id,
           receiver_id: targetDev.id,
@@ -187,7 +192,6 @@ export const DiscoveryPage: React.FC = () => {
 
         if (error) throw error;
 
-        // Send notification
         await supabase.from('notifications').insert({
           user_id: targetDev.id,
           sender_id: user.id,
@@ -220,71 +224,84 @@ export const DiscoveryPage: React.FC = () => {
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
             Discover Developers
-            <Badge variant="cyan" className="font-mono text-xs">
-              {developers.length} Found
+            <Badge variant="cyan" dot className="font-mono text-xs">
+              {developers.length} Available
             </Badge>
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Connect with skilled software engineers, open-source maintainers, and potential project teammates.
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            Connect with skilled engineers, open-source maintainers, and potential project teammates.
           </p>
         </div>
       </div>
 
-      {/* Search and Filters Bar */}
-      <div className="p-4 rounded-2xl border border-slate-800 bg-[#0d1527]/90 shadow-xl space-y-4">
+      {/* Filter and Search Bar */}
+      <div className="p-4 rounded-2xl border border-white/[0.08] bg-[#0c1017] shadow-xl space-y-4">
         <form onSubmit={handleSearchSubmit} className="flex gap-2">
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by name, @username, or technology (e.g. React, Python, Go)..."
+            placeholder="Search by name, @username, or technology (e.g. React, Rust, Python)..."
             icon={<Search className="h-4 w-4" />}
-            className="h-11"
+            className="h-10 text-xs sm:text-sm"
           />
-          <Button type="submit" variant="primary" className="h-11 px-5 font-semibold text-xs">
+          <Button type="submit" variant="primary" className="h-10 px-5 font-semibold text-xs">
             Search
           </Button>
         </form>
 
-        {/* Filter Dropdowns & Pills */}
-        <div className="flex flex-wrap items-center gap-3 pt-1 text-xs">
-          <div className="flex items-center gap-1.5 text-slate-400 font-semibold">
-            <Filter className="h-3.5 w-3.5" /> Filters:
+        {/* Filter Controls Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex items-center gap-1.5 text-slate-400 font-semibold font-mono text-[11px]">
+              <Filter className="h-3 w-3 text-sky-400" /> FILTERS:
+            </div>
+
+            <select
+              value={selectedExperience}
+              onChange={(e) => setSelectedExperience(e.target.value)}
+              className="h-8 rounded-lg bg-[#090d15] border border-white/[0.08] px-2.5 text-xs text-slate-200 focus:outline-none focus:border-sky-500/50"
+            >
+              <option value="all">All Seniority</option>
+              {experienceLevels.map((lvl) => (
+                <option key={lvl} value={lvl}>
+                  {lvl}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={selectedAvailability}
+              onChange={(e) => setSelectedAvailability(e.target.value)}
+              className="h-8 rounded-lg bg-[#090d15] border border-white/[0.08] px-2.5 text-xs text-slate-200 focus:outline-none focus:border-sky-500/50"
+            >
+              <option value="all">All Availability</option>
+              <option value="open_to_collaborate">Open to Collaborate</option>
+              <option value="available">Available</option>
+              <option value="busy">Busy</option>
+            </select>
+
+            <div className="flex items-center gap-1 pl-2 border-l border-white/[0.08]">
+              <ArrowUpDown className="h-3 w-3 text-slate-500" />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="h-8 rounded-lg bg-[#090d15] border border-white/[0.08] px-2 text-xs text-slate-200 focus:outline-none focus:border-sky-500/50"
+              >
+                <option value="recent">Sort by: Recently Joined</option>
+                <option value="seniority">Sort by: Seniority</option>
+                <option value="availability">Sort by: Hours Available</option>
+              </select>
+            </div>
           </div>
 
-          {/* Experience level filter */}
-          <select
-            value={selectedExperience}
-            onChange={(e) => setSelectedExperience(e.target.value)}
-            className="h-9 rounded-lg bg-slate-900 border border-slate-700/80 px-3 text-slate-200 focus:outline-none focus:border-cyan-500"
-          >
-            <option value="all">All Experience Levels</option>
-            {experienceLevels.map((lvl) => (
-              <option key={lvl} value={lvl}>
-                {lvl}
-              </option>
-            ))}
-          </select>
-
-          {/* Availability filter */}
-          <select
-            value={selectedAvailability}
-            onChange={(e) => setSelectedAvailability(e.target.value)}
-            className="h-9 rounded-lg bg-slate-900 border border-slate-700/80 px-3 text-slate-200 focus:outline-none focus:border-cyan-500"
-          >
-            <option value="all">All Availability</option>
-            <option value="available">Available</option>
-            <option value="open_to_collaborate">Open to Collaborate</option>
-            <option value="busy">Busy</option>
-          </select>
-
-          {/* Language quick pills */}
-          <div className="hidden lg:flex items-center gap-1.5 overflow-x-auto ml-auto">
+          {/* Quick Skill Filter Pills */}
+          <div className="hidden xl:flex items-center gap-1 overflow-x-auto">
             <button
               onClick={() => setSelectedLanguage('all')}
-              className={`px-2.5 py-1 rounded-md text-xs font-mono transition-all ${
+              className={`px-2.5 py-1 rounded-md text-[11px] font-mono transition-all ${
                 selectedLanguage === 'all'
-                  ? 'bg-cyan-500 text-slate-950 font-bold'
-                  : 'bg-slate-800 text-slate-400 hover:text-white'
+                  ? 'bg-sky-500 text-slate-950 font-bold'
+                  : 'bg-slate-900 text-slate-400 hover:text-white border border-white/[0.06]'
               }`}
             >
               All Skills
@@ -293,10 +310,10 @@ export const DiscoveryPage: React.FC = () => {
               <button
                 key={lang}
                 onClick={() => setSelectedLanguage(lang)}
-                className={`px-2.5 py-1 rounded-md text-xs font-mono transition-all ${
+                className={`px-2.5 py-1 rounded-md text-[11px] font-mono transition-all ${
                   selectedLanguage.toLowerCase() === lang.toLowerCase()
-                    ? 'bg-cyan-500 text-slate-950 font-bold'
-                    : 'bg-slate-800 text-slate-400 hover:text-white'
+                    ? 'bg-sky-500 text-slate-950 font-bold'
+                    : 'bg-slate-900 text-slate-400 hover:text-white border border-white/[0.06]'
                 }`}
               >
                 {lang}
@@ -314,9 +331,9 @@ export const DiscoveryPage: React.FC = () => {
           ))}
         </div>
       ) : developers.length === 0 ? (
-        <div className="p-12 text-center border border-dashed border-slate-800 rounded-2xl bg-[#0d1527]/50">
-          <Sparkles className="h-12 w-12 text-slate-600 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-white mb-1">No Developers Found</h3>
+        <div className="p-12 text-center border border-dashed border-white/[0.08] rounded-2xl bg-[#0c1017]">
+          <Sparkles className="h-10 w-10 text-slate-600 mx-auto mb-3" />
+          <h3 className="text-base font-bold text-white mb-1">No Developers Found</h3>
           <p className="text-xs text-slate-400 max-w-sm mx-auto mb-4">
             Try adjusting your search criteria or resetting filters to discover more developers.
           </p>
@@ -328,6 +345,7 @@ export const DiscoveryPage: React.FC = () => {
               setSelectedLanguage('all');
               setSelectedExperience('all');
               setSelectedAvailability('all');
+              setSortBy('recent');
               loadDevelopers();
             }}
           >
@@ -335,120 +353,138 @@ export const DiscoveryPage: React.FC = () => {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {developers.map((dev) => (
-            <Card
-              key={dev.id}
-              className="border-slate-800 bg-[#0d1527]/90 hover:border-slate-700/80 transition-all flex flex-col justify-between overflow-hidden group shadow-xl"
-            >
-              <CardContent className="p-6 space-y-4">
-                {/* Header with Avatar & Details */}
-                <div className="flex items-start justify-between gap-3">
-                  <Link to={`/profile/${dev.username}`} className="flex items-center gap-3 min-w-0">
-                    <Avatar
-                      src={dev.avatar_url}
-                      name={dev.full_name}
-                      size="lg"
-                      status={dev.availability_status}
-                    />
-                    <div className="min-w-0">
-                      <h4 className="font-bold text-base text-white group-hover:text-cyan-400 transition-colors truncate">
-                        {dev.full_name}
-                      </h4>
-                      <p className="text-xs text-cyan-400 font-mono">@{dev.username}</p>
-                      <Badge variant="secondary" className="mt-1 text-[10px] font-mono">
-                        {dev.experience_level}
+        <motion.div
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+        >
+          <AnimatePresence>
+            {developers.map((dev) => (
+              <motion.div
+                key={dev.id}
+                layout
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+              >
+                <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4">
+                  <div>
+                    {/* Top Status & GitHub Link */}
+                    <div className="flex items-center justify-between mb-3">
+                      <Badge
+                        variant={dev.availability_status === 'open_to_collaborate' ? 'cyan' : 'secondary'}
+                        dot
+                        className="text-[10px]"
+                      >
+                        {dev.availability_status.replace(/_/g, ' ')}
                       </Badge>
+
+                      {dev.github_username && (
+                        <a
+                          href={`https://github.com/${dev.github_username}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+                          title={`github.com/${dev.github_username}`}
+                        >
+                          <Github className="h-3.5 w-3.5" />
+                        </a>
+                      )}
                     </div>
-                  </Link>
 
-                  {dev.github_username && (
-                    <a
-                      href={`https://github.com/${dev.github_username}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-                      title="GitHub Profile"
+                    {/* Developer Info */}
+                    <Link to={`/profile/${dev.username}`} className="flex items-start gap-3 group">
+                      <Avatar
+                        src={dev.avatar_url}
+                        name={dev.full_name}
+                        size="lg"
+                        status={dev.availability_status}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <h4 className="font-bold text-sm text-white group-hover:text-sky-300 transition-colors truncate">
+                          {dev.full_name}
+                        </h4>
+                        <p className="text-xs text-sky-400 font-mono">@{dev.username}</p>
+                        <span className="text-[10px] text-slate-400 font-mono block mt-0.5">
+                          {dev.experience_level}
+                        </span>
+                      </div>
+                    </Link>
+
+                    {/* Headline & Bio */}
+                    <p className="text-xs font-medium text-slate-200 mt-3 line-clamp-1">
+                      {dev.headline || 'Software Engineer'}
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                      {dev.bio || 'Building modern software and open-source projects on DevConnect.'}
+                    </p>
+
+                    {/* Metadata: Location & Hours */}
+                    <div className="flex items-center gap-4 text-[11px] text-slate-500 font-mono mt-3">
+                      {dev.location && (
+                        <span className="flex items-center gap-1">
+                          <MapPin className="h-3 w-3 text-slate-500" /> {dev.location}
+                        </span>
+                      )}
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3 text-sky-400" /> {dev.weekly_hours_available}h/wk
+                      </span>
+                    </div>
+
+                    {/* Technical Skills Pills */}
+                    <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-white/[0.06]">
+                      {(dev.skillsList || []).slice(0, 4).map((sk) => (
+                        <span
+                          key={sk}
+                          className="text-[10px] px-2 py-0.5 rounded-md bg-slate-900 border border-white/[0.06] text-slate-300 font-mono"
+                        >
+                          {sk}
+                        </span>
+                      ))}
+                      {(dev.skillsList || []).length > 4 && (
+                        <span className="text-[10px] text-slate-500 font-mono px-1">
+                          +{dev.skillsList!.length - 4}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Actions Footer */}
+                  <div className="flex items-center justify-between gap-2 pt-3 border-t border-white/[0.06]">
+                    <Link to={`/profile/${dev.username}`} className="flex-1">
+                      <Button variant="outline" size="sm" className="w-full text-xs font-semibold h-8">
+                        View Portfolio
+                      </Button>
+                    </Link>
+
+                    <Button
+                      variant={dev.isConnected ? 'outline' : dev.isPending ? 'secondary' : 'primary'}
+                      size="sm"
+                      disabled={connectingId === dev.id}
+                      isLoading={connectingId === dev.id}
+                      onClick={() => handleConnectToggle(dev)}
+                      className="flex-1 text-xs font-semibold h-8"
                     >
-                      <Github className="h-4 w-4" />
-                    </a>
-                  )}
-                </div>
-
-                {/* Headline & Bio */}
-                <div>
-                  <p className="text-xs font-medium text-slate-200 line-clamp-1">
-                    {dev.headline || 'Software Engineer'}
-                  </p>
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
-                    {dev.bio || 'Passionate software developer interested in modern web tech and collaborative engineering.'}
-                  </p>
-                </div>
-
-                {/* Location & Weekly Availability */}
-                <div className="flex items-center gap-4 text-[11px] text-slate-400 font-mono">
-                  {dev.location && (
-                    <span className="flex items-center gap-1">
-                      <MapPin className="h-3 w-3 text-slate-500" /> {dev.location}
-                    </span>
-                  )}
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-3 w-3 text-cyan-400" /> {dev.weekly_hours_available}h/wk
-                  </span>
-                </div>
-
-                {/* Skills tags */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {(dev.skillsList || []).slice(0, 4).map((sk) => (
-                    <span
-                      key={sk}
-                      className="text-[10px] px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300 font-mono"
-                    >
-                      {sk}
-                    </span>
-                  ))}
-                  {(dev.skillsList || []).length > 4 && (
-                    <span className="text-[10px] text-slate-500 font-mono px-1">
-                      +{dev.skillsList!.length - 4} more
-                    </span>
-                  )}
-                </div>
-              </CardContent>
-
-              {/* Action Buttons */}
-              <div className="p-4 bg-slate-950/60 border-t border-slate-800 flex items-center justify-between gap-2">
-                <Link to={`/profile/${dev.username}`} className="flex-1">
-                  <Button variant="outline" size="sm" className="w-full text-xs font-semibold">
-                    View Profile
-                  </Button>
-                </Link>
-
-                <Button
-                  variant={dev.isConnected ? 'outline' : dev.isPending ? 'secondary' : 'primary'}
-                  size="sm"
-                  disabled={connectingId === dev.id}
-                  isLoading={connectingId === dev.id}
-                  onClick={() => handleConnectToggle(dev)}
-                  className="flex-1 text-xs font-semibold"
-                >
-                  {dev.isConnected ? (
-                    <span className="flex items-center gap-1 text-emerald-400">
-                      <UserCheck className="h-3.5 w-3.5" /> Connected
-                    </span>
-                  ) : dev.isPending ? (
-                    <span className="flex items-center gap-1 text-amber-400">
-                      <Clock className="h-3.5 w-3.5" /> Pending
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1">
-                      <UserPlus className="h-3.5 w-3.5" /> Connect
-                    </span>
-                  )}
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
+                      {dev.isConnected ? (
+                        <span className="flex items-center gap-1 text-emerald-400">
+                          <UserCheck className="h-3.5 w-3.5" /> Connected
+                        </span>
+                      ) : dev.isPending ? (
+                        <span className="flex items-center gap-1 text-amber-400">
+                          <Clock className="h-3.5 w-3.5" /> Pending
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1">
+                          <UserPlus className="h-3.5 w-3.5" /> Connect
+                        </span>
+                      )}
+                    </Button>
+                  </div>
+                </CardSpotlight>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       )}
     </div>
   );

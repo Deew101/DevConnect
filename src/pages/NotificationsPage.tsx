@@ -11,7 +11,9 @@ import {
   ExternalLink,
   Check,
   X,
+  Sparkles,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useNotifications } from '@/context/NotificationContext';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -23,8 +25,14 @@ import { formatTimeAgo } from '@/lib/utils';
 import { useToast } from '@/components/ui/Toast';
 
 export const NotificationsPage: React.FC = () => {
-  const { notifications, unreadCount, markAsRead, markAllAsRead, clearNotification, refreshNotifications } =
-    useNotifications();
+  const {
+    notifications,
+    unreadCount,
+    markAsRead,
+    markAllAsRead,
+    clearNotification,
+    refreshNotifications,
+  } = useNotifications();
   const { user } = useAuth();
   const { toast } = useToast();
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
@@ -39,14 +47,12 @@ export const NotificationsPage: React.FC = () => {
     try {
       const requesterId = notif.data?.requester_id || notif.sender_id;
 
-      // Update connection to accepted
       await supabase
         .from('connections')
         .update({ status: 'accepted' })
         .eq('requester_id', requesterId)
         .eq('receiver_id', user.id);
 
-      // Notify requester
       await supabase.from('notifications').insert({
         user_id: requesterId,
         sender_id: user.id,
@@ -72,14 +78,12 @@ export const NotificationsPage: React.FC = () => {
       const projectId = notif.data?.project_id;
       if (!projectId) throw new Error('Project ID missing');
 
-      // Add to project members
       await supabase.from('project_members').insert({
         project_id: projectId,
         user_id: user.id,
         role: 'contributor',
       });
 
-      // Update invitation record
       await supabase
         .from('project_invitations')
         .update({ status: 'accepted' })
@@ -114,10 +118,22 @@ export const NotificationsPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="max-w-4xl mx-auto space-y-6 pb-12"
+    >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[11px] font-mono tracking-wider text-cyan-400 uppercase font-semibold">
+              DevConnect Stream
+            </span>
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <span className="text-xs font-mono text-slate-400">Activity Center</span>
+          </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
             Notifications
             {unreadCount > 0 && (
@@ -126,15 +142,20 @@ export const NotificationsPage: React.FC = () => {
               </Badge>
             )}
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Real-time activity logs, project invitations, and connection requests.
+          <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+            Real-time collaboration alerts, team invitations, and network updates.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 self-start sm:self-auto">
           {unreadCount > 0 && (
-            <Button variant="outline" size="sm" onClick={markAllAsRead} className="text-xs">
-              <Check className="h-3.5 w-3.5 mr-1" /> Mark all read
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={markAllAsRead}
+              className="text-xs h-8 font-semibold"
+            >
+              <Check className="h-3.5 w-3.5 mr-1 text-cyan-400" /> Mark all read
             </Button>
           )}
 
@@ -142,7 +163,9 @@ export const NotificationsPage: React.FC = () => {
             <button
               onClick={() => setFilter('all')}
               className={`px-3 py-1 rounded-md font-semibold transition-all ${
-                filter === 'all' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400'
+                filter === 'all'
+                  ? 'bg-slate-800 text-cyan-300 border border-slate-700 shadow-sm'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               All
@@ -150,7 +173,9 @@ export const NotificationsPage: React.FC = () => {
             <button
               onClick={() => setFilter('unread')}
               className={`px-3 py-1 rounded-md font-semibold transition-all ${
-                filter === 'unread' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400'
+                filter === 'unread'
+                  ? 'bg-slate-800 text-cyan-300 border border-slate-700 shadow-sm'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               Unread
@@ -160,23 +185,29 @@ export const NotificationsPage: React.FC = () => {
       </div>
 
       {/* Notifications List */}
-      <Card className="border-slate-800 bg-[#0d1527]/90 shadow-xl overflow-hidden divide-y divide-slate-800/60">
+      <Card className="border-slate-800/80 bg-[#0c1017] shadow-xl overflow-hidden divide-y divide-slate-800/60">
         {filteredNotifications.length === 0 ? (
-          <div className="p-12 text-center text-slate-500 text-xs">
-            <Bell className="h-10 w-10 text-slate-700 mx-auto mb-3" />
-            <h4 className="font-semibold text-white text-sm">All caught up!</h4>
-            <p className="mt-1">You have no {filter === 'unread' ? 'unread' : ''} notifications right now.</p>
+          <div className="p-16 text-center text-slate-500 text-xs">
+            <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto mb-3 text-slate-500">
+              <Bell className="h-6 w-6" />
+            </div>
+            <h4 className="font-bold text-white text-sm">All caught up!</h4>
+            <p className="mt-1 text-slate-400 max-w-xs mx-auto">
+              You have no {filter === 'unread' ? 'unread' : ''} notifications at this moment.
+            </p>
           </div>
         ) : (
           filteredNotifications.map((notif) => (
             <div
               key={notif.id}
               className={`p-4 sm:p-5 flex items-start justify-between gap-4 transition-colors ${
-                !notif.is_read ? 'bg-cyan-950/20' : 'hover:bg-slate-900/40'
+                !notif.is_read
+                  ? 'bg-cyan-950/15 border-l-2 border-l-cyan-400'
+                  : 'hover:bg-slate-900/40'
               }`}
             >
               <div className="flex items-start gap-3.5 min-w-0 flex-1">
-                <div className="p-2 rounded-xl bg-slate-800 border border-slate-700/80 flex-shrink-0 mt-0.5">
+                <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex-shrink-0 mt-0.5 shadow-inner">
                   {getNotificationIcon(notif.type)}
                 </div>
 
@@ -184,7 +215,7 @@ export const NotificationsPage: React.FC = () => {
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-bold text-white text-sm truncate">{notif.title}</span>
                     {!notif.is_read && (
-                      <span className="h-2 w-2 rounded-full bg-cyan-400 flex-shrink-0" />
+                      <span className="h-2 w-2 rounded-full bg-cyan-400 flex-shrink-0 shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
                     )}
                   </div>
 
@@ -209,7 +240,7 @@ export const NotificationsPage: React.FC = () => {
                         size="sm"
                         isLoading={actionLoadingId === notif.id}
                         onClick={() => handleAcceptConnection(notif)}
-                        className="h-8 text-xs font-semibold"
+                        className="h-7 text-xs font-semibold px-3"
                       >
                         Accept Request
                       </Button>
@@ -217,7 +248,7 @@ export const NotificationsPage: React.FC = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => markAsRead(notif.id)}
-                        className="h-8 text-xs text-slate-400"
+                        className="h-7 text-xs text-slate-400"
                       >
                         Dismiss
                       </Button>
@@ -231,7 +262,7 @@ export const NotificationsPage: React.FC = () => {
                         size="sm"
                         isLoading={actionLoadingId === notif.id}
                         onClick={() => handleAcceptInvite(notif)}
-                        className="h-8 text-xs font-semibold"
+                        className="h-7 text-xs font-semibold px-3"
                       >
                         Accept & Join Project
                       </Button>
@@ -239,7 +270,7 @@ export const NotificationsPage: React.FC = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => markAsRead(notif.id)}
-                        className="h-8 text-xs text-slate-400"
+                        className="h-7 text-xs text-slate-400"
                       >
                         Decline
                       </Button>
@@ -260,6 +291,6 @@ export const NotificationsPage: React.FC = () => {
           ))
         )}
       </Card>
-    </div>
+    </motion.div>
   );
 };

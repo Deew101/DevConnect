@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Layers, Mail, Lock, User, ArrowRight, Github, Sparkles, ShieldCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { useToast } from '@/components/ui/Toast';
+import { GridPattern } from '@/components/ui/GridPattern';
 
 export const AuthPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -86,28 +88,39 @@ export const AuthPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#090d16] flex flex-col justify-center items-center p-4 sm:p-6 text-slate-100">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen bg-[#07090e] flex flex-col justify-center items-center p-4 sm:p-6 text-slate-100 relative overflow-hidden">
+      <GridPattern className="opacity-25" />
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-to-tr from-cyan-500/10 to-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="max-w-md w-full relative z-10"
+      >
         {/* Brand Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex h-14 w-14 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 items-center justify-center shadow-xl shadow-cyan-500/25 mb-4 animate-pulse">
-            <Layers className="h-7 w-7 text-white" />
+        <div className="text-center mb-7">
+          <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 items-center justify-center shadow-lg shadow-cyan-500/20 mb-3 border border-cyan-400/30">
+            <Layers className="h-6 w-6 text-white" />
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">DevConnect</h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            The GitHub + LinkedIn + Discord ecosystem for developers.
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">DevConnect</h1>
+          <p className="text-xs text-slate-400 mt-1 font-mono">
+            GitHub + LinkedIn + Discord ecosystem for engineers
           </p>
         </div>
 
         {/* Card */}
-        <Card className="border-slate-800 bg-[#0d1527]/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+        <Card className="border-slate-800/80 bg-[#0c1017]/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
           {/* Tab selector */}
-          <div className="grid grid-cols-2 rounded-xl bg-slate-900 border border-slate-800 p-1 mb-6 text-xs font-semibold">
+          <div className="grid grid-cols-2 rounded-xl bg-slate-900 border border-slate-800 p-1 mb-6 text-xs font-semibold font-mono">
             <button
               type="button"
               onClick={() => setIsRegister(false)}
               className={`py-2 rounded-lg transition-all ${
-                !isRegister ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+                !isRegister
+                  ? 'bg-slate-800 text-cyan-300 shadow-sm border border-slate-700/80'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               Sign In
@@ -116,7 +129,9 @@ export const AuthPage: React.FC = () => {
               type="button"
               onClick={() => setIsRegister(true)}
               className={`py-2 rounded-lg transition-all ${
-                isRegister ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+                isRegister
+                  ? 'bg-slate-800 text-cyan-300 shadow-sm border border-slate-700/80'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               Create Account
@@ -129,7 +144,7 @@ export const AuthPage: React.FC = () => {
               type="button"
               disabled={Boolean(oauthLoading)}
               onClick={handleGoogleAuth}
-              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-700 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-white transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-700/80 bg-slate-900/90 hover:bg-slate-800/90 text-xs font-semibold text-white transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24">
                 <path
@@ -156,7 +171,7 @@ export const AuthPage: React.FC = () => {
               type="button"
               disabled={Boolean(oauthLoading)}
               onClick={handleGitHubAuth}
-              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-700 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-white transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-700/80 bg-slate-900/90 hover:bg-slate-800/90 text-xs font-semibold text-white transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
             >
               <Github className="h-4 w-4" />
               <span>{oauthLoading === 'github' ? 'Redirecting...' : 'Continue with GitHub'}</span>
@@ -165,8 +180,8 @@ export const AuthPage: React.FC = () => {
 
           <div className="relative flex items-center justify-center mb-6">
             <div className="border-t border-slate-800 w-full" />
-            <span className="bg-[#0d1527] px-3 text-[11px] font-mono text-slate-500 uppercase">
-              Or with email
+            <span className="bg-[#0c1017] px-3 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+              Or with email credentials
             </span>
             <div className="border-t border-slate-800 w-full" />
           </div>
@@ -175,19 +190,22 @@ export const AuthPage: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {isRegister && (
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                  Full Name
+                </label>
                 <Input
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Guido van Rossum"
                   icon={<User className="h-4 w-4" />}
+                  className="h-10 text-xs"
                   required={isRegister}
                 />
               </div>
             )}
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
                 Email Address
               </label>
               <Input
@@ -196,18 +214,22 @@ export const AuthPage: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="developer@domain.com"
                 icon={<Mail className="h-4 w-4" />}
+                className="h-10 text-xs"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Password</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                Password
+              </label>
               <Input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
                 icon={<Lock className="h-4 w-4" />}
+                className="h-10 text-xs"
                 required
               />
             </div>
@@ -215,7 +237,7 @@ export const AuthPage: React.FC = () => {
             <Button
               type="submit"
               variant="primary"
-              className="w-full h-11 font-semibold text-xs sm:text-sm mt-2"
+              className="w-full h-10 font-semibold text-xs mt-3 shadow-md shadow-cyan-500/20"
               isLoading={loading}
             >
               {isRegister ? 'Create Developer Account' : 'Sign In to DevConnect'}
@@ -223,12 +245,12 @@ export const AuthPage: React.FC = () => {
             </Button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-center gap-1.5 text-[11px] text-slate-500">
+          <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-center gap-1.5 text-[11px] text-slate-500 font-mono">
             <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-            <span>End-to-End Supabase PostgreSQL Row Level Security</span>
+            <span>Supabase PostgreSQL Row Level Security (RLS)</span>
           </div>
         </Card>
-      </div>
+      </motion.div>
     </div>
   );
 };

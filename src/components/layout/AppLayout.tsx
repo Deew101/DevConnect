@@ -9,7 +9,7 @@ export const AppLayout: React.FC = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#07090e] text-slate-100 flex flex-col font-sans selection:bg-sky-500/20 selection:text-sky-300">
       <SupabaseConfigBanner />
       <Navbar onToggleSidebar={() => setIsMobileSidebarOpen(true)} />
 
@@ -19,7 +19,7 @@ export const AppLayout: React.FC = () => {
           onClose={() => setIsMobileSidebarOpen(false)}
         />
 
-        <main className="flex-1 overflow-y-auto min-h-[calc(100vh-4rem)] p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto min-h-[calc(100vh-3.5rem)] p-4 sm:p-6 lg:p-7">
           <ErrorBoundary>
             <Outlet />
           </ErrorBoundary>

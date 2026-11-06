@@ -16,7 +16,14 @@ import {
   Code2,
   FolderGit2,
   ExternalLink,
+  Share2,
+  Check,
+  CheckCircle2,
+  Flame,
+  Layers,
+  ArrowUpRight,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Profile, UserSkill, Project, ConnectionStatus } from '@/types/database.types';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
@@ -28,6 +35,8 @@ import { GitHubReposCard } from '@/components/github/GitHubReposCard';
 import { LoadingScreen } from '@/components/common/LoadingScreen';
 import { formatDate } from '@/lib/utils';
 import { useToast } from '@/components/ui/Toast';
+import { CardSpotlight } from '@/components/ui/CardSpotlight';
+import { GridPattern } from '@/components/ui/GridPattern';
 
 export const ProfilePage: React.FC = () => {
   const { username } = useParams<{ username: string }>();
@@ -41,6 +50,7 @@ export const ProfilePage: React.FC = () => {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
 
   const isOwner =
     (currentUser && profile?.id === currentUser.id) ||
@@ -58,7 +68,6 @@ export const ProfilePage: React.FC = () => {
           fetchedProfile = currentProfile;
           targetId = currentUser?.id || '';
         } else {
-          // Fetch by username or UUID
           const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
             username || ''
           );
@@ -92,7 +101,7 @@ export const ProfilePage: React.FC = () => {
 
         if (skillsData) setSkills(skillsData as any);
 
-        // Fetch user projects (as owner or member)
+        // Fetch user projects
         const { data: projectsData } = await supabase
           .from('projects')
           .select('*')
@@ -101,7 +110,7 @@ export const ProfilePage: React.FC = () => {
 
         if (projectsData) setProjects(projectsData as Project[]);
 
-        // Check connection status if viewing someone else's profile
+        // Check connection status
         if (currentUser && targetId !== currentUser.id) {
           const { data: conn } = await supabase
             .from('connections')
@@ -132,7 +141,6 @@ export const ProfilePage: React.FC = () => {
     setActionLoading(true);
     try {
       if (connectionStatus === 'pending' || connectionStatus === 'accepted') {
-        // Disconnect
         await supabase
           .from('connections')
           .delete()
@@ -143,7 +151,6 @@ export const ProfilePage: React.FC = () => {
         setConnectionStatus(null);
         toast({ title: 'Connection removed', type: 'info' });
       } else {
-        // Send request
         await supabase.from('connections').insert({
           requester_id: currentUser.id,
           receiver_id: profile.id,
@@ -172,7 +179,6 @@ export const ProfilePage: React.FC = () => {
   const handleStartMessage = async () => {
     if (!currentUser || !profile) return;
     try {
-      // Find or create direct conversation
       const { data: convData, error } = await supabase
         .from('conversations')
         .insert({ type: 'direct' })
@@ -181,7 +187,6 @@ export const ProfilePage: React.FC = () => {
 
       if (error) throw error;
 
-      // Add both members
       await supabase.from('conversation_members').insert([
         { conversation_id: convData.id, user_id: currentUser.id },
         { conversation_id: convData.id, user_id: profile.id },
@@ -193,15 +198,25 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
+  const handleCopyProfile = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopiedLink(true);
+    toast({ title: 'Profile URL copied to clipboard', type: 'success' });
+    setTimeout(() => setCopiedLink(false), 2000);
+  };
+
   if (loading) {
     return <LoadingScreen message="Loading developer portfolio..." />;
   }
 
   if (!profile) {
     return (
-      <div className="p-12 text-center border border-dashed border-slate-800 rounded-2xl max-w-lg mx-auto mt-12 bg-[#0d1527]">
+      <div className="p-12 text-center border border-dashed border-slate-800 rounded-2xl max-w-lg mx-auto mt-16 bg-[#0c1017]">
+        <div className="w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-center mx-auto mb-4 text-slate-400">
+          <Code2 className="w-6 h-6" />
+        </div>
         <h3 className="text-xl font-bold text-white mb-2">Developer Not Found</h3>
-        <p className="text-xs text-slate-400 mb-6">
+        <p className="text-xs text-slate-400 mb-6 leading-relaxed">
           The requested developer profile does not exist or has been removed.
         </p>
         <Link to="/developers">
@@ -212,37 +227,76 @@ export const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
-      {/* Profile Header Banner Card */}
-      <div className="relative rounded-2xl border border-slate-800 bg-[#0d1527]/90 shadow-2xl overflow-hidden">
-        {/* Cover gradient */}
-        <div className="h-36 sm:h-48 bg-gradient-to-r from-cyan-900/60 via-slate-900 to-indigo-950/60 relative">
-          <div className="absolute inset-0 bg-slate-950/20 backdrop-blur-[2px]" />
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-6 max-w-7xl mx-auto pb-12"
+    >
+      {/* Hero Profile Banner Card */}
+      <div className="relative rounded-2xl border border-slate-800/80 bg-[#0c1017] shadow-2xl overflow-hidden">
+        {/* Cover Graphic with Mesh & Grid Pattern */}
+        <div className="h-44 sm:h-56 relative overflow-hidden bg-gradient-to-r from-cyan-950/40 via-[#0a0e17] to-indigo-950/40 border-b border-slate-800/70">
+          <GridPattern className="opacity-40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0c1017]" />
+          <div className="absolute -top-24 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -top-24 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Quick share button in cover */}
+          <div className="absolute top-4 right-4">
+            <button
+              onClick={handleCopyProfile}
+              className="px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-700/80 backdrop-blur-md text-xs font-mono flex items-center gap-1.5 transition-all shadow-md active:scale-95"
+            >
+              {copiedLink ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-400">Copied</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Share</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
-        <div className="px-6 pb-6 pt-0 relative">
-          <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 -mt-16 sm:-mt-20 mb-4">
-            <div className="flex items-end gap-4">
-              <Avatar
-                src={profile.avatar_url}
-                name={profile.full_name}
-                size="xl"
-                status={profile.availability_status}
-                className="ring-4 ring-[#0d1527] shadow-2xl"
-              />
-              <div className="mb-2">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                  {profile.full_name}
-                  <Badge variant="cyan" className="text-[10px] font-mono">
+        {/* Profile Details Container */}
+        <div className="px-6 sm:px-8 pb-8 pt-0 relative">
+          <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-5 -mt-16 sm:-mt-20 mb-6">
+            <div className="flex items-end gap-5">
+              <div className="relative">
+                <Avatar
+                  src={profile.avatar_url}
+                  name={profile.full_name}
+                  size="xl"
+                  status={profile.availability_status}
+                  className="ring-4 ring-[#0c1017] shadow-2xl w-24 h-24 sm:w-28 sm:h-28 text-2xl"
+                />
+              </div>
+              <div className="mb-1">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    {profile.full_name}
+                  </h1>
+                  <Badge variant="cyan" className="text-[10px] font-mono capitalize">
                     {profile.experience_level}
                   </Badge>
-                </h1>
-                <p className="text-xs sm:text-sm text-cyan-400 font-mono">@{profile.username}</p>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    {profile.availability_status?.replace(/_/g, ' ') || 'Available'}
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-cyan-400/90 font-mono mt-0.5">
+                  @{profile.username}
+                </p>
               </div>
             </div>
 
             {/* Profile Action Buttons */}
-            <div className="flex items-center gap-2 w-full sm:w-auto self-end">
+            <div className="flex items-center gap-2.5 w-full sm:w-auto self-end">
               {isOwner ? (
                 <Link to="/profile/edit" className="w-full sm:w-auto">
                   <Button variant="primary" size="sm" className="w-full sm:w-auto text-xs font-semibold">
@@ -287,16 +341,16 @@ export const ProfilePage: React.FC = () => {
           </div>
 
           {/* Headline & Bio */}
-          <div className="space-y-3 pt-2 max-w-3xl">
-            <h3 className="text-base font-semibold text-slate-100">
+          <div className="space-y-3 max-w-3xl">
+            <h3 className="text-base font-semibold text-slate-100 tracking-tight">
               {profile.headline || 'Software Developer & Open Source Contributor'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line">
-              {profile.bio || 'Building collaborative projects on DevConnect.'}
+              {profile.bio || 'Building collaborative software and networking on DevConnect.'}
             </p>
 
-            {/* Metadata tags */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2 font-mono">
+            {/* Meta Tags Row */}
+            <div className="flex flex-wrap items-center gap-y-2 gap-x-5 text-xs text-slate-400 pt-3 border-t border-slate-800/80 font-mono">
               {profile.location && (
                 <span className="flex items-center gap-1.5">
                   <MapPin className="h-3.5 w-3.5 text-slate-500" /> {profile.location}
@@ -309,7 +363,7 @@ export const ProfilePage: React.FC = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 text-cyan-400 hover:underline"
                 >
-                  <Globe className="h-3.5 w-3.5" /> Portfolio
+                  <Globe className="h-3.5 w-3.5" /> Portfolio <ArrowUpRight className="w-3 h-3" />
                 </a>
               )}
               {profile.github_username && (
@@ -317,13 +371,13 @@ export const ProfilePage: React.FC = () => {
                   href={`https://github.com/${profile.github_username}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-slate-200 hover:text-cyan-400"
+                  className="flex items-center gap-1.5 text-slate-200 hover:text-cyan-400 transition-colors"
                 >
-                  <Github className="h-3.5 w-3.5" /> github.com/{profile.github_username}
+                  <Github className="h-3.5 w-3.5" /> {profile.github_username}
                 </a>
               )}
-              <span className="flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5 text-emerald-400" /> {profile.weekly_hours_available} hrs/week available
+              <span className="flex items-center gap-1.5 text-emerald-400/90">
+                <Clock className="h-3.5 w-3.5 text-emerald-400" /> {profile.weekly_hours_available || 15} hrs/wk available
               </span>
               <span className="flex items-center gap-1.5 text-slate-500">
                 <Calendar className="h-3.5 w-3.5" /> Joined {formatDate(profile.created_at)}
@@ -333,30 +387,31 @@ export const ProfilePage: React.FC = () => {
         </div>
       </div>
 
+      {/* Main Grid Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: Skills & Interests (1 col) */}
+        {/* Left Column: Technical Skills, Languages, Focus Areas */}
         <div className="space-y-6">
           {/* Technical Skills Card */}
-          <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl">
-            <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-bold text-white flex items-center gap-2">
+          <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl relative overflow-hidden">
+            <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between border-b border-slate-800/60">
+              <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
                 <Code2 className="h-4 w-4 text-cyan-400" /> Technical Skills
               </CardTitle>
               {isOwner && (
-                <Link to="/profile/edit" className="text-xs text-cyan-400 hover:underline">
+                <Link to="/profile/edit" className="text-xs text-cyan-400 hover:underline font-mono">
                   Manage
                 </Link>
               )}
             </CardHeader>
 
-            <CardContent className="p-0 space-y-3">
+            <CardContent className="p-0 pt-4 space-y-2.5">
               {skills.length === 0 ? (
-                <p className="text-xs text-slate-500 italic">No skills listed yet.</p>
+                <p className="text-xs text-slate-500 italic py-2">No technical skills added yet.</p>
               ) : (
                 skills.map((us) => (
                   <div
                     key={us.id}
-                    className="p-2.5 rounded-lg bg-slate-900/70 border border-slate-800 flex items-center justify-between text-xs"
+                    className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/80 flex items-center justify-between text-xs hover:border-slate-700/80 transition-colors"
                   >
                     <div>
                       <span className="font-semibold text-slate-200">{us.skill?.name}</span>
@@ -364,7 +419,7 @@ export const ProfilePage: React.FC = () => {
                         {us.years_of_experience} yrs
                       </span>
                     </div>
-                    <Badge variant="cyan" className="text-[10px] py-0 px-1.5">
+                    <Badge variant="cyan" className="text-[10px] py-0 px-2 font-mono">
                       {us.proficiency_level}
                     </Badge>
                   </div>
@@ -373,19 +428,21 @@ export const ProfilePage: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Interests & Collaboration Preferences */}
-          <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl">
-            <CardHeader className="p-0 pb-3">
-              <CardTitle className="text-base font-bold text-white flex items-center gap-2">
+          {/* Collaboration Focus & Interests */}
+          <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl">
+            <CardHeader className="p-0 pb-4 border-b border-slate-800/60">
+              <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-violet-400" /> Collaboration Focus
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-0 space-y-3 text-xs">
+            <CardContent className="p-0 pt-4 space-y-4 text-xs">
               <div>
-                <span className="text-slate-400 font-medium block mb-1.5">Interests:</span>
+                <span className="text-slate-400 font-medium block mb-2 font-mono text-[11px]">
+                  AREAS OF INTEREST
+                </span>
                 <div className="flex flex-wrap gap-1.5">
                   {(profile.interests || []).map((interest) => (
-                    <Badge key={interest} variant="secondary">
+                    <Badge key={interest} variant="secondary" className="text-[11px]">
                       {interest}
                     </Badge>
                   ))}
@@ -395,17 +452,24 @@ export const ProfilePage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-800/80">
-                <span className="text-slate-400 font-medium block mb-1">Availability Status:</span>
-                <Badge variant="cyan" className="capitalize">
-                  {profile.availability_status.replace(/_/g, ' ')}
-                </Badge>
+              <div className="pt-3 border-t border-slate-800/60">
+                <span className="text-slate-400 font-medium block mb-1.5 font-mono text-[11px]">
+                  COLLABORATION AVAILABILITY
+                </span>
+                <div className="flex items-center gap-2">
+                  <Badge variant="cyan" className="capitalize text-xs font-mono">
+                    {profile.availability_status?.replace(/_/g, ' ') || 'Available'}
+                  </Badge>
+                  <span className="text-slate-500 font-mono text-xs">
+                    ({profile.weekly_hours_available || 15} hours/week)
+                  </span>
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Right Column: GitHub Repos & Linked Projects (2 cols) */}
+        {/* Right Column: GitHub Repositories & Collaborative Projects */}
         <div className="lg:col-span-2 space-y-6">
           {/* GitHub Repositories Section */}
           <GitHubReposCard
@@ -414,24 +478,24 @@ export const ProfilePage: React.FC = () => {
             isOwner={Boolean(isOwner)}
           />
 
-          {/* Linked Projects Card */}
-          <Card className="border-slate-800 bg-[#0d1527]/90 p-6 shadow-xl">
-            <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-bold text-white flex items-center gap-2">
+          {/* Linked Projects Showcase */}
+          <Card className="border-slate-800/80 bg-[#0c1017] p-6 shadow-xl">
+            <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between border-b border-slate-800/60">
+              <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
                 <FolderGit2 className="h-4 w-4 text-cyan-400" /> Collaborative Projects
               </CardTitle>
               {isOwner && (
                 <Link to="/projects/new">
-                  <Button variant="outline" size="sm" className="h-8 text-xs">
+                  <Button variant="outline" size="sm" className="h-7 text-xs">
                     + New Project
                   </Button>
                 </Link>
               )}
             </CardHeader>
 
-            <CardContent className="p-0 space-y-3">
+            <CardContent className="p-0 pt-4 space-y-3">
               {projects.length === 0 ? (
-                <div className="py-8 text-center text-xs text-slate-500 border border-dashed border-slate-800 rounded-xl">
+                <div className="py-10 text-center text-xs text-slate-500 border border-dashed border-slate-800/80 rounded-xl">
                   No projects created by this developer yet.
                 </div>
               ) : (
@@ -439,23 +503,38 @@ export const ProfilePage: React.FC = () => {
                   <Link
                     key={proj.id}
                     to={`/projects/${proj.id}`}
-                    className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-slate-800/60 transition-all flex items-center justify-between group block"
+                    className="p-4 rounded-xl border border-slate-800/80 bg-slate-900/40 hover:bg-slate-800/50 hover:border-slate-700/80 transition-all flex items-center justify-between group block"
                   >
-                    <div>
-                      <div className="flex items-center gap-2">
+                    <div className="space-y-1.5 pr-4">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <h4 className="font-semibold text-sm text-white group-hover:text-cyan-400 transition-colors">
                           {proj.title}
                         </h4>
-                        <Badge variant="cyan" className="text-[10px]">
+                        <Badge variant="cyan" className="text-[10px] font-mono">
                           {proj.category}
                         </Badge>
+                        <Badge variant="outline" className="text-[10px] font-mono capitalize">
+                          {proj.status?.replace(/_/g, ' ')}
+                        </Badge>
                       </div>
-                      <p className="text-xs text-slate-400 mt-1 line-clamp-1">
+                      <p className="text-xs text-slate-400 line-clamp-1 leading-relaxed">
                         {proj.tagline || proj.description}
                       </p>
+                      {proj.required_skills && proj.required_skills.length > 0 && (
+                        <div className="flex flex-wrap gap-1 pt-1">
+                          {proj.required_skills.slice(0, 4).map((sk) => (
+                            <span
+                              key={sk}
+                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60"
+                            >
+                              {sk}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
-                    <ExternalLink className="h-4 w-4 text-slate-500 group-hover:text-cyan-400 transition-colors flex-shrink-0" />
+                    <ArrowUpRight className="h-4 w-4 text-slate-500 group-hover:text-cyan-400 transition-colors flex-shrink-0" />
                   </Link>
                 ))
               )}
@@ -463,6 +542,6 @@ export const ProfilePage: React.FC = () => {
           </Card>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
