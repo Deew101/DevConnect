@@ -14,6 +14,7 @@ import {
   PanelLeftClose,
   PanelLeft,
   GitBranch,
+  Github,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
@@ -36,6 +37,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
       items: [
         { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
         { label: 'Discover Developers', path: '/developers', icon: Users },
+        { label: 'GitHub Developers', path: '/developers?tab=github', icon: Github },
         { label: 'Explore Projects', path: '/projects', icon: Compass },
         { label: 'Open Source Repos', path: '/repositories', icon: GitBranch },
         { label: 'Collaborative Teams', path: '/teams', icon: Users2 },

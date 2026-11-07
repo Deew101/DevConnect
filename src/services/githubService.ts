@@ -1,5 +1,14 @@
+// src/services/githubService.ts
+// Official GitHub REST API client & resilient cache management for DevConnect
+
 import { supabase } from '@/lib/supabase';
 import { GitHubAccount } from '@/types/database.types';
+import {
+  GitHubRepository,
+  ExternalGitHubDeveloper,
+  COMMUNITY_GITHUB_REPOSITORIES,
+  EXTERNAL_GITHUB_DEVELOPERS,
+} from '@/data/githubData';
 
 export interface GitHubRepo {
   id: number;
@@ -123,9 +132,260 @@ export async function syncGitHubAccount(userId: string, username: string): Promi
 
   if (error) {
     console.error('Failed to sync github account in database:', error);
-    // Return structured object even if database upsert fails
     return accountData as unknown as GitHubAccount;
   }
 
   return data as GitHubAccount;
 }
+
+class GitHubService {
+  private memoryRepoCache: GitHubRepository[] = COMMUNITY_GITHUB_REPOSITORIES;
+  private memoryDevCache: ExternalGitHubDeveloper[] = EXTERNAL_GITHUB_DEVELOPERS;
+  private rateLimitRemaining: number = 60;
+
+  /**
+   * Retrieves verified community repositories from Supabase cache or high-fidelity fallback
+   */
+  async getCommunityRepositories(): Promise<GitHubRepository[]> {
+    try {
+      const { data, error } = await supabase
+        .from('community_repositories')
+        .select('*')
+        .order('stars', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        const formatted: GitHubRepository[] = data.map((d: any) => ({
+          id: d.id,
+          github_id: Number(d.github_id) || 0,
+          name: d.name,
+          full_name: d.full_name,
+          owner: d.owner,
+          owner_avatar_url: d.owner_avatar_url || `https://avatars.githubusercontent.com/u/0?v=4`,
+          owner_type: d.owner_type || 'User',
+          html_url: d.html_url,
+          description: d.description || '',
+          language: d.language || 'Code',
+          stars: Number(d.stars) || 0,
+          forks: Number(d.forks) || 0,
+          open_issues_count: Number(d.open_issues_count) || 0,
+          topics: Array.isArray(d.topics) ? d.topics : [],
+          created_at: d.created_at,
+          updated_at: d.updated_at,
+          license: d.license,
+        }));
+        this.memoryRepoCache = formatted;
+        return formatted;
+      }
+    } catch (err) {
+      console.warn('Supabase community_repositories fetch failed, falling back to verified catalog:', err);
+    }
+
+    return this.memoryRepoCache;
+  }
+
+  /**
+   * Retrieves verified external GitHub developers from Supabase cache or high-fidelity fallback
+   */
+  async getExternalDevelopers(): Promise<ExternalGitHubDeveloper[]> {
+    try {
+      const { data, error } = await supabase
+        .from('external_github_developers')
+        .select('*')
+        .order('followers', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        const formatted: ExternalGitHubDeveloper[] = data.map((d: any) => ({
+          id: d.id,
+          github_id: Number(d.github_id) || 0,
+          username: d.username,
+          name: d.name || d.username,
+          avatar_url: d.avatar_url,
+          bio: d.bio || '',
+          company: d.company,
+          location: d.location,
+          blog: d.blog,
+          public_repos: Number(d.public_repos) || 0,
+          public_gists: Number(d.public_gists) || 0,
+          followers: Number(d.followers) || 0,
+          following: Number(d.following) || 0,
+          html_url: d.html_url,
+          created_at: d.created_at,
+          updated_at: d.updated_at,
+          is_external: true,
+        }));
+        this.memoryDevCache = formatted;
+        return formatted;
+      }
+    } catch (err) {
+      console.warn('Supabase external_github_developers fetch failed, falling back to verified catalog:', err);
+    }
+
+    return this.memoryDevCache;
+  }
+
+  /**
+   * Live search on official GitHub REST API with graceful fallback to cached catalog
+   */
+  async searchLiveRepositories(query: string): Promise<{ items: GitHubRepository[]; isLive: boolean }> {
+    if (!query.trim()) {
+      const repos = await this.getCommunityRepositories();
+      return { items: repos, isLive: false };
+    }
+
+    try {
+      const response = await fetch(
+        `https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=30`,
+        {
+          headers: {
+            Accept: 'application/vnd.github.v3+json',
+          },
+        }
+      );
+
+      const remaining = response.headers.get('x-ratelimit-remaining');
+      if (remaining) {
+        this.rateLimitRemaining = parseInt(remaining, 10);
+      }
+
+      if (response.ok) {
+        const json = await response.json();
+        if (json.items && Array.isArray(json.items)) {
+          const liveRepos: GitHubRepository[] = json.items.map((item: any) => ({
+            id: `gh-repo-${item.id}`,
+            github_id: item.id,
+            name: item.name,
+            full_name: item.full_name,
+            owner: item.owner?.login || 'unknown',
+            owner_avatar_url: item.owner?.avatar_url || '',
+            owner_type: item.owner?.type || 'User',
+            html_url: item.html_url,
+            description: item.description || '',
+            language: item.language || 'Code',
+            stars: item.stargazers_count,
+            forks: item.forks_count,
+            open_issues_count: item.open_issues_count,
+            topics: item.topics || [],
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            license: item.license?.name || null,
+          }));
+
+          this.cacheReposToSupabase(liveRepos.slice(0, 5));
+          return { items: liveRepos, isLive: true };
+        }
+      }
+    } catch (err) {
+      console.warn('Live GitHub repo search unreachable or rate limited, falling back to local index:', err);
+    }
+
+    const all = await this.getCommunityRepositories();
+    const q = query.toLowerCase();
+    const filtered = all.filter(
+      (r) =>
+        r.name.toLowerCase().includes(q) ||
+        r.owner.toLowerCase().includes(q) ||
+        r.description.toLowerCase().includes(q) ||
+        r.topics.some((t) => t.toLowerCase().includes(q))
+    );
+
+    return { items: filtered, isLive: false };
+  }
+
+  /**
+   * Live search on official GitHub REST API for developers with graceful fallback
+   */
+  async searchLiveDevelopers(query: string): Promise<{ items: ExternalGitHubDeveloper[]; isLive: boolean }> {
+    if (!query.trim()) {
+      const devs = await this.getExternalDevelopers();
+      return { items: devs, isLive: false };
+    }
+
+    try {
+      const response = await fetch(
+        `https://api.github.com/search/users?q=${encodeURIComponent(query)}+type:user&per_page=20`,
+        {
+          headers: {
+            Accept: 'application/vnd.github.v3+json',
+          },
+        }
+      );
+
+      const remaining = response.headers.get('x-ratelimit-remaining');
+      if (remaining) {
+        this.rateLimitRemaining = parseInt(remaining, 10);
+      }
+
+      if (response.ok) {
+        const json = await response.json();
+        if (json.items && Array.isArray(json.items)) {
+          const liveDevs: ExternalGitHubDeveloper[] = json.items.map((user: any) => ({
+            id: `gh-user-${user.id}`,
+            github_id: user.id,
+            username: user.login,
+            name: user.login,
+            avatar_url: user.avatar_url,
+            bio: 'Public open source developer on GitHub.',
+            company: null,
+            location: null,
+            blog: null,
+            public_repos: 0,
+            followers: 0,
+            html_url: user.html_url,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            is_external: true,
+          }));
+
+          return { items: liveDevs, isLive: true };
+        }
+      }
+    } catch (err) {
+      console.warn('Live GitHub user search failed, falling back to local catalog:', err);
+    }
+
+    const allDevs = await this.getExternalDevelopers();
+    const q = query.toLowerCase();
+    const filtered = allDevs.filter(
+      (d) =>
+        d.username.toLowerCase().includes(q) ||
+        d.name.toLowerCase().includes(q) ||
+        (d.bio && d.bio.toLowerCase().includes(q)) ||
+        (d.company && d.company.toLowerCase().includes(q))
+    );
+
+    return { items: filtered, isLive: false };
+  }
+
+  private async cacheReposToSupabase(repos: GitHubRepository[]) {
+    try {
+      const rows = repos.map((r) => ({
+        id: r.id,
+        github_id: r.github_id,
+        name: r.name,
+        full_name: r.full_name,
+        owner: r.owner,
+        owner_avatar_url: r.owner_avatar_url,
+        owner_type: r.owner_type,
+        html_url: r.html_url,
+        description: r.description,
+        language: r.language,
+        stars: r.stars,
+        forks: r.forks,
+        open_issues_count: r.open_issues_count || 0,
+        topics: r.topics,
+        updated_at: r.updated_at,
+        license: r.license,
+      }));
+
+      await supabase.from('community_repositories').upsert(rows, { onConflict: 'full_name' });
+    } catch (e) {
+      // Ignore background cache failure
+    }
+  }
+
+  getRateLimitRemaining(): number {
+    return this.rateLimitRemaining;
+  }
+}
+
+export const githubService = new GitHubService();
