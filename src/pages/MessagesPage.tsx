@@ -26,6 +26,7 @@ import { Button } from '@/components/ui/Button';
 import { Avatar } from '@/components/ui/Avatar';
 import { LoadingScreen } from '@/components/common/LoadingScreen';
 import { useToast } from '@/components/ui/Toast';
+import { DEMO_CONVERSATIONS } from '@/data/demoCommunityData';
 
 export const MessagesPage: React.FC = () => {
   const { user } = useAuth();
@@ -61,19 +62,65 @@ export const MessagesPage: React.FC = () => {
           `)
           .order('updated_at', { ascending: false });
 
-        if (error) throw error;
+        const convList: any[] = (!error && data) ? data : [];
 
-        const convList = data || [];
-        setConversations(convList as any);
+        // Format demo community channels
+        const formattedDemo: Conversation[] = DEMO_CONVERSATIONS.map((dc) => ({
+          id: dc.id,
+          type: dc.type as any,
+          name: dc.name,
+          project_id: null,
+          created_at: new Date().toISOString(),
+          updated_at: dc.last_message?.created_at || new Date().toISOString(),
+          is_demo: true,
+          members: dc.members.map((m, idx) => ({
+            id: `mem-${dc.id}-${idx}`,
+            conversation_id: dc.id,
+            user_id: m.user_id,
+            last_read_at: new Date().toISOString(),
+            joined_at: new Date().toISOString(),
+            profile: m.profile as any,
+          })),
+          last_message: dc.last_message as any,
+        } as any));
+
+        // Merge real and demo, real first
+        const existingIds = new Set(convList.map((c) => c.id));
+        const merged = [
+          ...convList,
+          ...formattedDemo.filter((d) => !existingIds.has(d.id)),
+        ];
+
+        setConversations(merged);
 
         const queryId = searchParams.get('id');
-        if (queryId && convList.some((c: any) => c.id === queryId)) {
+        if (queryId && merged.some((c: any) => c.id === queryId)) {
           setActiveConversationId(queryId);
-        } else if (convList.length > 0 && !activeConversationId) {
-          setActiveConversationId(convList[0].id);
+        } else if (merged.length > 0 && !activeConversationId) {
+          setActiveConversationId(merged[0].id);
         }
       } catch (err: any) {
         console.error('Error loading conversations:', err);
+        const formattedDemo: Conversation[] = DEMO_CONVERSATIONS.map((dc) => ({
+          id: dc.id,
+          type: dc.type as any,
+          name: dc.name,
+          project_id: null,
+          created_at: new Date().toISOString(),
+          updated_at: dc.last_message?.created_at || new Date().toISOString(),
+          is_demo: true,
+          members: dc.members.map((m, idx) => ({
+            id: `mem-${dc.id}-${idx}`,
+            conversation_id: dc.id,
+            user_id: m.user_id,
+            last_read_at: new Date().toISOString(),
+            joined_at: new Date().toISOString(),
+            profile: m.profile as any,
+          })),
+          last_message: dc.last_message as any,
+        } as any));
+        setConversations(formattedDemo);
+        if (formattedDemo.length > 0) setActiveConversationId(formattedDemo[0].id);
       } finally {
         setLoading(false);
       }

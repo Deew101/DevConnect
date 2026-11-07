@@ -26,6 +26,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Avatar } from '@/components/ui/Avatar';
 import { formatDate } from '@/lib/utils';
 import { CardSpotlight } from '@/components/ui/CardSpotlight';
+import { DEMO_PROJECTS, DEMO_PROFILES } from '@/data/demoCommunityData';
 
 export const ProjectsPage: React.FC = () => {
   const { user } = useAuth();
@@ -68,10 +69,34 @@ export const ProjectsPage: React.FC = () => {
         query = query.eq('status', selectedStatus);
       }
 
-      const { data, error } = await query;
-      if (error) throw error;
+      let rawList: any[] = [];
+      try {
+        const { data, error } = await query;
+        if (!error && data && data.length > 0) {
+          rawList = data;
+        }
+      } catch (err) {
+        console.warn('Using demo community projects fallback:', err);
+      }
 
-      let list = data || [];
+      // Enhance DEMO_PROJECTS with owner and member relationships from DEMO_PROFILES
+      const enhancedDemoProjects = DEMO_PROJECTS.map((dp, i) => {
+        const owner = DEMO_PROFILES.find((p) => p.id === dp.owner_id) || DEMO_PROFILES[0];
+        const members = [
+          { id: `mem-1-${i}`, user_id: owner.id, role: 'owner' as const },
+          { id: `mem-2-${i}`, user_id: DEMO_PROFILES[(i + 1) % DEMO_PROFILES.length].id, role: 'lead' as const },
+          { id: `mem-3-${i}`, user_id: DEMO_PROFILES[(i + 2) % DEMO_PROFILES.length].id, role: 'contributor' as const },
+        ];
+        return {
+          ...dp,
+          owner,
+          members,
+        };
+      });
+
+      const existingIds = new Set(rawList.map((p: any) => p.id));
+      const demoToAdd = enhancedDemoProjects.filter((dp) => !existingIds.has(dp.id));
+      let list = [...rawList, ...demoToAdd];
 
       // Filter by tab
       if (user) {

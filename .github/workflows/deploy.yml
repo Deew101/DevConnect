@@ -52,6 +52,7 @@ jobs:
         with:
           branch: gh-pages
           folder: dist
+          commit-message: "deploy: sync production build [skip ci]"
 
   deploy:
     needs: build

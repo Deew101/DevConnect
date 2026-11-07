@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Save, ArrowLeft, Plus, X, Upload, Code2, Sparkles } from 'lucide-react';
+import { Save, ArrowLeft, Plus, X, Upload, Code2, Sparkles, Compass, Target, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -11,6 +11,7 @@ import { Card, CardTitle } from '@/components/ui/Card';
 import { Avatar } from '@/components/ui/Avatar';
 import { useToast } from '@/components/ui/Toast';
 import { ExperienceLevel, AvailabilityStatus, Skill } from '@/types/database.types';
+import { AvatarSelector } from '@/components/avatar/AvatarSelector';
 
 export const EditProfilePage: React.FC = () => {
   const { profile, user, refreshProfile, updateProfile } = useAuth();
@@ -28,8 +29,22 @@ export const EditProfilePage: React.FC = () => {
   const [availabilityStatus, setAvailabilityStatus] = useState<AvailabilityStatus>(profile?.availability_status || 'open_to_collaborate');
   const [weeklyHours, setWeeklyHours] = useState(profile?.weekly_hours_available || 10);
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || '');
+  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
   const [interests, setInterests] = useState<string[]>(profile?.interests || []);
   const [interestInput, setInterestInput] = useState('');
+
+  // Professional Description & Collaboration Goals
+  const [currentGoals, setCurrentGoals] = useState(
+    (profile as any)?.professional_description?.current_goals || ''
+  );
+  const [collaborationStyle, setCollaborationStyle] = useState(
+    (profile as any)?.professional_description?.collaboration_style || ''
+  );
+  const [targetProjects, setTargetProjects] = useState(
+    Array.isArray((profile as any)?.professional_description?.target_projects)
+      ? (profile as any)?.professional_description?.target_projects.join(', ')
+      : ''
+  );
 
   // Skills
   const [availableSkills, setAvailableSkills] = useState<Skill[]>([]);
@@ -154,6 +169,13 @@ export const EditProfilePage: React.FC = () => {
         avatar_url: avatarUrl || null,
         interests,
         is_onboarded: true,
+        professional_description: {
+          bio: bio.trim(),
+          technical_interests: interests,
+          current_goals: currentGoals.trim(),
+          collaboration_style: collaborationStyle.trim(),
+          target_projects: targetProjects.split(',').map((s: string) => s.trim()).filter(Boolean)
+        }
       };
 
       const { error } = await updateProfile(updates);
@@ -211,27 +233,23 @@ export const EditProfilePage: React.FC = () => {
             // General Information
           </CardTitle>
 
-          {/* Avatar Upload */}
+          {/* Avatar Identity Options */}
           <div className="flex items-center gap-5 pt-1">
             <Avatar src={avatarUrl} name={fullName} size="xl" className="ring-2 ring-[#6D95FF]/30" />
             <div>
               <label className="block text-xs font-semibold text-[#929DB2] mb-1.5 font-mono">
-                PROFILE AVATAR
+                DEVELOPER AVATAR IDENTITY
               </label>
               <div className="flex items-center gap-2">
-                <label className="cursor-pointer">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#151F30] hover:bg-[#1f2d45] text-xs font-semibold text-[#F4F6FC] border border-[#273249] transition-colors">
-                    <Upload className="h-3.5 w-3.5 text-[#6D95FF]" />
-                    {uploadingAvatar ? 'Uploading...' : 'Upload Image'}
-                  </span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleAvatarUpload}
-                    className="hidden"
-                    disabled={uploadingAvatar}
-                  />
-                </label>
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="sm"
+                  onClick={() => setShowAvatarSelector(true)}
+                  className="text-xs font-semibold h-8"
+                >
+                  <Sparkles className="h-3.5 w-3.5 mr-1.5" /> Change Avatar / Photo
+                </Button>
                 {avatarUrl && (
                   <Button
                     type="button"
@@ -240,13 +258,30 @@ export const EditProfilePage: React.FC = () => {
                     onClick={() => setAvatarUrl('')}
                     className="text-xs text-rose-400 h-8"
                   >
-                    Remove
+                    Reset to Initials
                   </Button>
                 )}
               </div>
-              <p className="text-[11px] text-[#929DB2] mt-1 font-mono">PNG, JPG or WebP (max 5MB)</p>
+              <p className="text-[11px] text-[#929DB2] mt-1 font-mono">
+                Choose from 24 curated vector presets, upload personal photos, or use custom initials.
+              </p>
             </div>
           </div>
+
+          {/* Avatar Selector Modal */}
+          {showAvatarSelector && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+              <AvatarSelector
+                currentAvatar={avatarUrl}
+                userName={username || fullName}
+                onSelectAvatar={(newAvatar) => {
+                  setAvatarUrl(newAvatar);
+                  setShowAvatarSelector(false);
+                }}
+                onClose={() => setShowAvatarSelector(false)}
+              />
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div>
@@ -286,17 +321,87 @@ export const EditProfilePage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
-              Engineering Biography
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-medium text-[#929DB2] font-mono">
+                Engineering Biography *
+              </label>
+              <span className="text-[10px] font-mono text-[#929DB2]">
+                {bio.length} / 500
+              </span>
+            </div>
             <Textarea
               value={bio}
+              maxLength={500}
               onChange={(e) => setBio(e.target.value)}
               placeholder="Describe your tech background, current builds, and open source interests..."
               rows={4}
               className="text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
             />
           </div>
+        </Card>
+
+        {/* Dedicated Professional Description Card */}
+        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
+          <div className="flex items-center gap-2">
+            <Compass className="h-4 w-4 text-[#6D95FF]" />
+            <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono">
+              // Professional Description & Collaboration Profile
+            </CardTitle>
+          </div>
+          <p className="text-xs text-[#929DB2]">
+            Detailed collaboration preferences featured on your developer dossier card to match with ideal project partners.
+          </p>
+
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-medium text-[#929DB2] font-mono">
+                Current Engineering Goals
+              </label>
+              <span className="text-[10px] font-mono text-[#929DB2]">
+                {currentGoals.length} / 300
+              </span>
+            </div>
+            <Input
+              value={currentGoals}
+              maxLength={300}
+              onChange={(e) => setCurrentGoals(e.target.value)}
+              placeholder="e.g. Architecting fault-tolerant task orchestrators and mentoring early-career engineers in distributed systems."
+              className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+                Preferred Collaboration Style
+              </label>
+              <Input
+                value={collaborationStyle}
+                onChange={(e) => setCollaborationStyle(e.target.value)}
+                placeholder="e.g. Async-first, documented PRs, weekly Discord sync"
+                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+                Target Project Domains (comma-separated)
+              </label>
+              <Input
+                value={targetProjects}
+                onChange={(e) => setTargetProjects(e.target.value)}
+                placeholder="e.g. Developer tools, WebRTC mesh, Edge computing"
+                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+              />
+            </div>
+          </div>
+        </Card>
+
+        {/* Experience & Professional Links */}
+        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-5">
+          <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono">
+            // Experience & Professional Links
+          </CardTitle>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div>

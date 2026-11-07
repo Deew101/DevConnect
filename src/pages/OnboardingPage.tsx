@@ -19,6 +19,9 @@ import { Textarea } from '@/components/ui/Textarea';
 import { Card } from '@/components/ui/Card';
 import { useToast } from '@/components/ui/Toast';
 import { Skill, ExperienceLevel } from '@/types/database.types';
+import { Avatar } from '@/components/ui/Avatar';
+import { AvatarSelector } from '@/components/avatar/AvatarSelector';
+import { Sparkles } from 'lucide-react';
 
 export const OnboardingPage: React.FC = () => {
   const { user, profile, refreshProfile, updateProfile } = useAuth();
@@ -34,6 +37,8 @@ export const OnboardingPage: React.FC = () => {
   const [headline, setHeadline] = useState(profile?.headline || 'Full-Stack Developer');
   const [bio, setBio] = useState(profile?.bio || '');
   const [location, setLocation] = useState(profile?.location || '');
+  const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || 'preset:dev-1');
+  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
 
   // Step 2: Tech stack & seniority
   const [experienceLevel, setExperienceLevel] = useState<ExperienceLevel>('Mid-Level');
@@ -76,6 +81,7 @@ export const OnboardingPage: React.FC = () => {
         username: username.trim().toLowerCase(),
         headline: headline.trim(),
         bio: bio.trim(),
+        avatar_url: avatarUrl || null,
         location: location.trim() || null,
         experience_level: experienceLevel,
         weekly_hours_available: Number(weeklyHours) || 10,
@@ -164,6 +170,38 @@ export const OnboardingPage: React.FC = () => {
                   <User className="h-5 w-5 text-[#6D95FF]" />
                   <h3 className="font-bold font-display text-base text-[#F4F6FC]">Basic Information</h3>
                 </div>
+
+                {/* Avatar Picker in Onboarding */}
+                <div className="flex items-center gap-4 p-3 rounded-xl bg-[#151F30] border border-[#273249]">
+                  <Avatar src={avatarUrl} name={fullName || 'Dev'} size="lg" className="ring-2 ring-[#6D95FF]/30" />
+                  <div className="flex-1">
+                    <span className="text-xs font-semibold text-[#F4F6FC] block">Choose Your Avatar</span>
+                    <span className="text-[11px] text-[#929DB2] block">Select from 24 vector presets or upload a photo</span>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="primary"
+                    size="xs"
+                    onClick={() => setShowAvatarSelector(true)}
+                    className="h-8 text-xs font-semibold"
+                  >
+                    <Sparkles className="h-3 w-3 mr-1" /> Choose
+                  </Button>
+                </div>
+
+                {showAvatarSelector && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <AvatarSelector
+                      currentAvatar={avatarUrl}
+                      userName={username || fullName}
+                      onSelectAvatar={(newAvatar) => {
+                        setAvatarUrl(newAvatar);
+                        setShowAvatarSelector(false);
+                      }}
+                      onClose={() => setShowAvatarSelector(false)}
+                    />
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>

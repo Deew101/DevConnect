@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/Button';
 import { Avatar } from '@/components/ui/Avatar';
 import { SkeletonCard } from '@/components/ui/Skeleton';
 import { useToast } from '@/components/ui/Toast';
+import { DEMO_PROFILES } from '@/data/demoCommunityData';
 
 export const DiscoveryPage: React.FC = () => {
   const { user } = useAuth();
@@ -82,26 +83,42 @@ export const DiscoveryPage: React.FC = () => {
         query = query.eq('availability_status', selectedAvailability);
       }
 
-      const { data, error } = await query;
-      if (error) throw error;
+      let rawData: any[] = [];
+      try {
+        const { data, error } = await query;
+        if (!error && data && data.length > 0) {
+          rawData = data;
+        }
+      } catch (e) {
+        console.warn('Using demo community profiles fallback:', e);
+      }
+
+      // Merge with 40 Demo Profiles, ensuring real users take precedence
+      const existingIds = new Set(rawData.map((r: any) => r.id));
+      const demoToAdd = DEMO_PROFILES.filter((dp) => !existingIds.has(dp.id));
+      const combined = [...rawData, ...demoToAdd];
 
       let connectionMap: Record<string, { status: string; id: string }> = {};
       if (user) {
-        const { data: conns } = await supabase
-          .from('connections')
-          .select('*')
-          .or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`);
+        try {
+          const { data: conns } = await supabase
+            .from('connections')
+            .select('*')
+            .or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`);
 
-        if (conns) {
-          conns.forEach((c: any) => {
-            const partnerId = c.requester_id === user.id ? c.receiver_id : c.requester_id;
-            connectionMap[partnerId] = { status: c.status, id: c.id };
-          });
+          if (conns) {
+            conns.forEach((c: any) => {
+              const partnerId = c.requester_id === user.id ? c.receiver_id : c.requester_id;
+              connectionMap[partnerId] = { status: c.status, id: c.id };
+            });
+          }
+        } catch (e) {
+          // ignore
         }
       }
 
-      const mapped = (data || []).map((p: any) => {
-        const skillsList = (p.user_skills || []).map((us: any) => us.skill?.name).filter(Boolean);
+      const mapped = combined.map((p: any) => {
+        const skillsList = p.skillsList || (p.user_skills || []).map((us: any) => us.skill?.name).filter(Boolean);
         const conn = connectionMap[p.id];
         return {
           ...p,
@@ -379,18 +396,25 @@ export const DiscoveryPage: React.FC = () => {
                   <div>
                     {/* Top Status & GitHub Link */}
                     <div className="flex items-center justify-between mb-3">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono border border-[#273249] bg-[#101725] text-[#929DB2] flex items-center gap-1.5">
-                        <span
-                          className={`h-1.5 w-1.5 rounded-full ${
-                            dev.availability_status === 'open_to_collaborate'
-                              ? 'bg-[#35C98A]'
-                              : dev.availability_status === 'available'
-                              ? 'bg-[#6D95FF]'
-                              : 'bg-[#929DB2]'
-                          }`}
-                        />
-                        {dev.availability_status.replace(/_/g, ' ')}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono border border-[#273249] bg-[#101725] text-[#929DB2] flex items-center gap-1.5">
+                          <span
+                            className={`h-1.5 w-1.5 rounded-full ${
+                              dev.availability_status === 'open_to_collaborate'
+                                ? 'bg-[#35C98A]'
+                                : dev.availability_status === 'available'
+                                ? 'bg-[#6D95FF]'
+                                : 'bg-[#929DB2]'
+                            }`}
+                          />
+                          {dev.availability_status.replace(/_/g, ' ')}
+                        </span>
+                        {dev.is_demo && (
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                            DEMO
+                          </span>
+                        )}
+                      </div>
 
                       {dev.github_username && (
                         <a
@@ -431,6 +455,14 @@ export const DiscoveryPage: React.FC = () => {
                     <p className="text-xs text-[#929DB2] mt-1 line-clamp-2 leading-relaxed">
                       {dev.bio || 'Building modern software and open-source projects on DevConnect.'}
                     </p>
+
+                    {/* Professional Description: Current Goal */}
+                    {dev.professional_description?.current_goals && (
+                      <div className="mt-2.5 p-2 rounded-lg bg-[#101725] border border-[#273249]/60 text-[11px] text-[#929DB2] line-clamp-2 leading-relaxed font-sans">
+                        <span className="font-mono text-[#6D95FF] text-[10px] font-bold mr-1">// FOCUS:</span>
+                        {dev.professional_description.current_goals}
+                      </div>
+                    )}
 
                     {/* Metadata: Location & Hours */}
                     <div className="flex items-center gap-4 text-[11px] text-[#929DB2] font-mono mt-3">

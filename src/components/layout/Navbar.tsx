@@ -76,6 +76,10 @@ export const Navbar: React.FC<{ onToggleSidebar?: () => void }> = ({ onToggleSid
               <span className="hidden sm:inline-block text-[10px] font-mono tracking-wider text-[#929DB2] border border-[#273249] px-1.5 py-0.5 rounded bg-[#101725] uppercase">
                 EDITION // 2026
               </span>
+              <span className="hidden md:inline-flex items-center gap-1.5 text-[10px] font-mono tracking-wider text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full bg-amber-500/10 uppercase" title="Populated demonstration community data for practical showcase">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                DEMO COMMUNITY DATA
+              </span>
             </div>
           </Link>
         </div>

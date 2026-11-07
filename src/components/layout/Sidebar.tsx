@@ -13,6 +13,7 @@ import {
   ChevronRight,
   PanelLeftClose,
   PanelLeft,
+  GitBranch,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
@@ -36,8 +37,9 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
         { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
         { label: 'Discover Developers', path: '/developers', icon: Users },
         { label: 'Explore Projects', path: '/projects', icon: Compass },
+        { label: 'Open Source Repos', path: '/repositories', icon: GitBranch },
+        { label: 'Collaborative Teams', path: '/teams', icon: Users2 },
         { label: 'My Projects', path: '/projects?filter=my-projects', icon: FolderGit2 },
-        { label: 'My Teams', path: '/projects?filter=my-teams', icon: Users2 },
       ],
     },
     {

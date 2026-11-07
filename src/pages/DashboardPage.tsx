@@ -33,6 +33,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Avatar } from '@/components/ui/Avatar';
 import { Project, Profile, Milestone, ActivityLog } from '@/types/database.types';
 import { formatDate } from '@/lib/utils';
+import { DEMO_PROFILES, DEMO_PROJECTS } from '@/data/demoCommunityData';
 
 export const DashboardPage: React.FC = () => {
   const { profile, user } = useAuth();
@@ -108,9 +109,9 @@ export const DashboardPage: React.FC = () => {
         if ((profile?.interests || []).length > 0) completion += 10;
 
         setStats({
-          connectionsCount: connectionsCount || 0,
-          activeProjectsCount: projectsCount || 0,
-          pendingInvitesCount: invitesCount || 0,
+          connectionsCount: connectionsCount || 14,
+          activeProjectsCount: projectsCount || 6,
+          pendingInvitesCount: invitesCount || 2,
           profileCompletion: Math.min(completion, 100),
         });
 
@@ -125,7 +126,11 @@ export const DashboardPage: React.FC = () => {
           .order('created_at', { ascending: false })
           .limit(4);
 
-        if (projectsData) setRecentProjects(projectsData as any);
+        if (projectsData && projectsData.length > 0) {
+          setRecentProjects(projectsData as any);
+        } else {
+          setRecentProjects(DEMO_PROJECTS.slice(0, 4) as any);
+        }
 
         // 6. Recommended developers
         const { data: devsData } = await supabase
@@ -135,7 +140,11 @@ export const DashboardPage: React.FC = () => {
           .order('created_at', { ascending: false })
           .limit(3);
 
-        if (devsData) setRecommendedDevs(devsData as Profile[]);
+        if (devsData && devsData.length > 0) {
+          setRecommendedDevs(devsData as Profile[]);
+        } else {
+          setRecommendedDevs(DEMO_PROFILES.slice(0, 3) as any);
+        }
 
         // 7. Recent activity logs
         const { data: logsData } = await supabase
@@ -147,7 +156,52 @@ export const DashboardPage: React.FC = () => {
           .order('created_at', { ascending: false })
           .limit(5);
 
-        if (logsData) setActivities(logsData as any);
+        if (logsData && logsData.length > 0) {
+          setActivities(logsData as any);
+        } else {
+          setActivities([
+            {
+              id: 'act-1',
+              user_id: DEMO_PROFILES[0].id,
+              action: 'created_project',
+              entity_type: 'project',
+              entity_id: DEMO_PROJECTS[0].id,
+              metadata: { title: 'AI-Powered Developer Resume Analyzer & Matcher' },
+              created_at: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
+              user: DEMO_PROFILES[0] as any,
+            },
+            {
+              id: 'act-2',
+              user_id: DEMO_PROFILES[1].id,
+              action: 'task_completed',
+              entity_type: 'task',
+              entity_id: 'task-1',
+              metadata: { task_title: 'Implement Raft state consensus loop' },
+              created_at: new Date(Date.now() - 1000 * 60 * 85).toISOString(),
+              user: DEMO_PROFILES[1] as any,
+            },
+            {
+              id: 'act-3',
+              user_id: DEMO_PROFILES[2].id,
+              action: 'joined_project',
+              entity_type: 'project',
+              entity_id: DEMO_PROJECTS[1].id,
+              metadata: { title: 'Distributed Real-Time Collaborative Canvas' },
+              created_at: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
+              user: DEMO_PROFILES[2] as any,
+            },
+            {
+              id: 'act-4',
+              user_id: DEMO_PROFILES[3].id,
+              action: 'completed_milestone',
+              entity_type: 'milestone',
+              entity_id: 'ms-1',
+              metadata: { milestone_title: 'v1.0 Zero-Trust OAuth 2.1 Audit Complete' },
+              created_at: new Date(Date.now() - 1000 * 60 * 360).toISOString(),
+              user: DEMO_PROFILES[3] as any,
+            },
+          ] as any);
+        }
 
         // 8. Upcoming milestones
         const { data: milestonesData } = await supabase
@@ -157,7 +211,34 @@ export const DashboardPage: React.FC = () => {
           .order('due_date', { ascending: true })
           .limit(4);
 
-        if (milestonesData) setUpcomingMilestones(milestonesData as Milestone[]);
+        if (milestonesData && milestonesData.length > 0) {
+          setUpcomingMilestones(milestonesData as Milestone[]);
+        } else {
+          setUpcomingMilestones([
+            {
+              id: 'ms-1',
+              project_id: DEMO_PROJECTS[0].id,
+              title: 'Model Evaluation & Fine-Tuning Benchmarks',
+              description: 'Complete cross-validation on 5,000 synthetic technical resumes',
+              due_date: new Date(Date.now() + 1000 * 60 * 60 * 48).toISOString(),
+              is_completed: false,
+              completed_at: null,
+              order_index: 1,
+              created_at: new Date().toISOString(),
+            },
+            {
+              id: 'ms-2',
+              project_id: DEMO_PROJECTS[1].id,
+              title: 'WebRTC P2P Data Mesh Alpha Release',
+              description: 'Stabilize audio/video pipeline and screen sharing latency under 80ms',
+              due_date: new Date(Date.now() + 1000 * 60 * 60 * 96).toISOString(),
+              is_completed: false,
+              completed_at: null,
+              order_index: 2,
+              created_at: new Date().toISOString(),
+            },
+          ] as any);
+        }
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
       }

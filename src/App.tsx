@@ -19,6 +19,8 @@ import { CreateProjectPage } from '@/pages/CreateProjectPage';
 import { ProjectWorkspacePage } from '@/pages/ProjectWorkspacePage';
 import { MessagesPage } from '@/pages/MessagesPage';
 import { NotificationsPage } from '@/pages/NotificationsPage';
+import { CommunityRepositoriesPage } from '@/pages/CommunityRepositoriesPage';
+import { TeamsPage } from '@/pages/TeamsPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
 const queryClient = new QueryClient({
@@ -76,6 +78,8 @@ export function App() {
                     <Route path="/projects" element={<ProjectsPage />} />
                     <Route path="/projects/new" element={<CreateProjectPage />} />
                     <Route path="/projects/:id" element={<ProjectWorkspacePage />} />
+                    <Route path="/repositories" element={<CommunityRepositoriesPage />} />
+                    <Route path="/teams" element={<TeamsPage />} />
                     <Route path="/messages" element={<MessagesPage />} />
                     <Route path="/notifications" element={<NotificationsPage />} />
                   </Route>

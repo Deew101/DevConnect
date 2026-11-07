@@ -31,6 +31,7 @@ import { LoadingScreen } from '@/components/common/LoadingScreen';
 import { formatDate } from '@/lib/utils';
 import { useToast } from '@/components/ui/Toast';
 import { GridPattern } from '@/components/ui/GridPattern';
+import { DEMO_PROFILES, DEMO_PROJECTS } from '@/data/demoCommunityData';
 
 export const ProfilePage: React.FC = () => {
   const { username } = useParams<{ username: string }>();
@@ -66,14 +67,30 @@ export const ProfilePage: React.FC = () => {
             username || ''
           );
 
-          const query = supabase.from('profiles').select('*');
-          const { data, error } = isUuid
-            ? await query.eq('id', username).maybeSingle()
-            : await query.eq('username', username).maybeSingle();
+          try {
+            const query = supabase.from('profiles').select('*');
+            const { data, error } = isUuid
+              ? await query.eq('id', username).maybeSingle()
+              : await query.eq('username', username).maybeSingle();
 
-          if (error) throw error;
-          fetchedProfile = data;
-          targetId = data?.id || '';
+            if (!error && data) {
+              fetchedProfile = data;
+              targetId = data.id;
+            }
+          } catch (e) {
+            // ignore
+          }
+
+          if (!fetchedProfile) {
+            // Fallback to Demo Community Profiles
+            const demoMatch = DEMO_PROFILES.find(
+              (dp) => dp.username === username || dp.id === username
+            );
+            if (demoMatch) {
+              fetchedProfile = demoMatch;
+              targetId = demoMatch.id;
+            }
+          }
         }
 
         if (!fetchedProfile) {
@@ -93,7 +110,20 @@ export const ProfilePage: React.FC = () => {
           `)
           .eq('user_id', targetId);
 
-        if (skillsData) setSkills(skillsData as any);
+        if (skillsData && skillsData.length > 0) {
+          setSkills(skillsData as any);
+        } else if ((fetchedProfile as any)?.skillsList) {
+          const fakeUserSkills = (fetchedProfile as any).skillsList.map((skName: string, i: number) => ({
+            id: `usk-${i}`,
+            user_id: targetId,
+            skill_id: `sk-${i}`,
+            proficiency_level: i === 0 ? 'Expert' : i < 3 ? 'Advanced' : 'Intermediate',
+            years_of_experience: 3,
+            created_at: new Date().toISOString(),
+            skill: { id: `sk-${i}`, name: skName, category: 'language', icon: null, created_at: '' }
+          }));
+          setSkills(fakeUserSkills);
+        }
 
         // Fetch user projects
         const { data: projectsData } = await supabase
@@ -102,7 +132,12 @@ export const ProfilePage: React.FC = () => {
           .eq('owner_id', targetId)
           .order('created_at', { ascending: false });
 
-        if (projectsData) setProjects(projectsData as Project[]);
+        if (projectsData && projectsData.length > 0) {
+          setProjects(projectsData as Project[]);
+        } else {
+          const demoUserProjects = DEMO_PROJECTS.filter((dp) => dp.owner_id === targetId);
+          setProjects(demoUserProjects);
+        }
 
         // Check connection status
         if (currentUser && targetId !== currentUser.id) {
@@ -470,8 +505,81 @@ export const ProfilePage: React.FC = () => {
           </Card>
         </div>
 
-        {/* Right Column: GitHub Repositories & Collaborative Projects */}
+        {/* Right Column: Professional Description, GitHub Repositories & Collaborative Projects */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Professional Profile & Collaboration Objectives */}
+          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl relative overflow-hidden">
+            <CardHeader className="p-0 pb-4 border-b border-[#273249]">
+              <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Terminal className="h-4 w-4 text-[#6D95FF]" /> Professional Dossier & Objectives
+                </span>
+                {(profile as any).is_demo && (
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                    DEMO COMMUNITY PROFILE
+                  </span>
+                )}
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent className="p-0 pt-4 space-y-4 text-xs">
+              {/* Bio summary */}
+              <div>
+                <span className="text-[10px] font-mono text-[#929DB2] uppercase tracking-wider block mb-1">
+                  EXECUTIVE BIOGRAPHY
+                </span>
+                <p className="text-[#F4F6FC] leading-relaxed text-xs">
+                  {(profile as any).professional_description?.bio || profile.bio || 'Building scalable applications and open-source software on DevConnect.'}
+                </p>
+              </div>
+
+              {/* Current Goals */}
+              {(profile as any).professional_description?.current_goals && (
+                <div className="p-3 rounded-xl bg-[#151F30] border border-[#273249]">
+                  <span className="text-[10px] font-mono text-[#6D95FF] uppercase font-bold tracking-wider block mb-1">
+                    CURRENT ENGINEERING GOALS
+                  </span>
+                  <p className="text-[#F4F6FC] leading-relaxed text-xs">
+                    {(profile as any).professional_description.current_goals}
+                  </p>
+                </div>
+              )}
+
+              {/* Collaboration Style & Target Projects */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                {(profile as any).professional_description?.collaboration_style && (
+                  <div className="p-3 rounded-xl bg-[#151F30] border border-[#273249]">
+                    <span className="text-[10px] font-mono text-[#9D83FF] uppercase font-bold tracking-wider block mb-1">
+                      COLLABORATION STYLE
+                    </span>
+                    <p className="text-[#929DB2] leading-relaxed text-xs">
+                      {(profile as any).professional_description.collaboration_style}
+                    </p>
+                  </div>
+                )}
+
+                {Array.isArray((profile as any).professional_description?.target_projects) &&
+                  (profile as any).professional_description.target_projects.length > 0 && (
+                    <div className="p-3 rounded-xl bg-[#151F30] border border-[#273249]">
+                      <span className="text-[10px] font-mono text-[#35C98A] uppercase font-bold tracking-wider block mb-1">
+                        TARGET PROJECT DOMAINS
+                      </span>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {(profile as any).professional_description.target_projects.map((tp: string) => (
+                          <span
+                            key={tp}
+                            className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#101725] border border-[#273249] text-[#F4F6FC]"
+                          >
+                            {tp}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+              </div>
+            </CardContent>
+          </Card>
+
           {/* GitHub Repositories Section */}
           <GitHubReposCard
             githubUsername={profile.github_username}

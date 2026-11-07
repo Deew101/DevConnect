@@ -36,6 +36,7 @@ import { LoadingScreen } from '@/components/common/LoadingScreen';
 import { formatDate } from '@/lib/utils';
 import { useToast } from '@/components/ui/Toast';
 import { GridPattern } from '@/components/ui/GridPattern';
+import { DEMO_PROJECTS, DEMO_PROFILES } from '@/data/demoCommunityData';
 
 export const ProjectWorkspacePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -59,72 +60,232 @@ export const ProjectWorkspacePage: React.FC = () => {
   const loadProjectData = useCallback(async () => {
     if (!id) return;
     try {
-      // 1. Fetch project
-      const { data: projData, error: projError } = await supabase
-        .from('projects')
-        .select(`
-          *,
-          owner:owner_id (id, username, full_name, avatar_url)
-        `)
-        .eq('id', id)
-        .single();
+      let currentProj: any = null;
 
-      if (projError) throw projError;
-      setProject(projData as any);
+      // 1. Fetch project from Supabase
+      try {
+        const { data: projData, error: projError } = await supabase
+          .from('projects')
+          .select(`
+            *,
+            owner:owner_id (id, username, full_name, avatar_url)
+          `)
+          .eq('id', id)
+          .single();
+
+        if (!projError && projData) {
+          currentProj = projData;
+        }
+      } catch (e) {
+        // ignore
+      }
+
+      // Fallback to Demo Projects
+      if (!currentProj) {
+        const demoMatch = DEMO_PROJECTS.find((dp) => dp.id === id || dp.slug === id);
+        if (demoMatch) {
+          const owner = DEMO_PROFILES.find((p) => p.id === demoMatch.owner_id) || DEMO_PROFILES[0];
+          currentProj = {
+            ...demoMatch,
+            owner,
+          };
+        }
+      }
+
+      if (!currentProj) {
+        throw new Error('Project not found');
+      }
+
+      setProject(currentProj);
 
       // 2. Fetch project members
-      const { data: membersData } = await supabase
-        .from('project_members')
-        .select(`
-          *,
-          profile:user_id (id, username, full_name, avatar_url, headline, availability_status)
-        `)
-        .eq('project_id', id);
+      try {
+        const { data: membersData } = await supabase
+          .from('project_members')
+          .select(`
+            *,
+            profile:user_id (id, username, full_name, avatar_url, headline, availability_status)
+          `)
+          .eq('project_id', id);
 
-      if (membersData) setMembers(membersData as any);
+        if (membersData && membersData.length > 0) {
+          setMembers(membersData as any);
+        } else {
+          // Demo members
+          const demoMembers = [
+            {
+              id: 'dmem-1',
+              project_id: currentProj.id,
+              user_id: currentProj.owner.id,
+              role: 'owner',
+              profile: currentProj.owner,
+            },
+            {
+              id: 'dmem-2',
+              project_id: currentProj.id,
+              user_id: DEMO_PROFILES[1].id,
+              role: 'lead',
+              profile: DEMO_PROFILES[1],
+            },
+            {
+              id: 'dmem-3',
+              project_id: currentProj.id,
+              user_id: DEMO_PROFILES[2].id,
+              role: 'contributor',
+              profile: DEMO_PROFILES[2],
+            },
+          ];
+          setMembers(demoMembers as any);
+        }
+      } catch (e) {
+        // ignore
+      }
 
       // 3. Fetch project tasks
-      const { data: tasksData } = await supabase
-        .from('tasks')
-        .select(`
-          *,
-          assignee:assignee_id (id, username, full_name, avatar_url),
-          creator:creator_id (id, username, full_name, avatar_url)
-        `)
-        .eq('project_id', id)
-        .order('order_index', { ascending: true });
+      try {
+        const { data: tasksData } = await supabase
+          .from('tasks')
+          .select(`
+            *,
+            assignee:assignee_id (id, username, full_name, avatar_url),
+            creator:creator_id (id, username, full_name, avatar_url)
+          `)
+          .eq('project_id', id)
+          .order('order_index', { ascending: true });
 
-      if (tasksData) setTasks(tasksData as any);
+        if (tasksData && tasksData.length > 0) {
+          setTasks(tasksData as any);
+        } else {
+          // Demo Tasks
+          const demoTasks: any[] = [
+            {
+              id: `task-${id}-1`,
+              project_id: currentProj.id,
+              title: 'Architect system boundaries and data schemas',
+              description: 'Draft API contracts, database migration files, and edge worker routes.',
+              status: 'done',
+              priority: 'high',
+              creator_id: currentProj.owner.id,
+              assignee_id: currentProj.owner.id,
+              assignee: currentProj.owner,
+              order_index: 0,
+              tags: ['architecture', 'backend'],
+            },
+            {
+              id: `task-${id}-2`,
+              project_id: currentProj.id,
+              title: 'Implement real-time WebSocket telemetry mesh',
+              description: 'Wire up live subscription channels and bi-directional message dispatch.',
+              status: 'in_progress',
+              priority: 'urgent',
+              creator_id: currentProj.owner.id,
+              assignee_id: DEMO_PROFILES[1].id,
+              assignee: DEMO_PROFILES[1],
+              order_index: 1,
+              tags: ['realtime', 'mesh'],
+            },
+            {
+              id: `task-${id}-3`,
+              project_id: currentProj.id,
+              title: 'Design dark editorial dashboard interface',
+              description: 'Build high-fidelity Linear-inspired responsive workspace with status cards.',
+              status: 'review',
+              priority: 'medium',
+              creator_id: currentProj.owner.id,
+              assignee_id: DEMO_PROFILES[2].id,
+              assignee: DEMO_PROFILES[2],
+              order_index: 2,
+              tags: ['ui', 'tailwind'],
+            },
+            {
+              id: `task-${id}-4`,
+              project_id: currentProj.id,
+              title: 'Unit tests & performance profiling pass',
+              description: 'Ensure 90%+ code coverage and zero sub-frame layout thrashing.',
+              status: 'todo',
+              priority: 'low',
+              creator_id: currentProj.owner.id,
+              assignee_id: null,
+              assignee: null,
+              order_index: 3,
+              tags: ['testing', 'benchmarks'],
+            },
+          ];
+          setTasks(demoTasks);
+        }
+      } catch (e) {
+        // ignore
+      }
 
       // 4. Fetch project milestones
-      const { data: milestonesData } = await supabase
-        .from('milestones')
-        .select('*')
-        .eq('project_id', id)
-        .order('order_index', { ascending: true });
+      try {
+        const { data: milestonesData } = await supabase
+          .from('milestones')
+          .select('*')
+          .eq('project_id', id)
+          .order('order_index', { ascending: true });
 
-      if (milestonesData) setMilestones(milestonesData as Milestone[]);
+        if (milestonesData && milestonesData.length > 0) {
+          setMilestones(milestonesData as Milestone[]);
+        } else {
+          setMilestones([
+            {
+              id: `ms-${id}-1`,
+              project_id: currentProj.id,
+              title: 'Sprint 01: Core Architecture Foundation',
+              description: 'Schema migrations, type definitions, and repository initialization',
+              is_completed: true,
+              completed_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+              due_date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+              order_index: 0,
+              created_at: new Date().toISOString(),
+            },
+            {
+              id: `ms-${id}-2`,
+              project_id: currentProj.id,
+              title: 'Sprint 02: Realtime Synchronization & Kanban',
+              description: 'Live task board, chat stream, and AI teammate matchmaking integration',
+              is_completed: false,
+              completed_at: null,
+              due_date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14).toISOString(),
+              order_index: 1,
+              created_at: new Date().toISOString(),
+            },
+          ]);
+        }
+      } catch (e) {
+        // ignore
+      }
 
-      // 5. Fetch or ensure project conversation channel
-      const { data: convData } = await supabase
-        .from('conversations')
-        .select('*')
-        .eq('project_id', id)
-        .maybeSingle();
-
-      if (convData) {
-        setConversation(convData as Conversation);
-      } else {
-        const { data: newConv } = await supabase
+      // 5. Fetch or ensure conversation channel
+      try {
+        const { data: convData } = await supabase
           .from('conversations')
-          .insert({
+          .select('*')
+          .eq('project_id', id)
+          .maybeSingle();
+
+        if (convData) {
+          setConversation(convData as Conversation);
+        } else {
+          setConversation({
+            id: `conv-proj-${id}`,
             type: 'project',
-            project_id: id,
-            name: `${projData.title} Discussions`,
-          })
-          .select()
-          .single();
-        if (newConv) setConversation(newConv as Conversation);
+            project_id: currentProj.id,
+            name: `${currentProj.title} Channel`,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          } as Conversation);
+        }
+      } catch (e) {
+        setConversation({
+          id: `conv-proj-${id}`,
+          type: 'project',
+          project_id: currentProj.id,
+          name: `${currentProj.title} Channel`,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        } as Conversation);
       }
     } catch (err: any) {
       console.error('Error fetching workspace:', err);

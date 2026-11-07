@@ -43,6 +43,16 @@ export interface Profile {
     lookingFor?: string[];
     preferredTeamSize?: string;
   } | null;
+  professional_description?: {
+    bio?: string;
+    current_goals?: string;
+    collaboration_style?: string;
+    target_projects?: string | string[];
+    [key: string]: any;
+  } | null;
+  preset_avatar_id?: string | null;
+  skills?: any[];
+  is_demo?: boolean;
   is_onboarded: boolean;
   created_at: string;
   updated_at: string;
@@ -82,6 +92,7 @@ export interface Project {
   live_demo_url: string | null;
   is_published: boolean;
   required_skills: string[];
+  is_demo?: boolean;
   created_at: string;
   updated_at: string;
   owner?: Profile;
