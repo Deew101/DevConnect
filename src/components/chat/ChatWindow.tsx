@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Paperclip, Hash } from 'lucide-react';
+import { Send, Paperclip, Hash, Code, Smile, PanelRightOpen, PanelRightClose, Sparkles } from 'lucide-react';
 import { Conversation, Message } from '@/types/database.types';
 import { supabase } from '@/lib/supabase';
 import { Avatar } from '@/components/ui/Avatar';
@@ -10,17 +10,22 @@ import { useToast } from '@/components/ui/Toast';
 interface ChatWindowProps {
   conversation: Conversation;
   currentUserId: string;
+  onToggleDetails?: () => void;
+  isDetailsOpen?: boolean;
 }
 
 export const ChatWindow: React.FC<ChatWindowProps> = ({
   conversation,
   currentUserId,
+  onToggleDetails,
+  isDetailsOpen = true,
 }) => {
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -77,6 +82,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
           }
 
           setMessages((prev) => [...prev, newMsg]);
+          setIsTyping(false);
           setTimeout(scrollToBottom, 50);
         }
       )
@@ -108,7 +114,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       scrollToBottom();
     } catch (err: any) {
       toast({
-        title: 'Message sending failed',
+        title: 'Message transmission failed',
         description: err.message,
         type: 'error',
       });
@@ -116,6 +122,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     } finally {
       setSending(false);
     }
+  };
+
+  const handleInsertCodeSnippet = () => {
+    setInputMessage((prev) => `${prev}\`\`\`typescript\n// Enter snippet\n\`\`\`\n`);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,7 +167,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       });
 
       if (msgError) throw msgError;
-      toast({ title: 'File shared successfully', type: 'success' });
+      toast({ title: 'File attached and shared', type: 'success' });
     } catch (err: any) {
       toast({
         title: 'Upload failed',
@@ -173,13 +183,13 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   const isDirect = conversation.type === 'direct';
   const otherMember = conversation.members?.find((m) => m.user_id !== currentUserId)?.profile;
   const title = isDirect
-    ? otherMember?.full_name || 'Direct Chat'
-    : conversation.name || 'Project Channel';
+    ? otherMember?.full_name || 'Direct Channel'
+    : conversation.name || 'Project Collaboration Stream';
 
   return (
-    <div className="flex-1 h-full flex flex-col bg-[#090C13]">
+    <div className="flex-1 h-full flex flex-col bg-[#090C13] font-sans">
       {/* Header */}
-      <div className="h-14 px-5 border-b border-[#273249] flex items-center justify-between bg-[#0E1420]/90 backdrop-blur-md">
+      <div className="h-14 px-5 border-b border-[#273249] flex items-center justify-between bg-[#101725]/95 backdrop-blur-md">
         <div className="flex items-center gap-3">
           {isDirect ? (
             <Avatar
@@ -187,28 +197,41 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
               name={otherMember?.full_name}
               size="sm"
               status={otherMember?.availability_status}
-              className="w-8 h-8"
+              className="w-8 h-8 rounded-lg"
             />
           ) : (
-            <div className="w-8 h-8 rounded-lg bg-[#141C2B] border border-[#273249] flex items-center justify-center text-[#648BFF]">
+            <div className="w-8 h-8 rounded-lg bg-[#151F30] border border-[#273249] flex items-center justify-center text-[#6D95FF]">
               <Hash className="h-4 w-4" />
             </div>
           )}
 
           <div>
-            <h4 className="font-bold text-xs text-[#F1F5FC]">{title}</h4>
-            <p className="text-[11px] text-[#929DB2] font-mono">
-              {isDirect
-                ? (otherMember?.headline || 'Direct Conversation')
-                : 'Project Collaboration Stream'}
-            </p>
+            <h4 className="font-display font-bold text-xs text-[#F4F6FC]">{title}</h4>
+            <div className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#35C98A]" />
+              <p className="text-[10px] text-[#929DB2] font-mono">
+                {isDirect
+                  ? (otherMember?.headline || 'Direct Engineering Stream')
+                  : 'Workspace Channel • Realtime Connected'}
+              </p>
+            </div>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 text-[10px] text-[#35C98A] font-mono px-2 py-0.5 rounded-full bg-[#35C98A]/10 border border-[#35C98A]/20">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#35C98A] animate-pulse" /> Live Realtime
+          <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] text-[#35C98A] font-mono px-2 py-0.5 rounded bg-[#35C98A]/10 border border-[#35C98A]/20">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#35C98A] animate-pulse" /> Live WebSocket
           </span>
+
+          {onToggleDetails && (
+            <button
+              onClick={onToggleDetails}
+              className="p-1.5 rounded-lg text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30] border border-transparent hover:border-[#273249] transition-colors"
+              title={isDetailsOpen ? 'Hide channel dossier' : 'Show channel dossier'}
+            >
+              {isDetailsOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
+            </button>
+          )}
         </div>
       </div>
 
@@ -216,11 +239,13 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-[#929DB2] text-xs">
-            <div className="w-10 h-10 rounded-xl bg-[#141C2B] border border-[#273249] flex items-center justify-center text-[#929DB2] mb-2">
-              <Hash className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-lg bg-[#151F30] border border-[#273249] flex items-center justify-center text-[#929DB2] mb-2">
+              <Hash className="w-5 h-5 text-[#6D95FF]" />
             </div>
-            <p className="font-semibold text-[#F1F5FC] mb-1">Channel Initialized</p>
-            <p className="text-[#929DB2]">Send a message below to coordinate with your team.</p>
+            <p className="font-display font-bold text-[#F4F6FC] mb-1">Encrypted Stream Ready</p>
+            <p className="text-[#929DB2] text-center max-w-xs font-mono text-[11px]">
+              Type a message below to synchronize with your collaborator or workspace team.
+            </p>
           </div>
         ) : (
           messages.map((msg) => {
@@ -235,19 +260,19 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                     src={msg.sender?.avatar_url}
                     name={msg.sender?.full_name}
                     size="sm"
-                    className="w-7 h-7 text-[10px] mt-0.5"
+                    className="w-7 h-7 text-[10px] mt-0.5 rounded-lg"
                   />
                 )}
 
                 <div
-                  className={`max-w-[80%] sm:max-w-md rounded-2xl p-3.5 text-xs ${
+                  className={`max-w-[80%] sm:max-w-md rounded-xl p-3.5 text-xs ${
                     isMe
-                      ? 'bg-gradient-to-r from-[#648BFF] to-[#9B7BFF] text-white rounded-tr-none shadow-md shadow-[#648BFF]/20'
-                      : 'bg-[#141C2B] border border-[#273249] text-[#F1F5FC] rounded-tl-none shadow-sm'
+                      ? 'bg-gradient-to-r from-[#6D95FF] to-[#9D83FF] text-[#090C13] font-medium rounded-tr-none shadow-md shadow-[#6D95FF]/20'
+                      : 'bg-[#151F30] border border-[#273249] text-[#F4F6FC] rounded-tl-none shadow-sm'
                   }`}
                 >
                   {!isMe && (
-                    <div className="font-semibold text-[11px] text-[#648BFF] mb-1">
+                    <div className="font-display font-semibold text-[11px] text-[#6D95FF] mb-1">
                       {msg.sender?.full_name || 'Member'}
                     </div>
                   )}
@@ -263,7 +288,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                           href={att.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 p-2 rounded-lg bg-[#0E1420] hover:bg-[#192338] border border-[#273249] text-[#648BFF] underline font-mono text-[11px]"
+                          className="flex items-center gap-2 p-2 rounded-lg bg-[#101725] hover:bg-[#1C2940] border border-[#273249] text-[#6D95FF] underline font-mono text-[11px]"
                         >
                           <Paperclip className="h-3 w-3" />
                           <span className="truncate">{att.name}</span>
@@ -274,7 +299,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
 
                   <div
                     className={`mt-1.5 text-[9px] font-mono ${
-                      isMe ? 'text-white/80 text-right' : 'text-[#929DB2]'
+                      isMe ? 'text-[#090C13]/70 text-right font-bold' : 'text-[#929DB2]'
                     }`}
                   >
                     {formatTimeAgo(msg.created_at)}
@@ -284,11 +309,56 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             );
           })
         )}
+
+        {/* Typing indicator */}
+        {isTyping && (
+          <div className="flex items-center gap-2 text-xs text-[#929DB2] font-mono pl-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#6D95FF] animate-bounce" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#6D95FF] animate-bounce [animation-delay:0.2s]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#6D95FF] animate-bounce [animation-delay:0.4s]" />
+            <span>typing...</span>
+          </div>
+        )}
+
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input area */}
-      <div className="p-3.5 border-t border-[#273249] bg-[#0E1420]/90">
+      {/* Rich Composer Bar */}
+      <div className="p-3.5 border-t border-[#273249] bg-[#101725]/95">
+        {/* Quick format actions */}
+        <div className="flex items-center gap-2 mb-2 px-1 text-[11px] font-mono text-[#929DB2]">
+          <button
+            type="button"
+            onClick={handleInsertCodeSnippet}
+            className="flex items-center gap-1 hover:text-[#6D95FF] transition-colors"
+            title="Insert Code Snippet"
+          >
+            <Code className="h-3 w-3" /> Insert Code
+          </button>
+          <span>•</span>
+          <button
+            type="button"
+            onClick={() => setInputMessage((prev) => `${prev}🚀 `)}
+            className="hover:text-[#6D95FF] transition-colors"
+          >
+            🚀 Ship
+          </button>
+          <button
+            type="button"
+            onClick={() => setInputMessage((prev) => `${prev}⚡ `)}
+            className="hover:text-[#6D95FF] transition-colors"
+          >
+            ⚡ PR Ready
+          </button>
+          <button
+            type="button"
+            onClick={() => setInputMessage((prev) => `${prev}✅ `)}
+            className="hover:text-[#6D95FF] transition-colors"
+          >
+            ✅ LGTM
+          </button>
+        </div>
+
         <form onSubmit={handleSendMessage} className="flex items-center gap-2">
           <input
             type="file"
@@ -301,7 +371,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="p-2 rounded-lg bg-[#141C2B] hover:bg-[#192338] text-[#929DB2] hover:text-[#F1F5FC] border border-[#273249] transition-colors"
+            className="p-2 rounded-lg bg-[#151F30] hover:bg-[#1C2940] text-[#929DB2] hover:text-[#F4F6FC] border border-[#273249] transition-colors"
             title="Attach file"
           >
             <Paperclip className="h-4 w-4" />
@@ -311,8 +381,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Send a message or code snippet (Enter to send)..."
-            className="flex-1 h-9 px-3.5 rounded-lg bg-[#141C2B] border border-[#273249] text-xs text-[#F1F5FC] placeholder:text-[#929DB2] focus:outline-none focus:border-[#648BFF] font-sans"
+            placeholder="Type your message or paste code (Press Enter to transmit)..."
+            className="flex-1 h-9 px-3.5 rounded-lg bg-[#151F30] border border-[#273249] text-xs text-[#F4F6FC] placeholder:text-[#929DB2] focus:outline-none focus:border-[#6D95FF] font-sans"
           />
 
           <Button
@@ -321,7 +391,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             size="sm"
             disabled={!inputMessage.trim() || sending}
             isLoading={sending}
-            className="h-9 px-3.5 rounded-lg font-semibold text-xs shadow-md shadow-[#648BFF]/20"
+            className="h-9 px-4 rounded-lg font-semibold text-xs shadow-md shadow-[#6D95FF]/20"
           >
             <Send className="h-3.5 w-3.5 mr-1" /> Send
           </Button>

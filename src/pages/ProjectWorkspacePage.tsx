@@ -17,6 +17,7 @@ import {
   ArrowLeft,
   ChevronRight,
   TrendingUp,
+  Terminal,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Project, Task, Milestone, ProjectMember, Conversation } from '@/types/database.types';
@@ -229,13 +230,13 @@ export const ProjectWorkspacePage: React.FC = () => {
 
   if (!project) {
     return (
-      <div className="p-12 text-center border border-dashed border-[#273249] rounded-2xl max-w-lg mx-auto mt-16 bg-[#0E1420]">
-        <h3 className="text-xl font-bold text-[#F1F5FC] mb-2">Project Not Found</h3>
+      <div className="p-16 text-center border border-dashed border-[#273249] rounded-xl max-w-lg mx-auto mt-16 bg-[#101725]">
+        <h3 className="font-display text-xl font-bold text-[#F4F6FC] mb-2">Workspace Not Found</h3>
         <p className="text-xs text-[#929DB2] mb-6 leading-relaxed">
           The requested project does not exist or you do not have permission to view it.
         </p>
         <Link to="/projects">
-          <Button variant="primary">Browse Projects</Button>
+          <Button variant="primary">Browse Workspaces</Button>
         </Link>
       </div>
     );
@@ -251,35 +252,35 @@ export const ProjectWorkspacePage: React.FC = () => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="space-y-6 max-w-7xl mx-auto pb-12"
+      className="space-y-6 max-w-7xl mx-auto pb-12 font-sans"
     >
       {/* Breadcrumb nav */}
       <div className="flex items-center gap-2 text-xs font-mono text-[#929DB2]">
-        <Link to="/projects" className="hover:text-[#648BFF] transition-colors flex items-center gap-1">
-          <ArrowLeft className="w-3.5 h-3.5" /> Projects
+        <Link to="/projects" className="hover:text-[#6D95FF] transition-colors flex items-center gap-1">
+          <ArrowLeft className="w-3.5 h-3.5" /> Workspaces
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-[#273249]" />
-        <span className="text-[#F1F5FC] truncate max-w-xs">{project.title}</span>
+        <span className="text-[#F4F6FC] truncate max-w-xs">{project.title}</span>
       </div>
 
       {/* Workspace Header Hero */}
-      <div className="relative rounded-2xl border border-[#273249] bg-[#0E1420] p-6 shadow-2xl overflow-hidden">
+      <div className="relative rounded-xl border border-[#273249] bg-[#101725] p-6 shadow-2xl overflow-hidden">
         <GridPattern className="opacity-15" />
         <div className="relative z-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
             <div className="space-y-2 max-w-2xl">
               <div className="flex items-center gap-3">
-                <span className="p-2.5 rounded-xl bg-[#141C2B] border border-[#648BFF]/30 text-[#648BFF] shadow-inner">
+                <span className="p-2.5 rounded-lg bg-[#151F30] border border-[#6D95FF]/30 text-[#6D95FF] shadow-inner">
                   <FolderGit2 className="h-5 w-5" />
                 </span>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-[#F1F5FC] tracking-tight flex items-center gap-2.5">
+                  <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[#F4F6FC] tracking-tight flex items-center gap-2.5">
                     {project.title}
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono capitalize bg-[#141C2B] text-[#648BFF] border border-[#273249]">
+                    <span className="px-2.5 py-0.5 rounded text-[10px] font-mono capitalize bg-[#151F30] text-[#6D95FF] border border-[#273249]">
                       {project.status?.replace(/_/g, ' ')}
                     </span>
                   </h1>
-                  <span className="text-xs text-[#648BFF] font-mono">{project.category}</span>
+                  <span className="text-xs text-[#6D95FF] font-mono">{project.category}</span>
                 </div>
               </div>
               <p className="text-xs sm:text-sm text-[#929DB2] pt-1 leading-relaxed">
@@ -293,7 +294,7 @@ export const ProjectWorkspacePage: React.FC = () => {
                 variant="glow"
                 size="sm"
                 onClick={() => setIsAIModalOpen(true)}
-                className="font-semibold text-xs shadow-md shadow-[#648BFF]/20"
+                className="font-semibold text-xs shadow-md shadow-[#6D95FF]/20"
               >
                 <Sparkles className="h-4 w-4 mr-1.5" /> AI Matchmaker
               </Button>
@@ -303,7 +304,7 @@ export const ProjectWorkspacePage: React.FC = () => {
                   href={project.github_repo_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#141C2B] hover:bg-[#192338] border border-[#273249] text-xs font-mono text-[#F1F5FC] transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#151F30] hover:bg-[#1C2940] border border-[#273249] text-xs font-mono text-[#F4F6FC] transition-colors"
                 >
                   <GitBranch className="h-3.5 w-3.5" /> Repo <ExternalLink className="h-3 w-3" />
                 </a>
@@ -328,13 +329,13 @@ export const ProjectWorkspacePage: React.FC = () => {
             <div>
               <div className="flex items-center justify-between text-xs mb-1.5 font-mono">
                 <span className="text-[#929DB2] flex items-center gap-1.5">
-                  <TrendingUp className="w-3.5 h-3.5 text-[#648BFF]" /> Workspace Velocity
+                  <TrendingUp className="w-3.5 h-3.5 text-[#6D95FF]" /> Workspace Velocity
                 </span>
-                <span className="font-bold text-[#648BFF]">{progressPercent}%</span>
+                <span className="font-bold text-[#6D95FF]">{progressPercent}%</span>
               </div>
-              <div className="h-2 w-full rounded-full bg-[#141C2B] border border-[#273249] overflow-hidden">
+              <div className="h-2 w-full rounded-full bg-[#151F30] border border-[#273249] overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-[#648BFF] to-[#9B7BFF] rounded-full transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-[#6D95FF] to-[#9D83FF] rounded-full transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -348,7 +349,7 @@ export const ProjectWorkspacePage: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2 text-xs font-mono text-[#929DB2] sm:justify-end">
-              <Users className="h-4 w-4 text-[#648BFF]" />
+              <Users className="h-4 w-4 text-[#6D95FF]" />
               <span>
                 {members.length} / {project.team_size_needed} active contributors
               </span>
@@ -359,18 +360,18 @@ export const ProjectWorkspacePage: React.FC = () => {
 
       {/* Workspace Tabs: Kanban Board, Milestones, Team, Chat */}
       <Tabs defaultValue="kanban">
-        <TabsList className="w-full sm:w-auto grid grid-cols-4 sm:inline-flex mb-2 bg-[#0E1420] border border-[#273249]">
-          <TabsTrigger value="kanban" className="text-xs gap-1.5 data-[state=active]:bg-[#141C2B] data-[state=active]:text-[#F1F5FC]">
-            <CheckSquare className="h-3.5 w-3.5 text-[#648BFF]" /> Kanban Board
+        <TabsList className="w-full sm:w-auto grid grid-cols-4 sm:inline-flex mb-2 bg-[#101725] border border-[#273249]">
+          <TabsTrigger value="kanban" className="text-xs gap-1.5 font-mono data-[state=active]:bg-[#151F30] data-[state=active]:text-[#F4F6FC]">
+            <CheckSquare className="h-3.5 w-3.5 text-[#6D95FF]" /> Kanban Board
           </TabsTrigger>
-          <TabsTrigger value="milestones" className="text-xs gap-1.5 data-[state=active]:bg-[#141C2B] data-[state=active]:text-[#F1F5FC]">
-            <MilestoneIcon className="h-3.5 w-3.5 text-[#9B7BFF]" /> Milestones ({milestones.length})
+          <TabsTrigger value="milestones" className="text-xs gap-1.5 font-mono data-[state=active]:bg-[#151F30] data-[state=active]:text-[#F4F6FC]">
+            <MilestoneIcon className="h-3.5 w-3.5 text-[#9D83FF]" /> Milestones ({milestones.length})
           </TabsTrigger>
-          <TabsTrigger value="team" className="text-xs gap-1.5 data-[state=active]:bg-[#141C2B] data-[state=active]:text-[#F1F5FC]">
-            <Users className="h-3.5 w-3.5 text-[#648BFF]" /> Team ({members.length})
+          <TabsTrigger value="team" className="text-xs gap-1.5 font-mono data-[state=active]:bg-[#151F30] data-[state=active]:text-[#F4F6FC]">
+            <Users className="h-3.5 w-3.5 text-[#6D95FF]" /> Team ({members.length})
           </TabsTrigger>
-          <TabsTrigger value="chat" className="text-xs gap-1.5 data-[state=active]:bg-[#141C2B] data-[state=active]:text-[#F1F5FC]">
-            <MessageSquare className="h-3.5 w-3.5 text-[#35C98A]" /> Team Chat
+          <TabsTrigger value="chat" className="text-xs gap-1.5 font-mono data-[state=active]:bg-[#151F30] data-[state=active]:text-[#F4F6FC]">
+            <MessageSquare className="h-3.5 w-3.5 text-[#35C98A]" /> Team Stream
           </TabsTrigger>
         </TabsList>
 
@@ -386,14 +387,14 @@ export const ProjectWorkspacePage: React.FC = () => {
 
         {/* Tab 2: Project Milestones */}
         <TabsContent value="milestones" className="mt-4">
-          <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-6">
+          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <CardTitle className="text-sm font-bold text-[#F1F5FC] flex items-center gap-2">
-                  <MilestoneIcon className="w-4 h-4 text-[#648BFF]" /> Sprint Deliverables & Milestones
+                <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center gap-2">
+                  <MilestoneIcon className="w-4 h-4 text-[#6D95FF]" /> Sprint Deliverables & Milestones
                 </CardTitle>
                 <p className="text-xs text-[#929DB2] mt-1">
-                  Track project roadmaps, sprint checkpoints, and feature releases.
+                  Track sprint checkpoints, roadmap release dates, and critical features.
                 </p>
               </div>
             </div>
@@ -404,14 +405,14 @@ export const ProjectWorkspacePage: React.FC = () => {
                 value={newMilestoneTitle}
                 onChange={(e) => setNewMilestoneTitle(e.target.value)}
                 placeholder="New milestone title (e.g. Supabase Realtime Channels & Schema Migration)"
-                className="flex-1 h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="flex-1 h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                 required
               />
               <Input
                 type="date"
                 value={newMilestoneDate}
                 onChange={(e) => setNewMilestoneDate(e.target.value)}
-                className="w-full sm:w-44 h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="w-full sm:w-44 h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               />
               <Button
                 type="submit"
@@ -427,17 +428,17 @@ export const ProjectWorkspacePage: React.FC = () => {
             {/* Milestones Checklist */}
             <div className="space-y-2.5">
               {milestones.length === 0 ? (
-                <div className="py-10 text-center text-xs text-[#929DB2] border border-dashed border-[#273249] rounded-xl">
+                <div className="py-10 text-center text-xs text-[#929DB2] border border-dashed border-[#273249] rounded-xl bg-[#151F30]/40">
                   No sprint milestones configured yet. Add key milestones above to align the team.
                 </div>
               ) : (
                 milestones.map((ms) => (
                   <div
                     key={ms.id}
-                    className={`p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 ${
+                    className={`p-3.5 rounded-lg border transition-all flex items-center justify-between gap-3 ${
                       ms.is_completed
                         ? 'border-[#35C98A]/30 bg-[#35C98A]/10'
-                        : 'border-[#273249] bg-[#141C2B] hover:bg-[#192338]'
+                        : 'border-[#273249] bg-[#151F30] hover:bg-[#1C2940]'
                     }`}
                   >
                     <button
@@ -448,11 +449,11 @@ export const ProjectWorkspacePage: React.FC = () => {
                       {ms.is_completed ? (
                         <CheckCircle2 className="h-5 w-5 text-[#35C98A] flex-shrink-0" />
                       ) : (
-                        <Circle className="h-5 w-5 text-[#929DB2] hover:text-[#648BFF] flex-shrink-0 transition-colors" />
+                        <Circle className="h-5 w-5 text-[#929DB2] hover:text-[#6D95FF] flex-shrink-0 transition-colors" />
                       )}
                       <span
                         className={`text-xs font-medium truncate ${
-                          ms.is_completed ? 'line-through text-[#929DB2]' : 'text-[#F1F5FC]'
+                          ms.is_completed ? 'line-through text-[#929DB2]' : 'text-[#F4F6FC]'
                         }`}
                       >
                         {ms.title}
@@ -474,14 +475,14 @@ export const ProjectWorkspacePage: React.FC = () => {
 
         {/* Tab 3: Team Members */}
         <TabsContent value="team" className="mt-4">
-          <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-6">
+          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-sm font-bold text-[#F1F5FC] flex items-center gap-2">
-                  <Users className="w-4 h-4 text-[#648BFF]" /> Active Contributors
+                <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center gap-2">
+                  <Users className="w-4 h-4 text-[#6D95FF]" /> Active Engineering Contributors
                 </CardTitle>
                 <p className="text-xs text-[#929DB2] mt-1">
-                  Engineers currently building on this workspace.
+                  Engineers currently building and committing to this workspace.
                 </p>
               </div>
               <Button
@@ -498,7 +499,7 @@ export const ProjectWorkspacePage: React.FC = () => {
               {members.map((mem) => (
                 <div
                   key={mem.id}
-                  className="p-4 rounded-xl border border-[#273249] bg-[#141C2B] flex items-center justify-between hover:border-[#648BFF]/40 transition-colors"
+                  className="p-4 rounded-xl border border-[#273249] bg-[#151F30] flex items-center justify-between hover:border-[#6D95FF]/40 transition-colors"
                 >
                   <Link
                     to={`/profile/${mem.profile?.username}`}
@@ -511,10 +512,10 @@ export const ProjectWorkspacePage: React.FC = () => {
                       status={mem.profile?.availability_status}
                     />
                     <div className="min-w-0">
-                      <h5 className="font-semibold text-xs text-[#F1F5FC] group-hover:text-[#648BFF] transition-colors truncate">
+                      <h5 className="font-display font-semibold text-xs text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors truncate">
                         {mem.profile?.full_name}
                       </h5>
-                      <span className="text-[10px] text-[#648BFF] font-mono">
+                      <span className="text-[10px] text-[#6D95FF] font-mono">
                         @{mem.profile?.username}
                       </span>
                     </div>
@@ -534,7 +535,7 @@ export const ProjectWorkspacePage: React.FC = () => {
 
         {/* Tab 4: Team Chat */}
         <TabsContent value="chat" className="mt-4">
-          <div className="h-[650px] rounded-2xl border border-[#273249] overflow-hidden shadow-2xl bg-[#0E1420]">
+          <div className="h-[650px] rounded-xl border border-[#273249] overflow-hidden shadow-2xl bg-[#101725]">
             {conversation && user ? (
               <ChatWindow conversation={conversation} currentUserId={user.id} />
             ) : (

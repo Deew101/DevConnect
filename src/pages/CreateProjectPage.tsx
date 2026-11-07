@@ -127,29 +127,32 @@ export const CreateProjectPage: React.FC = () => {
       transition={{ duration: 0.3 }}
       className="max-w-3xl mx-auto space-y-6 pb-16"
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 border-b border-[#273249]/60 pb-5">
         <Button
           variant="ghost"
           size="sm"
           onClick={() => navigate(-1)}
-          className="p-2 h-9 w-9 rounded-lg border border-[#273249] text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#141C2B]"
+          className="p-2 h-9 w-9 rounded-lg border border-[#273249] text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-extrabold text-[#F1F5FC] tracking-tight">
+          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold mb-1">
+            INITIATIVE // NEW REPOSITORY
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
             Launch Collaborative Workspace
           </h1>
-          <p className="text-xs text-[#929DB2]">
+          <p className="text-xs text-[#929DB2] mt-0.5">
             Publish your project vision, assemble engineering teammates, and coordinate deliverables.
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-4">
-          <CardTitle className="text-sm font-bold text-[#F1F5FC] uppercase tracking-wider font-mono text-[#648BFF]">
-            Project Overview
+        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
+          <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono">
+            // Project Overview
           </CardTitle>
 
           <div>
@@ -160,7 +163,7 @@ export const CreateProjectPage: React.FC = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Distributed Task Orchestrator & Edge Mesh"
-              className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+              className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               required
             />
           </div>
@@ -173,7 +176,7 @@ export const CreateProjectPage: React.FC = () => {
               value={tagline}
               onChange={(e) => setTagline(e.target.value)}
               placeholder="A high-impact one-liner explaining the core value proposition"
-              className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+              className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
             />
           </div>
 
@@ -185,7 +188,7 @@ export const CreateProjectPage: React.FC = () => {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full h-10 rounded-lg border border-[#273249] bg-[#141C2B] px-3 text-xs text-[#F1F5FC] focus:outline-none focus:border-[#648BFF] font-mono cursor-pointer"
+                className="w-full h-10 rounded-lg border border-[#273249] bg-[#151F30] px-3 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF] font-mono cursor-pointer"
               >
                 <option value="Web Application">Web Application</option>
                 <option value="AI & Machine Learning">AI & Machine Learning</option>
@@ -206,7 +209,7 @@ export const CreateProjectPage: React.FC = () => {
                 max={15}
                 value={teamSizeNeeded}
                 onChange={(e) => setTeamSizeNeeded(Number(e.target.value))}
-                className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               />
             </div>
           </div>
@@ -220,18 +223,18 @@ export const CreateProjectPage: React.FC = () => {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Outline the core problem, expected technical stack, roadmap sprints, and engineering culture..."
               rows={5}
-              className="text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+              className="text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               required
             />
           </div>
         </Card>
 
         {/* Required Skills for AI Teammate Matching */}
-        <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-4">
+        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-[#648BFF]" />
-            <CardTitle className="text-sm font-bold text-[#F1F5FC] uppercase tracking-wider font-mono text-[#648BFF]">
-              Required Technical Stack (AI Matching)
+            <Sparkles className="h-4 w-4 text-[#6D95FF]" />
+            <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono">
+              // Required Technical Stack (AI Matching)
             </CardTitle>
           </div>
           <p className="text-xs text-[#929DB2]">
@@ -248,8 +251,8 @@ export const CreateProjectPage: React.FC = () => {
                   onClick={() => handleToggleSkill(sk.name)}
                   className={`px-2.5 py-1 rounded-lg text-xs font-mono border transition-all ${
                     isSelected
-                      ? 'bg-[#648BFF]/20 border-[#648BFF] text-[#F1F5FC] font-semibold'
-                      : 'bg-[#141C2B] border-[#273249] text-[#929DB2] hover:border-[#648BFF]/40 hover:text-[#F1F5FC]'
+                      ? 'bg-[#6D95FF]/20 border-[#6D95FF] text-[#F4F6FC] font-semibold'
+                      : 'bg-[#151F30] border-[#273249] text-[#929DB2] hover:border-[#6D95FF]/40 hover:text-[#F4F6FC]'
                   }`}
                 >
                   {isSelected && '✓ '}
@@ -268,7 +271,7 @@ export const CreateProjectPage: React.FC = () => {
               onChange={(e) => setCustomSkill(e.target.value)}
               onKeyDown={handleAddCustomSkill}
               placeholder="e.g. WebRTC, GraphQL, Prisma, Redis, Docker"
-              className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+              className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
             />
           </div>
 
@@ -276,7 +279,7 @@ export const CreateProjectPage: React.FC = () => {
             {requiredSkills.map((sk) => (
               <span
                 key={sk}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#141C2B] border border-[#648BFF]/30 text-[#648BFF] font-mono text-xs"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#151F30] border border-[#6D95FF]/30 text-[#6D95FF] font-mono text-xs"
               >
                 {sk}
                 <button
@@ -292,9 +295,9 @@ export const CreateProjectPage: React.FC = () => {
         </Card>
 
         {/* Links & Collaboration Requirements */}
-        <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-4">
-          <CardTitle className="text-sm font-bold text-[#F1F5FC] uppercase tracking-wider font-mono text-[#648BFF]">
-            Repository & Collaboration Cadence
+        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
+          <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono">
+            // Repository & Collaboration Cadence
           </CardTitle>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -306,7 +309,7 @@ export const CreateProjectPage: React.FC = () => {
                 value={githubRepoUrl}
                 onChange={(e) => setGithubRepoUrl(e.target.value)}
                 placeholder="https://github.com/organization/repo"
-                className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               />
             </div>
             <div>
@@ -317,7 +320,7 @@ export const CreateProjectPage: React.FC = () => {
                 value={liveDemoUrl}
                 onChange={(e) => setLiveDemoUrl(e.target.value)}
                 placeholder="https://preview.dev"
-                className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               />
             </div>
           </div>
@@ -331,7 +334,7 @@ export const CreateProjectPage: React.FC = () => {
                 type="date"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
-                className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               />
             </div>
             <div>
@@ -342,21 +345,21 @@ export const CreateProjectPage: React.FC = () => {
                 value={collaborationRequirements}
                 onChange={(e) => setCollaborationRequirements(e.target.value)}
                 placeholder="e.g. 5-10 hours/week, async sprints on Discord"
-                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               />
             </div>
           </div>
         </Card>
 
         <div className="flex items-center justify-end gap-3 pt-2">
-          <Button type="button" variant="outline" onClick={() => navigate(-1)} className="h-10 text-xs border-[#273249] text-[#F1F5FC]">
+          <Button type="button" variant="outline" onClick={() => navigate(-1)} className="h-10 text-xs border-[#273249] text-[#F4F6FC] bg-[#101725] hover:bg-[#151F30]">
             Cancel
           </Button>
           <Button
             type="submit"
-            variant="glow"
+            variant="primary"
             isLoading={saving}
-            className="px-6 font-semibold h-10 text-xs shadow-md shadow-[#648BFF]/20"
+            className="px-6 font-semibold h-10 text-xs shadow-md shadow-[#6D95FF]/20"
           >
             Create Workspace & Kanban Board
           </Button>

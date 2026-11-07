@@ -127,10 +127,13 @@ export const OnboardingPage: React.FC = () => {
       <div className="max-w-2xl w-full">
         {/* Logo and Progress */}
         <div className="text-center mb-8">
-          <div className="inline-flex h-12 w-12 rounded-2xl bg-gradient-to-tr from-[#648BFF] to-[#9B7BFF] items-center justify-center shadow-lg shadow-[#648BFF]/25 mb-3 border border-white/20">
+          <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-[#6D95FF] to-[#9D83FF] items-center justify-center shadow-lg shadow-[#6D95FF]/20 mb-3 border border-white/10">
             <Layers className="h-6 w-6 text-white" />
           </div>
-          <h1 className="text-2xl font-extrabold text-[#F1F5FC] tracking-tight">
+          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold mb-1">
+            INITIALIZATION // DOSSIER SETUP
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
             Set Up Your DevConnect Profile
           </h1>
           <p className="text-xs text-[#929DB2] mt-1 font-mono">
@@ -138,16 +141,16 @@ export const OnboardingPage: React.FC = () => {
           </p>
 
           {/* Progress Bar */}
-          <div className="h-1.5 w-full bg-[#141C2B] rounded-full mt-4 overflow-hidden max-w-md mx-auto border border-[#273249]">
+          <div className="h-1.5 w-full bg-[#101725] rounded-full mt-4 overflow-hidden max-w-md mx-auto border border-[#273249]">
             <div
-              className="h-full bg-gradient-to-r from-[#648BFF] to-[#9B7BFF] transition-all duration-300"
+              className="h-full bg-gradient-to-r from-[#6D95FF] to-[#9D83FF] transition-all duration-300"
               style={{ width: `${(step / totalSteps) * 100}%` }}
             />
           </div>
         </div>
 
         {/* Wizard Card */}
-        <Card className="border-[#273249] bg-[#0E1420]/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+        <Card className="border-[#273249] bg-[#101725]/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
           <AnimatePresence mode="wait">
             {step === 1 && (
               <motion.div
@@ -158,8 +161,8 @@ export const OnboardingPage: React.FC = () => {
                 className="space-y-4"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <User className="h-5 w-5 text-[#648BFF]" />
-                  <h3 className="font-bold text-base text-[#F1F5FC]">Basic Information</h3>
+                  <User className="h-5 w-5 text-[#6D95FF]" />
+                  <h3 className="font-bold font-display text-base text-[#F4F6FC]">Basic Information</h3>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -171,7 +174,7 @@ export const OnboardingPage: React.FC = () => {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="Linus Torvalds"
-                      className="bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                      className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                       required
                     />
                   </div>
@@ -183,7 +186,7 @@ export const OnboardingPage: React.FC = () => {
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder="ltorvalds"
-                      className="bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                      className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                       required
                     />
                   </div>
@@ -197,7 +200,7 @@ export const OnboardingPage: React.FC = () => {
                     value={headline}
                     onChange={(e) => setHeadline(e.target.value)}
                     placeholder="e.g. Senior Frontend Engineer | TypeScript & Next.js"
-                    className="bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                    className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                   />
                 </div>
 
@@ -208,7 +211,7 @@ export const OnboardingPage: React.FC = () => {
                     onChange={(e) => setBio(e.target.value)}
                     placeholder="Briefly describe what you love building and what technologies excite you..."
                     rows={3}
-                    className="bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                    className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                   />
                 </div>
 
@@ -218,7 +221,7 @@ export const OnboardingPage: React.FC = () => {
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     placeholder="e.g. Berlin, Germany / Remote"
-                    className="bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                    className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                   />
                 </div>
               </motion.div>
@@ -233,8 +236,8 @@ export const OnboardingPage: React.FC = () => {
                 className="space-y-4"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Code2 className="h-5 w-5 text-[#648BFF]" />
-                  <h3 className="font-bold text-base text-[#F1F5FC]">Technical Skills & Seniority</h3>
+                  <Code2 className="h-5 w-5 text-[#6D95FF]" />
+                  <h3 className="font-bold font-display text-base text-[#F4F6FC]">Technical Skills & Seniority</h3>
                 </div>
 
                 <div>
@@ -250,8 +253,8 @@ export const OnboardingPage: React.FC = () => {
                           onClick={() => setExperienceLevel(lvl)}
                           className={`p-2 rounded-xl text-xs font-semibold border transition-all ${
                             experienceLevel === lvl
-                              ? 'bg-[#648BFF]/20 border-[#648BFF] text-[#F1F5FC] shadow-sm'
-                              : 'bg-[#141C2B] border-[#273249] text-[#929DB2] hover:text-[#F1F5FC]'
+                              ? 'bg-[#6D95FF]/20 border-[#6D95FF] text-[#F4F6FC] shadow-sm'
+                              : 'bg-[#151F30] border-[#273249] text-[#929DB2] hover:text-[#F4F6FC]'
                           }`}
                         >
                           {lvl}
@@ -275,8 +278,8 @@ export const OnboardingPage: React.FC = () => {
                           onClick={() => handleToggleSkill(sk.name)}
                           className={`px-3 py-1.5 rounded-lg text-xs font-mono border transition-all ${
                             isSelected
-                              ? 'bg-[#648BFF] border-[#648BFF] text-[#090C13] font-bold shadow-sm'
-                              : 'bg-[#141C2B] border-[#273249] text-[#929DB2] hover:border-[#648BFF]/40 hover:text-[#F1F5FC]'
+                              ? 'bg-[#6D95FF] border-[#6D95FF] text-[#090C13] font-bold shadow-sm'
+                              : 'bg-[#151F30] border-[#273249] text-[#929DB2] hover:border-[#6D95FF]/40 hover:text-[#F4F6FC]'
                           }`}
                         >
                           {isSelected && '✓ '}
@@ -298,8 +301,8 @@ export const OnboardingPage: React.FC = () => {
                 className="space-y-4"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Clock className="h-5 w-5 text-[#648BFF]" />
-                  <h3 className="font-bold text-base text-[#F1F5FC]">Collaboration Preferences</h3>
+                  <Clock className="h-5 w-5 text-[#6D95FF]" />
+                  <h3 className="font-bold font-display text-base text-[#F4F6FC]">Collaboration Preferences</h3>
                 </div>
 
                 <div>
@@ -314,9 +317,9 @@ export const OnboardingPage: React.FC = () => {
                       step={2}
                       value={weeklyHours}
                       onChange={(e) => setWeeklyHours(Number(e.target.value))}
-                      className="w-full h-2 bg-[#141C2B] rounded-lg appearance-none cursor-pointer accent-[#648BFF]"
+                      className="w-full h-2 bg-[#151F30] rounded-lg appearance-none cursor-pointer accent-[#6D95FF]"
                     />
-                    <span className="font-mono text-sm font-bold text-[#648BFF] min-w-[70px]">
+                    <span className="font-mono text-sm font-bold text-[#6D95FF] min-w-[70px]">
                       {weeklyHours} hrs/wk
                     </span>
                   </div>
@@ -346,8 +349,8 @@ export const OnboardingPage: React.FC = () => {
                           }}
                           className={`p-3 rounded-xl text-xs font-semibold border text-left transition-all ${
                             isSelected
-                              ? 'bg-[#648BFF]/20 border-[#648BFF] text-[#F1F5FC]'
-                              : 'bg-[#141C2B] border-[#273249] text-[#929DB2] hover:text-[#F1F5FC]'
+                              ? 'bg-[#6D95FF]/20 border-[#6D95FF] text-[#F4F6FC]'
+                              : 'bg-[#151F30] border-[#273249] text-[#929DB2] hover:text-[#F4F6FC]'
                           }`}
                         >
                           {isSelected ? '✓ ' : '+ '}
@@ -369,8 +372,8 @@ export const OnboardingPage: React.FC = () => {
                 className="space-y-4"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Github className="h-5 w-5 text-[#648BFF]" />
-                  <h3 className="font-bold text-base text-[#F1F5FC]">Connect GitHub & Portfolio</h3>
+                  <Github className="h-5 w-5 text-[#6D95FF]" />
+                  <h3 className="font-bold font-display text-base text-[#F4F6FC]">Connect GitHub & Portfolio</h3>
                 </div>
 
                 <div>
@@ -381,7 +384,7 @@ export const OnboardingPage: React.FC = () => {
                     value={githubUsername}
                     onChange={(e) => setGithubUsername(e.target.value)}
                     placeholder="e.g. torvalds (without @)"
-                    className="bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                    className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                   />
                   <p className="text-[11px] text-[#929DB2] mt-1 font-mono">
                     DevConnect will automatically showcase your public repos and star counts.
@@ -396,7 +399,7 @@ export const OnboardingPage: React.FC = () => {
                     value={websiteUrl}
                     onChange={(e) => setWebsiteUrl(e.target.value)}
                     placeholder="https://myportfolio.dev"
-                    className="bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                    className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                   />
                 </div>
               </motion.div>
@@ -411,7 +414,7 @@ export const OnboardingPage: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setStep(step - 1)}
-                className="border-[#273249] text-[#F1F5FC]"
+                className="border-[#273249] text-[#F4F6FC] bg-[#101725] hover:bg-[#151F30]"
               >
                 <ArrowLeft className="h-4 w-4 mr-1.5" /> Back
               </Button>
@@ -425,18 +428,18 @@ export const OnboardingPage: React.FC = () => {
                 variant="primary"
                 size="sm"
                 onClick={() => setStep(step + 1)}
-                className="shadow-md shadow-[#648BFF]/20"
+                className="shadow-md shadow-[#6D95FF]/20"
               >
                 Next Step <ArrowRight className="h-4 w-4 ml-1.5" />
               </Button>
             ) : (
               <Button
                 type="button"
-                variant="glow"
+                variant="primary"
                 size="sm"
                 isLoading={saving}
                 onClick={handleFinishOnboarding}
-                className="shadow-md shadow-[#648BFF]/20"
+                className="shadow-md shadow-[#6D95FF]/20"
               >
                 <Check className="h-4 w-4 mr-1.5" /> Complete Profile & Enter
               </Button>

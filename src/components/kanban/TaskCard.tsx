@@ -46,8 +46,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
     <div
       ref={setNodeRef}
       style={style}
-      className={`group rounded-xl border border-[#273249] bg-[#141C2B] p-3.5 shadow-md hover:border-[#648BFF]/40 hover:shadow-lg transition-all ${
-        isDragging ? 'opacity-40 border-[#648BFF] scale-95' : ''
+      className={`group rounded-xl border border-[#273249] bg-[#151F30] p-3.5 shadow-md hover:border-[#6D95FF]/45 hover:shadow-lg transition-all ${
+        isDragging ? 'opacity-40 border-[#6D95FF] scale-95' : ''
       }`}
     >
       <div className="flex items-start justify-between gap-2">
@@ -57,7 +57,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
         <button
           {...attributes}
           {...listeners}
-          className="cursor-grab active:cursor-grabbing text-[#929DB2] group-hover:text-[#F1F5FC] p-0.5 rounded hover:bg-[#192338]"
+          className="cursor-grab active:cursor-grabbing text-[#929DB2] group-hover:text-[#F4F6FC] p-0.5 rounded hover:bg-[#1C2940]"
           title="Drag task"
         >
           <GripVertical className="h-4 w-4" />
@@ -66,7 +66,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
 
       <h5
         onClick={() => onEdit(task)}
-        className="font-semibold text-xs text-[#F1F5FC] mt-2 mb-1.5 hover:text-[#648BFF] cursor-pointer line-clamp-2 transition-colors"
+        className="font-display font-semibold text-xs text-[#F4F6FC] mt-2 mb-1.5 hover:text-[#6D95FF] cursor-pointer line-clamp-2 transition-colors"
       >
         {task.title}
       </h5>
@@ -82,7 +82,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
           {task.tags.slice(0, 3).map((tag, idx) => (
             <span
               key={idx}
-              className="text-[10px] px-1.5 py-0.5 rounded bg-[#0E1420] text-[#929DB2] border border-[#273249] font-mono"
+              className="text-[10px] px-1.5 py-0.5 rounded bg-[#101725] text-[#929DB2] border border-[#273249] font-mono"
             >
               #{tag}
             </span>

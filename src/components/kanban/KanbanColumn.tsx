@@ -32,8 +32,8 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
 
   const columnColors: Record<TaskStatus, { dot: string; border: string }> = {
     todo: { dot: 'bg-[#929DB2]', border: 'border-[#273249]' },
-    in_progress: { dot: 'bg-[#648BFF]', border: 'border-[#648BFF]/30' },
-    review: { dot: 'bg-[#9B7BFF]', border: 'border-[#9B7BFF]/30' },
+    in_progress: { dot: 'bg-[#6D95FF]', border: 'border-[#6D95FF]/30' },
+    review: { dot: 'bg-[#9D83FF]', border: 'border-[#9D83FF]/30' },
     done: { dot: 'bg-[#35C98A]', border: 'border-[#35C98A]/30' },
   };
 
@@ -42,21 +42,21 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   return (
     <div
       ref={setNodeRef}
-      className="flex flex-col w-72 sm:w-80 flex-shrink-0 rounded-2xl border border-[#273249] bg-[#0E1420]/90 backdrop-blur-md p-3.5 max-h-[calc(100vh-14rem)] min-h-[450px]"
+      className="flex flex-col w-72 sm:w-80 flex-shrink-0 rounded-xl border border-[#273249] bg-[#101725]/90 backdrop-blur-md p-3.5 max-h-[calc(100vh-14rem)] min-h-[450px]"
     >
       {/* Column Header */}
       <div className="flex items-center justify-between pb-3 px-1 border-b border-[#273249]">
         <div className="flex items-center gap-2">
           <span className={`h-2.5 w-2.5 rounded-full ${cConfig.dot}`} />
-          <h4 className="font-bold text-xs uppercase tracking-wider text-[#F1F5FC]">{title}</h4>
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#141C2B] border border-[#273249] font-mono text-[10px] font-bold text-[#929DB2]">
+          <h4 className="font-display font-bold text-xs uppercase tracking-wider text-[#F4F6FC]">{title}</h4>
+          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[#151F30] border border-[#273249] font-mono text-[10px] font-bold text-[#929DB2]">
             {count}
           </span>
         </div>
 
         <button
           onClick={() => onAddTask(id)}
-          className="p-1 rounded-md text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#141C2B] transition-colors"
+          className="p-1 rounded-md text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30] transition-colors"
           title={`Add task to ${title}`}
         >
           <Plus className="h-4 w-4" />
@@ -76,9 +76,9 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
             <p className="text-xs text-[#929DB2]">No tasks in this lane</p>
             <button
               onClick={() => onAddTask(id)}
-              className="mt-2 text-[11px] text-[#648BFF] hover:underline"
+              className="mt-2 text-[11px] text-[#6D95FF] hover:underline font-mono"
             >
-              + Create a task
+              + Create task
             </button>
           </div>
         )}

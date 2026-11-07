@@ -89,9 +89,9 @@ export const AuthPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#090C13] flex flex-col justify-center items-center p-4 sm:p-6 text-[#F1F5FC] relative overflow-hidden">
-      <GridPattern className="opacity-20" />
+      <GridPattern className="opacity-15" />
       {/* Background ambient lighting */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-to-tr from-[#648BFF]/15 to-[#9B7BFF]/15 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-to-tr from-[#6D95FF]/10 to-[#9D83FF]/10 rounded-full blur-[120px] pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
@@ -101,26 +101,29 @@ export const AuthPage: React.FC = () => {
       >
         {/* Brand Header */}
         <div className="text-center mb-7">
-          <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-[#648BFF] to-[#9B7BFF] items-center justify-center shadow-lg shadow-[#648BFF]/25 mb-3 border border-white/20">
+          <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-[#6D95FF] to-[#9D83FF] items-center justify-center shadow-lg shadow-[#6D95FF]/20 mb-3 border border-white/10">
             <Layers className="h-6 w-6 text-white" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#F1F5FC] tracking-tight">DevConnect</h1>
-          <p className="text-xs text-[#929DB2] mt-1 font-mono">
+          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold mb-1">
+            NETWORK // ACCESS GATEWAY
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F4F6FC] tracking-tight">DevConnect</h1>
+          <p className="text-xs text-[#929DB2] mt-1 font-sans">
             GitHub + LinkedIn + Discord ecosystem for engineers
           </p>
         </div>
 
         {/* Card */}
-        <Card className="border-[#273249] bg-[#0E1420]/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+        <Card className="border-[#273249] bg-[#101725]/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
           {/* Tab selector */}
-          <div className="grid grid-cols-2 rounded-xl bg-[#141C2B] border border-[#273249] p-1 mb-6 text-xs font-semibold font-mono">
+          <div className="grid grid-cols-2 rounded-xl bg-[#151F30] border border-[#273249] p-1 mb-6 text-xs font-semibold font-mono">
             <button
               type="button"
               onClick={() => setIsRegister(false)}
               className={`py-2 rounded-lg transition-all ${
                 !isRegister
-                  ? 'bg-[#192338] text-[#648BFF] shadow-sm border border-[#273249]'
-                  : 'text-[#929DB2] hover:text-[#F1F5FC]'
+                  ? 'bg-[#101725] text-[#6D95FF] shadow-sm border border-[#273249]'
+                  : 'text-[#929DB2] hover:text-[#F4F6FC]'
               }`}
             >
               Sign In
@@ -130,8 +133,8 @@ export const AuthPage: React.FC = () => {
               onClick={() => setIsRegister(true)}
               className={`py-2 rounded-lg transition-all ${
                 isRegister
-                  ? 'bg-[#192338] text-[#648BFF] shadow-sm border border-[#273249]'
-                  : 'text-[#929DB2] hover:text-[#F1F5FC]'
+                  ? 'bg-[#101725] text-[#6D95FF] shadow-sm border border-[#273249]'
+                  : 'text-[#929DB2] hover:text-[#F4F6FC]'
               }`}
             >
               Create Account
@@ -144,7 +147,7 @@ export const AuthPage: React.FC = () => {
               type="button"
               disabled={Boolean(oauthLoading)}
               onClick={handleGoogleAuth}
-              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-[#273249] bg-[#141C2B] hover:bg-[#192338] text-xs font-semibold text-[#F1F5FC] transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-[#273249] bg-[#151F30] hover:bg-[#1f2d45] text-xs font-semibold text-[#F4F6FC] transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24">
                 <path
@@ -171,7 +174,7 @@ export const AuthPage: React.FC = () => {
               type="button"
               disabled={Boolean(oauthLoading)}
               onClick={handleGitHubAuth}
-              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-[#273249] bg-[#141C2B] hover:bg-[#192338] text-xs font-semibold text-[#F1F5FC] transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-[#273249] bg-[#151F30] hover:bg-[#1f2d45] text-xs font-semibold text-[#F4F6FC] transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
             >
               <Github className="h-4 w-4" />
               <span>{oauthLoading === 'github' ? 'Redirecting...' : 'Continue with GitHub'}</span>
@@ -180,7 +183,7 @@ export const AuthPage: React.FC = () => {
 
           <div className="relative flex items-center justify-center mb-6">
             <div className="border-t border-[#273249] w-full" />
-            <span className="bg-[#0E1420] px-3 text-[10px] font-mono text-[#929DB2] uppercase tracking-wider">
+            <span className="bg-[#101725] px-3 text-[10px] font-mono text-[#929DB2] uppercase tracking-wider">
               Or with email credentials
             </span>
             <div className="border-t border-[#273249] w-full" />
@@ -198,7 +201,7 @@ export const AuthPage: React.FC = () => {
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Guido van Rossum"
                   icon={<User className="h-4 w-4 text-[#929DB2]" />}
-                  className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                  className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                   required={isRegister}
                 />
               </div>
@@ -214,7 +217,7 @@ export const AuthPage: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="developer@domain.com"
                 icon={<Mail className="h-4 w-4 text-[#929DB2]" />}
-                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                 required
               />
             </div>
@@ -229,7 +232,7 @@ export const AuthPage: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
                 icon={<Lock className="h-4 w-4 text-[#929DB2]" />}
-                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                 required
               />
             </div>
@@ -237,7 +240,7 @@ export const AuthPage: React.FC = () => {
             <Button
               type="submit"
               variant="primary"
-              className="w-full h-10 font-semibold text-xs mt-3 shadow-md shadow-[#648BFF]/20"
+              className="w-full h-10 font-semibold text-xs mt-3 shadow-md shadow-[#6D95FF]/20"
               isLoading={loading}
             >
               {isRegister ? 'Create Developer Account' : 'Sign In to DevConnect'}

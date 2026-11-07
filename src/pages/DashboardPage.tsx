@@ -8,16 +8,12 @@ import {
   ArrowRight,
   Sparkles,
   CheckCircle2,
-  Clock,
   ChevronRight,
   Plus,
-  GitBranch,
   Calendar,
-  Layers,
   ArrowUpRight,
-  UserPlus,
-  Award,
-  Zap,
+  Layers,
+  Terminal,
 } from 'lucide-react';
 import {
   AreaChart,
@@ -36,7 +32,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Avatar } from '@/components/ui/Avatar';
 import { Project, Profile, Milestone, ActivityLog } from '@/types/database.types';
-import { formatTimeAgo, formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 
 export const DashboardPage: React.FC = () => {
   const { profile, user } = useAuth();
@@ -52,7 +48,6 @@ export const DashboardPage: React.FC = () => {
   const [upcomingMilestones, setUpcomingMilestones] = useState<Milestone[]>([]);
   const [analyticsRange, setAnalyticsRange] = useState<'7D' | '30D'>('7D');
 
-  // Dynamic greeting based on current time
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good morning';
@@ -91,7 +86,7 @@ export const DashboardPage: React.FC = () => {
           .or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`)
           .eq('status', 'accepted');
 
-        // 2. Active Projects count (as owner or member)
+        // 2. Active Projects count
         const { count: projectsCount } = await supabase
           .from('project_members')
           .select('*', { count: 'exact', head: true })
@@ -132,7 +127,7 @@ export const DashboardPage: React.FC = () => {
 
         if (projectsData) setRecentProjects(projectsData as any);
 
-        // 6. Recommended developers (different from user)
+        // 6. Recommended developers
         const { data: devsData } = await supabase
           .from('profiles')
           .select('*')
@@ -172,34 +167,44 @@ export const DashboardPage: React.FC = () => {
   }, [user, profile]);
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
-      {/* 1. HERO SECTION: Personalized Greeting & Profile Dial */}
-      <div className="relative overflow-hidden rounded-2xl border border-[#273249] bg-gradient-to-r from-[#141C2B] via-[#0E1420] to-[#141C2B] p-6 sm:p-8 shadow-2xl">
-        <GridPattern className="opacity-30" />
-        <div className="absolute right-0 top-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-[#648BFF]/10 blur-3xl pointer-events-none" />
+    <div className="space-y-6 max-w-7xl mx-auto pb-12 font-sans">
+      {/* Editorial Meta Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#273249] text-[11px] font-mono text-[#929DB2]">
+        <div className="flex items-center gap-3">
+          <span className="text-[#6D95FF] font-semibold tracking-wider flex items-center gap-1.5">
+            <Terminal className="h-3.5 w-3.5" /> DEVCONNECT // VOL. 2026
+          </span>
+          <span className="hidden sm:inline text-[#273249]">|</span>
+          <span className="hidden sm:inline">ISSUE 04 — EDITORIAL NETWORK DISPATCH</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-[#35C98A] animate-pulse" />
+          <span className="text-[#F4F6FC] font-semibold">STATUS: NOMINAL</span>
+          <span className="text-[#929DB2]">({new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })})</span>
+        </div>
+      </div>
 
-        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#648BFF]/10 border border-[#648BFF]/30 text-[#648BFF] text-[11px] font-mono">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#35C98A] animate-pulse" />
-                DevConnect v2.0 • Supabase Live
-              </span>
-              <span className="text-xs text-[#929DB2] font-mono">
-                {new Date().toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
-              </span>
+      {/* 1. HERO SECTION: Editorial-Style Welcome Section */}
+      <div className="relative overflow-hidden rounded-xl border border-[#273249] bg-gradient-to-r from-[#101725] via-[#090C13] to-[#151F30] p-6 sm:p-8 shadow-2xl">
+        <GridPattern className="opacity-20" />
+        <div className="absolute right-0 top-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-[#6D95FF]/10 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-[#151F30] border border-[#273249] text-[10px] font-mono tracking-wider text-[#6D95FF] uppercase">
+              <Sparkles className="h-3 w-3" /> Architecture & Teammate Mesh
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#F1F5FC] tracking-tight">
-              {getGreeting()}, {profile?.full_name || 'Developer'}
+            <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-[#F4F6FC] tracking-tight leading-tight">
+              {getGreeting()}, <span className="text-[#6D95FF]">{profile?.full_name?.split(' ')[0] || 'Engineer'}</span>.
             </h1>
-            <p className="text-xs sm:text-sm text-[#929DB2] max-w-xl leading-relaxed">
-              Find collaborative engineering builds, coordinate sprint deliverables on Kanban boards, and recruit teammates via AI matching.
+            <p className="text-xs sm:text-sm text-[#929DB2] leading-relaxed">
+              Welcome to your personal command center. Discover verified engineering peers, coordinate sprints through interactive Kanban boards, and build high-impact software.
             </p>
           </div>
 
           {/* Profile Readiness & Action */}
-          <div className="flex items-center gap-4 bg-[#0E1420] border border-[#273249] p-3.5 rounded-2xl backdrop-blur-md w-full md:w-auto shadow-sm">
+          <div className="flex items-center gap-4 bg-[#101725] border border-[#273249] p-4 rounded-xl w-full lg:w-auto shadow-sm">
             {/* Progress Gauge */}
             <div className="relative flex items-center justify-center">
               <svg className="w-14 h-14 transform -rotate-90">
@@ -218,27 +223,27 @@ export const DashboardPage: React.FC = () => {
                   r="22"
                   stroke="currentColor"
                   strokeWidth="4"
-                  className="text-[#648BFF] transition-all duration-500"
+                  className="text-[#6D95FF] transition-all duration-500"
                   fill="transparent"
                   strokeDasharray="138"
                   strokeDashoffset={138 - (138 * stats.profileCompletion) / 100}
                   strokeLinecap="round"
                 />
               </svg>
-              <span className="absolute font-mono text-xs font-bold text-[#F1F5FC]">
+              <span className="absolute font-mono text-xs font-bold text-[#F4F6FC]">
                 {stats.profileCompletion}%
               </span>
             </div>
 
-            <div className="min-w-[130px]">
-              <div className="text-xs font-semibold text-[#F1F5FC]">Profile Readiness</div>
+            <div className="min-w-[140px]">
+              <div className="text-xs font-display font-bold text-[#F4F6FC]">Dossier Readiness</div>
               <p className="text-[11px] text-[#929DB2] mt-0.5">
-                {stats.profileCompletion === 100 ? 'All details set' : 'Boost matchmaking'}
+                {stats.profileCompletion === 100 ? 'Verified & Complete' : 'Refine public profile'}
               </p>
               {stats.profileCompletion < 100 && (
                 <Link
                   to="/profile/edit"
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#648BFF] hover:text-[#9B7BFF] mt-1"
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#6D95FF] hover:text-[#9D83FF] mt-1"
                 >
                   Complete profile <ChevronRight className="h-3 w-3" />
                 </Link>
@@ -248,44 +253,48 @@ export const DashboardPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. STAT TILES: 4 Distinct Asymmetric SaaS KPIs with Animated NumberTicker */}
+      {/* 2. STAT TILES: 4 Distinct Asymmetric Editorial KPIs with Animated NumberTicker */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Tile 1: Connections */}
-        <CardSpotlight className="p-5 flex flex-col justify-between bg-[#141C2B] border-[#273249]">
+        {/* Tile 1: Verified Collaborators */}
+        <CardSpotlight className="p-5 flex flex-col justify-between bg-[#151F30] border-[#273249]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#929DB2] font-mono tracking-wider">TOTAL CONNECTIONS</span>
-            <div className="p-2 rounded-xl bg-[#648BFF]/10 border border-[#648BFF]/20 text-[#648BFF]">
+            <span className="text-[10px] font-mono tracking-widest text-[#929DB2] uppercase font-bold">
+              PEER NETWORK
+            </span>
+            <div className="p-1.5 rounded-lg bg-[#6D95FF]/10 border border-[#6D95FF]/20 text-[#6D95FF]">
               <Users className="h-4 w-4" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-extrabold text-[#F1F5FC] font-mono tracking-tight">
+            <div className="font-display text-3xl font-extrabold text-[#F4F6FC] tracking-tight">
               <NumberTicker value={stats.connectionsCount} />
             </div>
-            <div className="flex items-center justify-between text-xs mt-1">
-              <span className="text-[#35C98A] font-medium">+3 this week</span>
-              <Link to="/developers" className="text-[#929DB2] hover:text-[#648BFF] transition-colors flex items-center">
-                Discover <ArrowUpRight className="h-3 w-3 ml-0.5" />
+            <div className="flex items-center justify-between text-xs mt-1 pt-1 border-t border-[#273249]/60">
+              <span className="text-[#35C98A] text-[11px] font-mono font-medium">+3 verified</span>
+              <Link to="/developers" className="text-[#929DB2] hover:text-[#6D95FF] transition-colors flex items-center text-[11px]">
+                Directory <ArrowUpRight className="h-3 w-3 ml-0.5" />
               </Link>
             </div>
           </div>
         </CardSpotlight>
 
         {/* Tile 2: Active Projects */}
-        <CardSpotlight className="p-5 flex flex-col justify-between bg-[#141C2B] border-[#273249]">
+        <CardSpotlight className="p-5 flex flex-col justify-between bg-[#151F30] border-[#273249]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#929DB2] font-mono tracking-wider">ACTIVE PROJECTS</span>
-            <div className="p-2 rounded-xl bg-[#9B7BFF]/10 border border-[#9B7BFF]/20 text-[#9B7BFF]">
+            <span className="text-[10px] font-mono tracking-widest text-[#929DB2] uppercase font-bold">
+              ACTIVE WORKSPACES
+            </span>
+            <div className="p-1.5 rounded-lg bg-[#9D83FF]/10 border border-[#9D83FF]/20 text-[#9D83FF]">
               <FolderGit2 className="h-4 w-4" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-extrabold text-[#F1F5FC] font-mono tracking-tight">
+            <div className="font-display text-3xl font-extrabold text-[#F4F6FC] tracking-tight">
               <NumberTicker value={stats.activeProjectsCount} />
             </div>
-            <div className="flex items-center justify-between text-xs mt-1">
-              <span className="text-[#929DB2]">Member & owner</span>
-              <Link to="/projects/new" className="text-[#648BFF] hover:underline flex items-center gap-0.5">
+            <div className="flex items-center justify-between text-xs mt-1 pt-1 border-t border-[#273249]/60">
+              <span className="text-[#929DB2] text-[11px] font-mono">Contributor / Lead</span>
+              <Link to="/projects/new" className="text-[#6D95FF] hover:underline flex items-center gap-0.5 text-[11px]">
                 <Plus className="h-3 w-3" /> New
               </Link>
             </div>
@@ -293,83 +302,89 @@ export const DashboardPage: React.FC = () => {
         </CardSpotlight>
 
         {/* Tile 3: Pending Invites */}
-        <CardSpotlight className="p-5 flex flex-col justify-between bg-[#141C2B] border-[#273249]">
+        <CardSpotlight className="p-5 flex flex-col justify-between bg-[#151F30] border-[#273249]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#929DB2] font-mono tracking-wider">PENDING INVITATIONS</span>
-            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
+            <span className="text-[10px] font-mono tracking-widest text-[#929DB2] uppercase font-bold">
+              COLLABORATION INQUIRIES
+            </span>
+            <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400">
               <Mail className="h-4 w-4" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-extrabold text-[#F1F5FC] font-mono tracking-tight">
+            <div className="font-display text-3xl font-extrabold text-[#F4F6FC] tracking-tight">
               <NumberTicker value={stats.pendingInvitesCount} />
             </div>
-            <div className="flex items-center justify-between text-xs mt-1">
-              <span className={stats.pendingInvitesCount > 0 ? 'text-amber-400 font-medium' : 'text-[#929DB2]'}>
-                {stats.pendingInvitesCount > 0 ? 'Requires response' : 'No pending requests'}
+            <div className="flex items-center justify-between text-xs mt-1 pt-1 border-t border-[#273249]/60">
+              <span className={`text-[11px] font-mono ${stats.pendingInvitesCount > 0 ? 'text-amber-400 font-medium' : 'text-[#929DB2]'}`}>
+                {stats.pendingInvitesCount > 0 ? 'Pending action' : 'Zero pending'}
               </span>
-              <Link to="/notifications" className="text-[#929DB2] hover:text-[#F1F5FC]">
-                View
+              <Link to="/notifications" className="text-[#929DB2] hover:text-[#F4F6FC] text-[11px]">
+                View Stream
               </Link>
             </div>
           </div>
         </CardSpotlight>
 
         {/* Tile 4: Productivity Index */}
-        <CardSpotlight className="p-5 flex flex-col justify-between bg-[#141C2B] border-[#273249]">
+        <CardSpotlight className="p-5 flex flex-col justify-between bg-[#151F30] border-[#273249]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#929DB2] font-mono tracking-wider">SPRINT VELOCITY</span>
-            <div className="p-2 rounded-xl bg-[#35C98A]/10 border border-[#35C98A]/20 text-[#35C98A]">
+            <span className="text-[10px] font-mono tracking-widest text-[#929DB2] uppercase font-bold">
+              SPRINT VELOCITY
+            </span>
+            <div className="p-1.5 rounded-lg bg-[#35C98A]/10 border border-[#35C98A]/20 text-[#35C98A]">
               <Activity className="h-4 w-4" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-extrabold text-[#F1F5FC] font-mono tracking-tight flex items-baseline">
+            <div className="font-display text-3xl font-extrabold text-[#F4F6FC] tracking-tight flex items-baseline">
               <NumberTicker value={94} />
-              <span className="text-sm font-normal text-[#929DB2]">/100</span>
+              <span className="text-sm font-normal text-[#929DB2] font-mono ml-1">/100</span>
             </div>
-            <div className="flex items-center justify-between text-xs mt-1">
-              <span className="text-[#35C98A] font-medium">Sprint on track</span>
+            <div className="flex items-center justify-between text-xs mt-1 pt-1 border-t border-[#273249]/60">
+              <span className="text-[#35C98A] text-[11px] font-mono font-medium">Cadence on track</span>
               <span className="text-[#929DB2] font-mono text-[10px]">Realtime RLS</span>
             </div>
           </div>
         </CardSpotlight>
       </div>
 
-      {/* 3. MIDDLE SECTION: Chart (2 Cols) & Milestones Checklist (1 Col) */}
+      {/* 3. MIDDLE SECTION: Asymmetrical Layout (Analytics Chart 65% + Milestones 35%) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Weekly Collaboration Analytics */}
-        <CardSpotlight className="lg:col-span-2 p-6 flex flex-col justify-between bg-[#141C2B] border-[#273249]">
+        {/* Weekly Collaboration Analytics Chart */}
+        <CardSpotlight className="lg:col-span-2 p-6 flex flex-col justify-between bg-[#151F30] border-[#273249]">
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-base font-bold text-[#F1F5FC] tracking-tight">Collaboration Analytics</h3>
-                  <Badge variant="cyan" className="bg-[#648BFF]/15 text-[#648BFF] border-[#648BFF]/30">Realtime</Badge>
+                  <h3 className="font-display text-lg font-bold text-[#F4F6FC] tracking-tight">System Telemetry & Commits</h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-[#6D95FF]/15 text-[#6D95FF] border border-[#6D95FF]/30">
+                    Telemetry Live
+                  </span>
                 </div>
                 <p className="text-xs text-[#929DB2] mt-0.5">
-                  Task completions and Git commits across team repositories
+                  Aggregate pull requests, completed deliverables, and repository commits
                 </p>
               </div>
 
               {/* Time Range Pills */}
-              <div className="flex items-center gap-1 bg-[#0E1420] p-1 rounded-xl border border-[#273249] self-start sm:self-auto">
+              <div className="flex items-center gap-1 bg-[#101725] p-1 rounded-lg border border-[#273249] self-start sm:self-auto">
                 <button
                   onClick={() => setAnalyticsRange('7D')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold font-mono transition-all ${
+                  className={`px-3 py-1 rounded text-xs font-semibold font-mono transition-all ${
                     analyticsRange === '7D'
-                      ? 'bg-[#141C2B] text-[#648BFF] border border-[#273249] shadow-sm'
-                      : 'text-[#929DB2] hover:text-[#F1F5FC]'
+                      ? 'bg-[#151F30] text-[#6D95FF] border border-[#273249] shadow-sm'
+                      : 'text-[#929DB2] hover:text-[#F4F6FC]'
                   }`}
                 >
                   7 Days
                 </button>
                 <button
                   onClick={() => setAnalyticsRange('30D')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold font-mono transition-all ${
+                  className={`px-3 py-1 rounded text-xs font-semibold font-mono transition-all ${
                     analyticsRange === '30D'
-                      ? 'bg-[#141C2B] text-[#648BFF] border border-[#273249] shadow-sm'
-                      : 'text-[#929DB2] hover:text-[#F1F5FC]'
+                      ? 'bg-[#151F30] text-[#6D95FF] border border-[#273249] shadow-sm'
+                      : 'text-[#929DB2] hover:text-[#F4F6FC]'
                   }`}
                 >
                   30 Days
@@ -383,12 +398,12 @@ export const DashboardPage: React.FC = () => {
                 <AreaChart data={currentChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="primaryGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#648BFF" stopOpacity={0.35} />
-                      <stop offset="95%" stopColor="#648BFF" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="#6D95FF" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="#6D95FF" stopOpacity={0.0} />
                     </linearGradient>
                     <linearGradient id="accentGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#9B7BFF" stopOpacity={0.25} />
-                      <stop offset="95%" stopColor="#9B7BFF" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="#9D83FF" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#9D83FF" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
                   <XAxis
@@ -406,11 +421,11 @@ export const DashboardPage: React.FC = () => {
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#141C2B',
+                      backgroundColor: '#151F30',
                       borderColor: '#273249',
-                      borderRadius: '0.875rem',
+                      borderRadius: '0.625rem',
                       fontSize: '12px',
-                      color: '#F1F5FC',
+                      color: '#F4F6FC',
                       boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)',
                     }}
                   />
@@ -418,7 +433,7 @@ export const DashboardPage: React.FC = () => {
                     type="monotone"
                     dataKey="commits"
                     name="Commits"
-                    stroke="#648BFF"
+                    stroke="#6D95FF"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#primaryGradient)"
@@ -426,8 +441,8 @@ export const DashboardPage: React.FC = () => {
                   <Area
                     type="monotone"
                     dataKey="tasks"
-                    name="Tasks Done"
-                    stroke="#9B7BFF"
+                    name="Tasks Completed"
+                    stroke="#9D83FF"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#accentGradient)"
@@ -440,26 +455,26 @@ export const DashboardPage: React.FC = () => {
           <div className="flex items-center justify-between pt-4 mt-2 border-t border-[#273249] text-xs font-mono text-[#929DB2]">
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#648BFF]" /> Commits
+                <span className="h-2 w-2 rounded-full bg-[#6D95FF]" /> Commits
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#9B7BFF]" /> Completed Tasks
+                <span className="h-2 w-2 rounded-full bg-[#9D83FF]" /> Completed Tasks
               </span>
             </div>
-            <span>Syncing Supabase DB</span>
+            <span className="text-[11px]">Synced via PostgreSQL Realtime</span>
           </div>
         </CardSpotlight>
 
         {/* Upcoming Milestones */}
-        <CardSpotlight className="p-6 flex flex-col justify-between bg-[#141C2B] border-[#273249]">
+        <CardSpotlight className="p-6 flex flex-col justify-between bg-[#151F30] border-[#273249]">
           <div>
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#273249]">
               <div>
-                <h3 className="text-base font-bold text-[#F1F5FC] tracking-tight">Upcoming Milestones</h3>
-                <p className="text-xs text-[#929DB2] mt-0.5">Sprint checkpoints</p>
+                <h3 className="font-display text-base font-bold text-[#F4F6FC] tracking-tight">Sprint Milestones</h3>
+                <p className="text-xs text-[#929DB2] mt-0.5">Deliverables checkpoint</p>
               </div>
               <Link to="/projects">
-                <Button variant="outline" size="sm" className="h-7 text-xs border-[#273249]">
+                <Button variant="outline" size="sm" className="h-7 text-xs border-[#273249] text-[#F4F6FC] font-mono">
                   View All
                 </Button>
               </Link>
@@ -467,29 +482,31 @@ export const DashboardPage: React.FC = () => {
 
             <div className="space-y-3">
               {upcomingMilestones.length === 0 ? (
-                <div className="py-12 text-center text-xs text-[#929DB2] border border-dashed border-[#273249] rounded-xl bg-[#0E1420]/50 p-4">
+                <div className="py-12 text-center text-xs text-[#929DB2] border border-dashed border-[#273249] rounded-xl bg-[#101725]/50 p-4">
                   <CheckCircle2 className="h-8 w-8 text-[#929DB2]/40 mx-auto mb-2" />
-                  <p className="font-semibold text-[#F1F5FC]">No pending milestones</p>
-                  <p className="text-[#929DB2] mt-1">Create or join a project workspace to track deliverables.</p>
+                  <p className="font-semibold text-[#F4F6FC]">All milestones cleared</p>
+                  <p className="text-[#929DB2] mt-1">Open a project workspace to configure roadmap goals.</p>
                   <Link to="/projects/new" className="inline-block mt-3">
-                    <Button variant="secondary" size="xs">
-                      + Start Project
+                    <Button variant="secondary" size="xs" className="border-[#273249]">
+                      + Initialize Project
                     </Button>
                   </Link>
                 </div>
               ) : (
-                upcomingMilestones.map((ms) => (
+                upcomingMilestones.map((ms, index) => (
                   <div
                     key={ms.id}
-                    className="p-3 rounded-xl bg-[#0E1420] border border-[#273249] hover:border-[#648BFF]/40 transition-all flex items-start gap-2.5"
+                    className="p-3 rounded-lg bg-[#101725] border border-[#273249] hover:border-[#6D95FF]/40 transition-all flex items-start gap-3"
                   >
-                    <CheckCircle2 className="h-4 w-4 text-[#929DB2] mt-0.5 flex-shrink-0" />
+                    <span className="text-[10px] font-mono text-[#6D95FF] mt-0.5 font-bold">
+                      [{String(index + 1).padStart(2, '0')}]
+                    </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-semibold text-[#F1F5FC] truncate">{ms.title}</p>
+                      <p className="text-xs font-semibold text-[#F4F6FC] truncate">{ms.title}</p>
                       <div className="flex items-center gap-2 mt-1 text-[10px] text-[#929DB2] font-mono">
                         {ms.due_date && (
                           <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3 text-[#648BFF]" />
+                            <Calendar className="h-3 w-3 text-[#6D95FF]" />
                             {formatDate(ms.due_date)}
                           </span>
                         )}
@@ -506,9 +523,9 @@ export const DashboardPage: React.FC = () => {
           <div className="pt-4 mt-4 border-t border-[#273249] text-center">
             <Link
               to="/projects"
-              className="text-xs text-[#648BFF] hover:text-[#9B7BFF] font-medium inline-flex items-center gap-1"
+              className="text-xs text-[#6D95FF] hover:text-[#9D83FF] font-medium inline-flex items-center gap-1 font-mono"
             >
-              Open Project Workspace <ArrowRight className="h-3 w-3" />
+              Open Kanban Workspace <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
         </CardSpotlight>
@@ -516,15 +533,15 @@ export const DashboardPage: React.FC = () => {
 
       {/* 4. BOTTOM SECTION: Recommended Developers & Active Projects */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recommended Developers */}
-        <CardSpotlight className="p-6 bg-[#141C2B] border-[#273249]">
+        {/* Recommended Engineers */}
+        <CardSpotlight className="p-6 bg-[#151F30] border-[#273249]">
           <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#273249]">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-[#648BFF]" />
-              <h3 className="text-base font-bold text-[#F1F5FC] tracking-tight">Recommended Engineers</h3>
+              <Sparkles className="h-4 w-4 text-[#6D95FF]" />
+              <h3 className="font-display text-base font-bold text-[#F4F6FC] tracking-tight">Recommended Engineering Talent</h3>
             </div>
-            <Link to="/developers" className="text-xs text-[#648BFF] hover:underline font-mono">
-              View Directory
+            <Link to="/developers" className="text-xs text-[#6D95FF] hover:underline font-mono">
+              View Directory →
             </Link>
           </div>
 
@@ -537,7 +554,7 @@ export const DashboardPage: React.FC = () => {
               recommendedDevs.map((dev) => (
                 <div
                   key={dev.id}
-                  className="p-3.5 rounded-xl bg-[#0E1420] border border-[#273249] hover:border-[#648BFF]/40 transition-all flex items-center justify-between gap-3 group"
+                  className="p-3.5 rounded-xl bg-[#101725] border border-[#273249] hover:border-[#6D95FF]/40 transition-all flex items-center justify-between gap-3 group"
                 >
                   <Link
                     to={`/profile/${dev.username}`}
@@ -550,18 +567,18 @@ export const DashboardPage: React.FC = () => {
                       status={dev.availability_status}
                     />
                     <div className="min-w-0">
-                      <h4 className="font-semibold text-xs text-[#F1F5FC] group-hover:text-[#648BFF] transition-colors truncate">
+                      <h4 className="font-semibold text-xs text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors truncate">
                         {dev.full_name}
                       </h4>
-                      <p className="text-[11px] text-[#929DB2] truncate">
+                      <p className="text-[11px] text-[#929DB2] truncate font-mono">
                         {dev.headline || dev.experience_level}
                       </p>
                     </div>
                   </Link>
 
                   <Link to={`/profile/${dev.username}`}>
-                    <Button variant="secondary" size="xs" className="h-7 text-xs border-[#273249]">
-                      View Profile
+                    <Button variant="secondary" size="xs" className="h-7 text-xs border-[#273249] bg-[#151F30] hover:bg-[#1C2940] text-[#F4F6FC]">
+                      Dossier
                     </Button>
                   </Link>
                 </div>
@@ -571,15 +588,15 @@ export const DashboardPage: React.FC = () => {
         </CardSpotlight>
 
         {/* Recent Collaborative Projects */}
-        <CardSpotlight className="p-6 bg-[#141C2B] border-[#273249]">
+        <CardSpotlight className="p-6 bg-[#151F30] border-[#273249]">
           <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#273249]">
             <div className="flex items-center gap-2">
-              <FolderGit2 className="h-4 w-4 text-[#9B7BFF]" />
-              <h3 className="text-base font-bold text-[#F1F5FC] tracking-tight">Recent Projects</h3>
+              <FolderGit2 className="h-4 w-4 text-[#9D83FF]" />
+              <h3 className="font-display text-base font-bold text-[#F4F6FC] tracking-tight">Active Team Repositories</h3>
             </div>
             <Link to="/projects/new">
-              <Button variant="secondary" size="xs" className="h-7 text-xs border-[#273249]">
-                + New Project
+              <Button variant="secondary" size="xs" className="h-7 text-xs border-[#273249] bg-[#101725] hover:bg-[#1C2940] text-[#F4F6FC]">
+                + Launch Project
               </Button>
             </Link>
           </div>
@@ -594,23 +611,23 @@ export const DashboardPage: React.FC = () => {
                 <Link
                   key={proj.id}
                   to={`/projects/${proj.id}`}
-                  className="p-3.5 rounded-xl bg-[#0E1420] border border-[#273249] hover:border-[#648BFF]/40 transition-all flex items-center justify-between gap-3 group block"
+                  className="p-3.5 rounded-xl bg-[#101725] border border-[#273249] hover:border-[#6D95FF]/40 transition-all flex items-center justify-between gap-3 group block"
                 >
                   <div className="min-w-0 flex-1 space-y-1">
                     <div className="flex items-center gap-2">
-                      <h4 className="font-semibold text-xs text-[#F1F5FC] group-hover:text-[#648BFF] transition-colors truncate">
+                      <h4 className="font-semibold text-xs text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors truncate">
                         {proj.title}
                       </h4>
-                      <Badge variant="cyan" className="text-[9px] py-0 px-1.5 font-mono bg-[#648BFF]/15 text-[#648BFF] border-[#648BFF]/30">
+                      <span className="text-[9px] py-0.5 px-1.5 font-mono bg-[#151F30] text-[#6D95FF] border border-[#273249] rounded">
                         {proj.category}
-                      </Badge>
+                      </span>
                     </div>
                     <p className="text-[11px] text-[#929DB2] line-clamp-1">
                       {proj.tagline || proj.description}
                     </p>
                   </div>
 
-                  <ArrowRight className="h-4 w-4 text-[#929DB2] group-hover:text-[#648BFF] transition-colors flex-shrink-0" />
+                  <ArrowRight className="h-4 w-4 text-[#929DB2] group-hover:text-[#6D95FF] transition-colors flex-shrink-0" />
                 </Link>
               ))
             )}

@@ -10,7 +10,6 @@ import {
   Bell,
   Bookmark,
   Settings,
-  Sparkles,
   ChevronRight,
   PanelLeftClose,
   PanelLeft,
@@ -32,7 +31,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
 
   const navigationSections = [
     {
-      title: 'WORKSPACE',
+      title: 'WORKSPACE // 01',
       items: [
         { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
         { label: 'Discover Developers', path: '/developers', icon: Users },
@@ -42,7 +41,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
       ],
     },
     {
-      title: 'COLLABORATION',
+      title: 'COMMUNICATION // 02',
       items: [
         { label: 'Messages', path: '/messages', icon: MessageSquare },
         {
@@ -55,9 +54,9 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
       ],
     },
     {
-      title: 'PREFERENCES',
+      title: 'PREFERENCES // 03',
       items: [
-        { label: 'Settings', path: '/profile/edit', icon: Settings },
+        { label: 'Settings & Skills', path: '/profile/edit', icon: Settings },
       ],
     },
   ];
@@ -65,21 +64,21 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
   const content = (
     <aside
       className={cn(
-        'h-[calc(100vh-3.5rem)] sticky top-14 flex flex-col justify-between border-r border-[#273249] bg-[#090C13] p-3 text-[#929DB2] transition-all duration-300 select-none z-30',
+        'h-[calc(100vh-3.5rem)] sticky top-14 flex flex-col justify-between border-r border-[#273249] bg-[#090C13] p-3 text-[#929DB2] transition-all duration-300 select-none z-30 font-sans',
         isCollapsed ? 'w-[68px]' : 'w-64'
       )}
     >
       <div className="space-y-5 overflow-y-auto pr-1 no-scrollbar">
         {/* Collapse Toggle Header (desktop only) */}
-        <div className="hidden lg:flex items-center justify-between px-2 pt-1 pb-1">
+        <div className="hidden lg:flex items-center justify-between px-2 pt-1 pb-1 border-b border-[#273249]/60">
           {!isCollapsed && (
-            <span className="text-[10px] font-mono tracking-wider text-[#929DB2]/80 uppercase font-semibold">
-              DevConnect Ecosystem
+            <span className="text-[10px] font-mono tracking-widest text-[#929DB2] uppercase font-semibold">
+              NAVIGATION
             </span>
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1.5 rounded-lg text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#141C2B] transition-colors ml-auto"
+            className="p-1.5 rounded-lg text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30] transition-colors ml-auto"
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {isCollapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
@@ -89,7 +88,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
         {navigationSections.map((section) => (
           <div key={section.title} className="space-y-1">
             {!isCollapsed && (
-              <span className="px-2.5 text-[10px] font-mono font-bold tracking-wider text-[#929DB2]/60">
+              <span className="px-2.5 text-[9px] font-mono font-bold tracking-widest text-[#929DB2]/70 uppercase">
                 {section.title}
               </span>
             )}
@@ -102,11 +101,11 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
                     onClick={onClose}
                     className={({ isActive }) =>
                       cn(
-                        'flex items-center rounded-xl text-xs font-medium transition-all group relative',
+                        'flex items-center rounded-lg text-xs font-medium transition-all group relative',
                         isCollapsed ? 'justify-center p-2.5' : 'justify-between px-3 py-2',
                         isActive
-                          ? 'bg-[#141C2B] text-[#F1F5FC] border border-[#273249] shadow-sm font-semibold'
-                          : 'text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#141C2B]/50'
+                          ? 'bg-[#151F30] text-[#F4F6FC] border border-[#273249] shadow-sm font-semibold'
+                          : 'text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30]/50'
                       )
                     }
                   >
@@ -116,26 +115,22 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
                           <item.icon
                             className={cn(
                               'h-4 w-4 transition-colors flex-shrink-0',
-                              isActive ? 'text-[#648BFF]' : 'text-[#929DB2] group-hover:text-[#F1F5FC]'
+                              isActive ? 'text-[#6D95FF]' : 'text-[#929DB2] group-hover:text-[#F4F6FC]'
                             )}
                           />
                           {!isCollapsed && <span>{item.label}</span>}
                         </div>
 
-                        {!isCollapsed && item.badge !== undefined && (
-                          <span className="flex h-4 min-w-[16px] px-1 items-center justify-center rounded-full bg-[#648BFF] text-[9px] font-bold text-white font-mono shadow-sm">
+                        {!isCollapsed && item.badge && (
+                          <span className="flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#6D95FF] px-1 text-[10px] font-mono font-bold text-[#090C13]">
                             {item.badge}
                           </span>
-                        )}
-
-                        {isCollapsed && item.badge !== undefined && (
-                          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-[#648BFF] ring-2 ring-[#090C13]" />
                         )}
 
                         {isActive && (
                           <motion.div
                             layoutId="activeSidebarIndicator"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 rounded-r-full bg-[#648BFF]"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 rounded-r-full bg-[#6D95FF]"
                           />
                         )}
                       </>
@@ -147,7 +142,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
                   return (
                     <Tooltip key={item.path}>
                       <TooltipTrigger className="block w-full text-left">{navLink}</TooltipTrigger>
-                      <TooltipContent side="right" className="bg-[#141C2B] text-[#F1F5FC] border border-[#273249]">
+                      <TooltipContent side="right" className="bg-[#151F30] text-[#F4F6FC] border border-[#273249] font-mono text-xs">
                         {item.label}
                       </TooltipContent>
                     </Tooltip>
@@ -168,8 +163,8 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
             to={`/profile/${profile?.username || 'me'}`}
             onClick={onClose}
             className={cn(
-              'flex items-center rounded-xl bg-[#0E1420] border border-[#273249] hover:border-[#648BFF]/40 transition-all group',
-              isCollapsed ? 'justify-center p-2' : 'gap-3 p-2.5'
+              'flex items-center gap-2.5 rounded-xl p-2 transition-all hover:bg-[#151F30] border border-transparent hover:border-[#273249] group',
+              isCollapsed && 'justify-center p-1.5'
             )}
           >
             <Avatar
@@ -177,19 +172,22 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
               name={profile?.full_name || user.email}
               size="sm"
               status={profile?.availability_status}
-              className="flex-shrink-0"
             />
+
             {!isCollapsed && (
-              <div className="flex-1 min-w-0 text-left">
-                <p className="text-xs font-semibold text-[#F1F5FC] group-hover:text-[#648BFF] transition-colors truncate">
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs font-semibold text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors">
                   {profile?.full_name || 'Developer'}
                 </p>
-                <p className="text-[10px] text-[#929DB2] font-mono truncate">
-                  @{profile?.username || 'user'}
+                <p className="truncate text-[10px] text-[#929DB2] font-mono">
+                  @{profile?.username || 'anonymous'}
                 </p>
               </div>
             )}
-            {!isCollapsed && <ChevronRight className="h-3.5 w-3.5 text-[#929DB2] group-hover:text-[#F1F5FC] transition-colors" />}
+
+            {!isCollapsed && (
+              <ChevronRight className="h-3.5 w-3.5 text-[#929DB2] group-hover:text-[#6D95FF] transition-colors flex-shrink-0" />
+            )}
           </NavLink>
         </div>
       )}
@@ -199,16 +197,16 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden md:block flex-shrink-0">{content}</div>
+      <div className="hidden md:block">{content}</div>
 
-      {/* Mobile Drawer Overlay */}
+      {/* Mobile Drawer */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex">
+        <div className="fixed inset-0 z-50 flex md:hidden">
           <div
-            className="fixed inset-0 bg-[#090C13]/80 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
             onClick={onClose}
           />
-          <div className="relative flex-1 flex flex-col max-w-xs w-full bg-[#090C13] shadow-2xl z-50">
+          <div className="relative flex w-full max-w-xs flex-1 flex-col bg-[#090C13] border-r border-[#273249]">
             {content}
           </div>
         </div>

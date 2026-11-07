@@ -180,21 +180,24 @@ export const EditProfilePage: React.FC = () => {
       transition={{ duration: 0.3 }}
       className="max-w-4xl mx-auto space-y-6 pb-16"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between border-b border-[#273249]/60 pb-5">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate(-1)}
-            className="p-2 h-9 w-9 rounded-lg border border-[#273249] text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#141C2B]"
+            className="p-2 h-9 w-9 rounded-lg border border-[#273249] text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30]"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-2xl font-extrabold text-[#F1F5FC] tracking-tight">
+            <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold mb-1">
+              ARCHIVE // PROFILE METADATA
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
               Edit Developer Profile
             </h1>
-            <p className="text-xs text-[#929DB2]">
+            <p className="text-xs text-[#929DB2] mt-0.5">
               Customize your developer identity, skill endorsements, and collaboration availability.
             </p>
           </div>
@@ -203,22 +206,22 @@ export const EditProfilePage: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Details */}
-        <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-5">
-          <CardTitle className="text-sm font-bold text-[#F1F5FC] uppercase tracking-wider font-mono text-[#648BFF]">
-            General Information
+        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-5">
+          <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono">
+            // General Information
           </CardTitle>
 
           {/* Avatar Upload */}
           <div className="flex items-center gap-5 pt-1">
-            <Avatar src={avatarUrl} name={fullName} size="xl" className="ring-2 ring-[#648BFF]/30" />
+            <Avatar src={avatarUrl} name={fullName} size="xl" className="ring-2 ring-[#6D95FF]/30" />
             <div>
               <label className="block text-xs font-semibold text-[#929DB2] mb-1.5 font-mono">
                 PROFILE AVATAR
               </label>
               <div className="flex items-center gap-2">
                 <label className="cursor-pointer">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#141C2B] hover:bg-[#192338] text-xs font-semibold text-[#F1F5FC] border border-[#273249] transition-colors">
-                    <Upload className="h-3.5 w-3.5 text-[#648BFF]" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#151F30] hover:bg-[#1f2d45] text-xs font-semibold text-[#F4F6FC] border border-[#273249] transition-colors">
+                    <Upload className="h-3.5 w-3.5 text-[#6D95FF]" />
                     {uploadingAvatar ? 'Uploading...' : 'Upload Image'}
                   </span>
                   <input
@@ -253,7 +256,7 @@ export const EditProfilePage: React.FC = () => {
               <Input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                 required
               />
             </div>
@@ -264,7 +267,7 @@ export const EditProfilePage: React.FC = () => {
               <Input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
                 required
               />
             </div>
@@ -278,7 +281,7 @@ export const EditProfilePage: React.FC = () => {
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
               placeholder="e.g. Senior Full-Stack Engineer | Distributed Systems & Rust"
-              className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+              className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
             />
           </div>
 
@@ -291,7 +294,7 @@ export const EditProfilePage: React.FC = () => {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Describe your tech background, current builds, and open source interests..."
               rows={4}
-              className="text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+              className="text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
             />
           </div>
 
@@ -303,7 +306,7 @@ export const EditProfilePage: React.FC = () => {
               <select
                 value={experienceLevel}
                 onChange={(e) => setExperienceLevel(e.target.value as ExperienceLevel)}
-                className="w-full h-10 rounded-lg border border-[#273249] bg-[#141C2B] px-3 text-xs text-[#F1F5FC] focus:outline-none focus:border-[#648BFF] font-mono cursor-pointer"
+                className="w-full h-10 rounded-lg border border-[#273249] bg-[#151F30] px-3 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF] font-mono cursor-pointer"
               >
                 <option value="Junior">Junior</option>
                 <option value="Mid-Level">Mid-Level</option>
@@ -320,7 +323,7 @@ export const EditProfilePage: React.FC = () => {
               <select
                 value={availabilityStatus}
                 onChange={(e) => setAvailabilityStatus(e.target.value as AvailabilityStatus)}
-                className="w-full h-10 rounded-lg border border-[#273249] bg-[#141C2B] px-3 text-xs text-[#F1F5FC] focus:outline-none focus:border-[#648BFF] font-mono cursor-pointer"
+                className="w-full h-10 rounded-lg border border-[#273249] bg-[#151F30] px-3 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF] font-mono cursor-pointer"
               >
                 <option value="open_to_collaborate">Open to Collaborate</option>
                 <option value="available">Available</option>
@@ -339,7 +342,7 @@ export const EditProfilePage: React.FC = () => {
                 max={60}
                 value={weeklyHours}
                 onChange={(e) => setWeeklyHours(Number(e.target.value))}
-                className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               />
             </div>
           </div>
@@ -353,7 +356,7 @@ export const EditProfilePage: React.FC = () => {
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="San Francisco, CA / Remote"
-                className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               />
             </div>
             <div>
@@ -364,7 +367,7 @@ export const EditProfilePage: React.FC = () => {
                 value={githubUsername}
                 onChange={(e) => setGithubUsername(e.target.value)}
                 placeholder="torvalds"
-                className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               />
             </div>
             <div>
@@ -375,16 +378,16 @@ export const EditProfilePage: React.FC = () => {
                 value={websiteUrl}
                 onChange={(e) => setWebsiteUrl(e.target.value)}
                 placeholder="https://yourportfolio.dev"
-                className="h-10 text-xs font-mono bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+                className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
               />
             </div>
           </div>
         </Card>
 
         {/* Technical Skills Catalog Management */}
-        <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-4">
-          <CardTitle className="text-sm font-bold text-[#F1F5FC] uppercase tracking-wider font-mono text-[#648BFF] flex items-center gap-2">
-            <Code2 className="h-4 w-4 text-[#648BFF]" /> Technical Skills Catalog
+        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
+          <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono flex items-center gap-2">
+            <Code2 className="h-4 w-4 text-[#6D95FF]" /> // Technical Skills Catalog
           </CardTitle>
           <p className="text-xs text-[#929DB2]">
             Select technologies from the canonical dictionary to showcase on your profile and boost your AI matching score.
@@ -394,7 +397,7 @@ export const EditProfilePage: React.FC = () => {
             <select
               value={selectedSkillToAdd}
               onChange={(e) => setSelectedSkillToAdd(e.target.value)}
-              className="flex-1 h-10 rounded-lg border border-[#273249] bg-[#141C2B] px-3 text-xs text-[#F1F5FC] focus:outline-none focus:border-[#648BFF] font-mono cursor-pointer"
+              className="flex-1 h-10 rounded-lg border border-[#273249] bg-[#151F30] px-3 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF] font-mono cursor-pointer"
             >
               <option value="">Select a skill to add...</option>
               {availableSkills
@@ -410,9 +413,9 @@ export const EditProfilePage: React.FC = () => {
               variant="secondary"
               onClick={handleAddSkill}
               disabled={!selectedSkillToAdd}
-              className="text-xs font-semibold h-10 px-4 bg-[#141C2B] border-[#273249] text-[#F1F5FC] hover:bg-[#192338]"
+              className="text-xs font-semibold h-10 px-4 bg-[#151F30] border-[#273249] text-[#F4F6FC] hover:bg-[#1f2d45]"
             >
-              <Plus className="h-4 w-4 mr-1 text-[#648BFF]" /> Add Skill
+              <Plus className="h-4 w-4 mr-1 text-[#6D95FF]" /> Add Skill
             </Button>
           </div>
 
@@ -422,7 +425,7 @@ export const EditProfilePage: React.FC = () => {
               return (
                 <div
                   key={skillId}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#141C2B] border border-[#273249] text-xs font-mono text-[#648BFF]"
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#151F30] border border-[#273249] text-xs font-mono text-[#6D95FF]"
                 >
                   <span>{skillObj?.name || 'Skill'}</span>
                   <button
@@ -439,9 +442,9 @@ export const EditProfilePage: React.FC = () => {
         </Card>
 
         {/* Interests */}
-        <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl space-y-4">
-          <CardTitle className="text-sm font-bold text-[#F1F5FC] uppercase tracking-wider font-mono text-[#648BFF] flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-[#9B7BFF]" /> Focus Areas & Topics
+        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
+          <CardTitle className="text-xs font-bold text-[#9D83FF] uppercase tracking-wider font-mono flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-[#9D83FF]" /> // Focus Areas & Topics
           </CardTitle>
           <div>
             <Input
@@ -449,7 +452,7 @@ export const EditProfilePage: React.FC = () => {
               onChange={(e) => setInterestInput(e.target.value)}
               onKeyDown={handleAddInterest}
               placeholder="Type a topic (e.g. AI Agents, Distributed Systems, Rust, WebGPU) and press Enter"
-              className="h-10 text-xs bg-[#141C2B] border-[#273249] text-[#F1F5FC]"
+              className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
             />
           </div>
 
@@ -457,7 +460,7 @@ export const EditProfilePage: React.FC = () => {
             {interests.map((item) => (
               <span
                 key={item}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#141C2B] border border-[#273249] text-xs text-[#F1F5FC]"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#151F30] border border-[#273249] text-xs text-[#F4F6FC]"
               >
                 {item}
                 <button
@@ -474,14 +477,14 @@ export const EditProfilePage: React.FC = () => {
 
         {/* Form Action */}
         <div className="flex items-center justify-end gap-3 pt-2">
-          <Button type="button" variant="outline" onClick={() => navigate(-1)} className="h-10 text-xs border-[#273249] text-[#F1F5FC]">
+          <Button type="button" variant="outline" onClick={() => navigate(-1)} className="h-10 text-xs border-[#273249] text-[#F4F6FC] bg-[#101725] hover:bg-[#151F30]">
             Cancel
           </Button>
           <Button
             type="submit"
             variant="primary"
             isLoading={saving}
-            className="px-6 font-semibold h-10 text-xs shadow-md shadow-[#648BFF]/20"
+            className="px-6 font-semibold h-10 text-xs shadow-md shadow-[#6D95FF]/20"
           >
             <Save className="h-4 w-4 mr-1.5" /> Save Profile
           </Button>

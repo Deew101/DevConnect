@@ -16,6 +16,7 @@ import {
   Share2,
   Check,
   ArrowUpRight,
+  Terminal,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Profile, UserSkill, Project, ConnectionStatus } from '@/types/database.types';
@@ -199,21 +200,21 @@ export const ProfilePage: React.FC = () => {
   };
 
   if (loading) {
-    return <LoadingScreen message="Loading developer portfolio..." />;
+    return <LoadingScreen message="Accessing engineering dossier..." />;
   }
 
   if (!profile) {
     return (
-      <div className="p-12 text-center border border-dashed border-[#273249] rounded-2xl max-w-lg mx-auto mt-16 bg-[#0E1420]">
-        <div className="w-12 h-12 rounded-xl bg-[#141C2B] border border-[#273249] flex items-center justify-center mx-auto mb-4 text-[#929DB2]">
+      <div className="p-16 text-center border border-dashed border-[#273249] rounded-xl max-w-lg mx-auto mt-16 bg-[#101725]">
+        <div className="w-12 h-12 rounded-lg bg-[#151F30] border border-[#273249] flex items-center justify-center mx-auto mb-4 text-[#929DB2]">
           <Code2 className="w-6 h-6" />
         </div>
-        <h3 className="text-xl font-bold text-[#F1F5FC] mb-2">Developer Not Found</h3>
+        <h3 className="font-display text-xl font-bold text-[#F4F6FC] mb-2">Record Not Found</h3>
         <p className="text-xs text-[#929DB2] mb-6 leading-relaxed">
-          The requested developer profile does not exist or has been removed.
+          The requested developer profile does not exist or has been removed from the directory.
         </p>
         <Link to="/developers">
-          <Button variant="primary">Discover Developers</Button>
+          <Button variant="primary">Return to Directory</Button>
         </Link>
       </div>
     );
@@ -224,22 +225,26 @@ export const ProfilePage: React.FC = () => {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="space-y-6 max-w-7xl mx-auto pb-12"
+      className="space-y-6 max-w-7xl mx-auto pb-12 font-sans"
     >
-      {/* Hero Profile Banner Card */}
-      <div className="relative rounded-2xl border border-[#273249] bg-[#0E1420] shadow-2xl overflow-hidden">
+      {/* Editorial Hero Profile Banner Card */}
+      <div className="relative rounded-xl border border-[#273249] bg-[#101725] shadow-2xl overflow-hidden">
         {/* Cover Graphic with Mesh & Grid Pattern */}
-        <div className="h-44 sm:h-56 relative overflow-hidden bg-gradient-to-r from-[#141C2B] via-[#090C13] to-[#192338] border-b border-[#273249]">
+        <div className="h-44 sm:h-52 relative overflow-hidden bg-gradient-to-r from-[#151F30] via-[#090C13] to-[#1C2940] border-b border-[#273249]">
           <GridPattern className="opacity-25" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0E1420]" />
-          <div className="absolute -top-24 left-1/4 w-96 h-96 bg-[#648BFF]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -top-24 right-1/4 w-96 h-96 bg-[#9B7BFF]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#101725]" />
+          <div className="absolute -top-24 left-1/4 w-96 h-96 bg-[#6D95FF]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -top-24 right-1/4 w-96 h-96 bg-[#9D83FF]/10 rounded-full blur-3xl pointer-events-none" />
 
-          {/* Quick share button in cover */}
+          {/* Editorial Label & Quick Share button */}
+          <div className="absolute top-4 left-6 hidden sm:flex items-center gap-2 text-[10px] font-mono tracking-widest text-[#929DB2] uppercase">
+            <Terminal className="h-3.5 w-3.5 text-[#6D95FF]" /> DOSSIER // ARCHIVE RECORD
+          </div>
+
           <div className="absolute top-4 right-4">
             <button
               onClick={handleCopyProfile}
-              className="px-3 py-1.5 rounded-lg bg-[#141C2B]/90 hover:bg-[#192338] text-[#F1F5FC] border border-[#273249] backdrop-blur-md text-xs font-mono flex items-center gap-1.5 transition-all shadow-md active:scale-95"
+              className="px-3 py-1.5 rounded-lg bg-[#151F30]/90 hover:bg-[#1C2940] text-[#F4F6FC] border border-[#273249] backdrop-blur-md text-xs font-mono flex items-center gap-1.5 transition-all shadow-md active:scale-95"
             >
               {copiedLink ? (
                 <>
@@ -249,7 +254,7 @@ export const ProfilePage: React.FC = () => {
               ) : (
                 <>
                   <Share2 className="w-3.5 h-3.5 text-[#929DB2]" />
-                  <span>Share</span>
+                  <span>Share Dossier</span>
                 </>
               )}
             </button>
@@ -266,23 +271,23 @@ export const ProfilePage: React.FC = () => {
                   name={profile.full_name}
                   size="xl"
                   status={profile.availability_status}
-                  className="ring-4 ring-[#0E1420] shadow-2xl w-24 h-24 sm:w-28 sm:h-28 text-2xl"
+                  className="ring-4 ring-[#101725] shadow-2xl w-24 h-24 sm:w-28 sm:h-28 text-2xl rounded-2xl"
                 />
               </div>
               <div className="mb-1">
                 <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-[#F1F5FC] tracking-tight">
+                  <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[#F4F6FC] tracking-tight">
                     {profile.full_name}
                   </h1>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono capitalize bg-[#141C2B] text-[#648BFF] border border-[#273249]">
+                  <span className="px-2.5 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-[#151F30] text-[#6D95FF] border border-[#273249]">
                     {profile.experience_level}
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-[#35C98A]/10 text-[#35C98A] border border-[#35C98A]/20">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-mono bg-[#35C98A]/10 text-[#35C98A] border border-[#35C98A]/20">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#35C98A] animate-pulse" />
                     {profile.availability_status?.replace(/_/g, ' ') || 'Available'}
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-[#648BFF] font-mono mt-0.5">
+                <p className="text-xs sm:text-sm text-[#6D95FF] font-mono mt-0.5">
                   @{profile.username}
                 </p>
               </div>
@@ -292,7 +297,7 @@ export const ProfilePage: React.FC = () => {
             <div className="flex items-center gap-2.5 w-full sm:w-auto self-end">
               {isOwner ? (
                 <Link to="/profile/edit" className="w-full sm:w-auto">
-                  <Button variant="primary" size="sm" className="w-full sm:w-auto text-xs font-semibold shadow-md shadow-[#648BFF]/20">
+                  <Button variant="primary" size="sm" className="w-full sm:w-auto text-xs font-semibold shadow-md shadow-[#6D95FF]/20">
                     <Edit className="h-3.5 w-3.5 mr-1.5" /> Edit Profile
                   </Button>
                 </Link>
@@ -310,7 +315,7 @@ export const ProfilePage: React.FC = () => {
                         <UserCheck className="h-3.5 w-3.5" /> Connected
                       </span>
                     ) : connectionStatus === 'pending' ? (
-                      <span className="flex items-center gap-1.5 text-[#9B7BFF]">
+                      <span className="flex items-center gap-1.5 text-[#9D83FF]">
                         <Clock className="h-3.5 w-3.5" /> Request Sent
                       </span>
                     ) : (
@@ -324,9 +329,9 @@ export const ProfilePage: React.FC = () => {
                     variant="secondary"
                     size="sm"
                     onClick={handleStartMessage}
-                    className="flex-1 sm:flex-none text-xs font-semibold"
+                    className="flex-1 sm:flex-none text-xs font-semibold border-[#273249] bg-[#151F30] text-[#F4F6FC]"
                   >
-                    <MessageSquare className="h-3.5 w-3.5 mr-1.5" /> Message
+                    <MessageSquare className="h-3.5 w-3.5 mr-1.5 text-[#6D95FF]" /> Message
                   </Button>
                 </>
               )}
@@ -335,7 +340,7 @@ export const ProfilePage: React.FC = () => {
 
           {/* Headline & Bio */}
           <div className="space-y-3 max-w-3xl">
-            <h3 className="text-base font-semibold text-[#F1F5FC] tracking-tight">
+            <h3 className="font-display text-base font-bold text-[#F4F6FC] tracking-tight">
               {profile.headline || 'Software Developer & Open Source Contributor'}
             </h3>
             <p className="text-xs sm:text-sm text-[#929DB2] leading-relaxed whitespace-pre-line">
@@ -354,7 +359,7 @@ export const ProfilePage: React.FC = () => {
                   href={profile.website_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-[#648BFF] hover:underline"
+                  className="flex items-center gap-1.5 text-[#6D95FF] hover:underline"
                 >
                   <Globe className="h-3.5 w-3.5" /> Portfolio <ArrowUpRight className="w-3 h-3" />
                 </a>
@@ -364,7 +369,7 @@ export const ProfilePage: React.FC = () => {
                   href={`https://github.com/${profile.github_username}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-[#F1F5FC] hover:text-[#648BFF] transition-colors"
+                  className="flex items-center gap-1.5 text-[#F4F6FC] hover:text-[#6D95FF] transition-colors"
                 >
                   <Github className="h-3.5 w-3.5" /> {profile.github_username}
                 </a>
@@ -385,13 +390,13 @@ export const ProfilePage: React.FC = () => {
         {/* Left Column: Technical Skills, Languages, Focus Areas */}
         <div className="space-y-6">
           {/* Technical Skills Card */}
-          <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl relative overflow-hidden">
+          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl relative overflow-hidden">
             <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between border-b border-[#273249]">
-              <CardTitle className="text-sm font-bold text-[#F1F5FC] flex items-center gap-2">
-                <Code2 className="h-4 w-4 text-[#648BFF]" /> Technical Skills
+              <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center gap-2">
+                <Code2 className="h-4 w-4 text-[#6D95FF]" /> Technical Competencies
               </CardTitle>
               {isOwner && (
-                <Link to="/profile/edit" className="text-xs text-[#648BFF] hover:underline font-mono">
+                <Link to="/profile/edit" className="text-xs text-[#6D95FF] hover:underline font-mono">
                   Manage
                 </Link>
               )}
@@ -399,20 +404,20 @@ export const ProfilePage: React.FC = () => {
 
             <CardContent className="p-0 pt-4 space-y-2.5">
               {skills.length === 0 ? (
-                <p className="text-xs text-[#929DB2] italic py-2">No technical skills added yet.</p>
+                <p className="text-xs text-[#929DB2] italic py-2">No technical competencies indexed yet.</p>
               ) : (
                 skills.map((us) => (
                   <div
                     key={us.id}
-                    className="p-2.5 rounded-lg bg-[#141C2B] border border-[#273249] flex items-center justify-between text-xs hover:border-[#648BFF]/40 transition-colors"
+                    className="p-2.5 rounded-lg bg-[#151F30] border border-[#273249] flex items-center justify-between text-xs hover:border-[#6D95FF]/40 transition-colors"
                   >
                     <div>
-                      <span className="font-semibold text-[#F1F5FC]">{us.skill?.name}</span>
+                      <span className="font-semibold text-[#F4F6FC]">{us.skill?.name}</span>
                       <span className="text-[10px] text-[#929DB2] font-mono ml-2">
                         {us.years_of_experience} yrs
                       </span>
                     </div>
-                    <Badge variant="cyan" className="text-[10px] py-0 px-2 font-mono">
+                    <Badge variant="cyan" className="text-[10px] py-0 px-2 font-mono bg-[#6D95FF]/15 text-[#6D95FF] border-[#6D95FF]/30">
                       {us.proficiency_level}
                     </Badge>
                   </div>
@@ -422,35 +427,38 @@ export const ProfilePage: React.FC = () => {
           </Card>
 
           {/* Collaboration Focus & Interests */}
-          <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl">
+          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl">
             <CardHeader className="p-0 pb-4 border-b border-[#273249]">
-              <CardTitle className="text-sm font-bold text-[#F1F5FC] flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-[#9B7BFF]" /> Collaboration Focus
+              <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-[#9D83FF]" /> Collaboration Cadence
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 pt-4 space-y-4 text-xs">
               <div>
-                <span className="text-[#929DB2] font-medium block mb-2 font-mono text-[11px]">
-                  AREAS OF INTEREST
+                <span className="text-[#929DB2] font-medium block mb-2 font-mono text-[10px] uppercase tracking-wider">
+                  AREAS OF SPECIALIZATION
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {(profile.interests || []).map((interest) => (
-                    <Badge key={interest} variant="secondary" className="text-[11px]">
+                    <span
+                      key={interest}
+                      className="px-2.5 py-1 rounded bg-[#151F30] border border-[#273249] text-xs font-mono text-[#F4F6FC]"
+                    >
                       {interest}
-                    </Badge>
+                    </span>
                   ))}
                   {(!profile.interests || profile.interests.length === 0) && (
-                    <span className="text-[#929DB2] italic">No interests specified</span>
+                    <span className="text-[#929DB2] italic">No specializations specified</span>
                   )}
                 </div>
               </div>
 
               <div className="pt-3 border-t border-[#273249]">
-                <span className="text-[#929DB2] font-medium block mb-1.5 font-mono text-[11px]">
-                  COLLABORATION AVAILABILITY
+                <span className="text-[#929DB2] font-medium block mb-1.5 font-mono text-[10px] uppercase tracking-wider">
+                  PROJECT COMMITMENT
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-mono capitalize bg-[#141C2B] text-[#648BFF] border border-[#273249]">
+                  <span className="px-2.5 py-0.5 rounded text-xs font-mono capitalize bg-[#151F30] text-[#6D95FF] border border-[#273249]">
                     {profile.availability_status?.replace(/_/g, ' ') || 'Available'}
                   </span>
                   <span className="text-[#929DB2] font-mono text-xs">
@@ -472,14 +480,14 @@ export const ProfilePage: React.FC = () => {
           />
 
           {/* Linked Projects Showcase */}
-          <Card className="border-[#273249] bg-[#0E1420] p-6 shadow-xl">
+          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl">
             <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between border-b border-[#273249]">
-              <CardTitle className="text-sm font-bold text-[#F1F5FC] flex items-center gap-2">
-                <FolderGit2 className="h-4 w-4 text-[#648BFF]" /> Collaborative Projects
+              <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center gap-2">
+                <FolderGit2 className="h-4 w-4 text-[#6D95FF]" /> Project Portfolio
               </CardTitle>
               {isOwner && (
                 <Link to="/projects/new">
-                  <Button variant="outline" size="sm" className="h-7 text-xs border-[#273249] text-[#F1F5FC]">
+                  <Button variant="outline" size="sm" className="h-7 text-xs border-[#273249] text-[#F4F6FC] font-mono">
                     + New Project
                   </Button>
                 </Link>
@@ -488,22 +496,22 @@ export const ProfilePage: React.FC = () => {
 
             <CardContent className="p-0 pt-4 space-y-3">
               {projects.length === 0 ? (
-                <div className="py-10 text-center text-xs text-[#929DB2] border border-dashed border-[#273249] rounded-xl">
-                  No projects created by this developer yet.
+                <div className="py-10 text-center text-xs text-[#929DB2] border border-dashed border-[#273249] rounded-xl bg-[#151F30]/40">
+                  No collaborative projects indexed by this engineer yet.
                 </div>
               ) : (
                 projects.map((proj) => (
                   <Link
                     key={proj.id}
                     to={`/projects/${proj.id}`}
-                    className="p-4 rounded-xl border border-[#273249] bg-[#141C2B] hover:bg-[#192338] hover:border-[#648BFF]/40 transition-all flex items-center justify-between group block"
+                    className="p-4 rounded-xl border border-[#273249] bg-[#151F30] hover:bg-[#1C2940] hover:border-[#6D95FF]/40 transition-all flex items-center justify-between group block"
                   >
                     <div className="space-y-1.5 pr-4">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h4 className="font-semibold text-sm text-[#F1F5FC] group-hover:text-[#648BFF] transition-colors">
+                        <h4 className="font-display font-semibold text-sm text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors">
                           {proj.title}
                         </h4>
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#0E1420] text-[#648BFF] border border-[#273249]">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#101725] text-[#6D95FF] border border-[#273249]">
                           {proj.category}
                         </span>
                         <span className="px-2 py-0.5 rounded text-[10px] font-mono capitalize border border-[#273249] text-[#929DB2]">
@@ -518,7 +526,7 @@ export const ProfilePage: React.FC = () => {
                           {proj.required_skills.slice(0, 4).map((sk) => (
                             <span
                               key={sk}
-                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#0E1420] text-[#929DB2] border border-[#273249]"
+                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#101725] text-[#929DB2] border border-[#273249]"
                             >
                               {sk}
                             </span>
@@ -527,7 +535,7 @@ export const ProfilePage: React.FC = () => {
                       )}
                     </div>
 
-                    <ArrowUpRight className="h-4 w-4 text-[#929DB2] group-hover:text-[#648BFF] transition-colors flex-shrink-0" />
+                    <ArrowUpRight className="h-4 w-4 text-[#929DB2] group-hover:text-[#6D95FF] transition-colors flex-shrink-0" />
                   </Link>
                 ))
               )}

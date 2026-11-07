@@ -113,44 +113,44 @@ export const ProjectsPage: React.FC = () => {
     switch (status) {
       case 'active':
       case 'in_progress':
-        return <Badge variant="success">Active Sprint</Badge>;
+        return <Badge variant="success" className="text-[10px] font-mono">Active Sprint</Badge>;
       case 'planning':
-        return <Badge variant="cyan">Planning</Badge>;
+        return <Badge variant="cyan" className="text-[10px] font-mono">Planning</Badge>;
       case 'completed':
-        return <Badge variant="purple">Completed</Badge>;
+        return <Badge variant="purple" className="text-[10px] font-mono">Completed</Badge>;
       default:
-        return <Badge variant="secondary">{status}</Badge>;
+        return <Badge variant="secondary" className="text-[10px] font-mono">{status}</Badge>;
     }
   };
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#273249]/60 pb-6">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[11px] font-mono tracking-wider text-[#648BFF] uppercase font-semibold">
-              DevConnect Workspaces
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold">
+              WORKSPACES // REPOSITORY CATALOG
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#648BFF]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#6D95FF] animate-pulse" />
             <span className="text-xs font-mono text-[#929DB2]">{projects.length} Active Hubs</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#F1F5FC] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
             {activeTab === 'my-projects'
               ? 'My Created Projects'
               : activeTab === 'my-teams'
               ? 'My Collaborative Teams'
               : activeTab === 'saved'
               ? 'Saved Projects'
-              : 'Collaborative Projects'}
+              : 'Engineering Workspaces'}
           </h1>
-          <p className="text-sm text-[#929DB2] mt-0.5">
+          <p className="text-sm text-[#929DB2] mt-1 font-sans max-w-2xl leading-relaxed">
             Discover active engineering builds, recruit teammates via AI matchmaking, and coordinate on live Kanban boards.
           </p>
         </div>
 
         <Link to="/projects/new">
-          <Button variant="primary" size="md" className="font-semibold text-xs sm:text-sm">
+          <Button variant="primary" size="md" className="font-semibold text-xs sm:text-sm shadow-lg shadow-[#6D95FF]/10">
             <Plus className="h-4 w-4 mr-1.5" /> Start Project
           </Button>
         </Link>
@@ -178,8 +178,8 @@ export const ProjectsPage: React.FC = () => {
               }}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 isActive
-                  ? 'bg-[#141C2B] text-[#648BFF] border border-[#273249] shadow-sm'
-                  : 'text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#141C2B]/50'
+                  ? 'bg-[#151F30] text-[#6D95FF] border border-[#273249] shadow-sm'
+                  : 'text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30]/40'
               }`}
             >
               <tab.icon className="w-3.5 h-3.5" />
@@ -190,14 +190,14 @@ export const ProjectsPage: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-2xl border border-[#273249] bg-[#141C2B] shadow-xl space-y-3.5">
+      <div className="p-4 rounded-2xl border border-[#273249] bg-[#101725] shadow-xl space-y-3.5">
         <form onSubmit={handleSearchSubmit} className="flex gap-2">
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search projects by title, stack keywords, or technologies (e.g. Supabase, Next.js, Rust)..."
             icon={<Search className="h-4 w-4" />}
-            className="h-10 text-xs"
+            className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
           />
           <Button type="submit" variant="primary" className="h-10 px-5 font-semibold text-xs">
             Search
@@ -220,8 +220,8 @@ export const ProjectsPage: React.FC = () => {
                 onClick={() => setSelectedCategory(cat === 'All Categories' ? 'all' : cat)}
                 className={`px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
                   isSelected
-                    ? 'bg-[#648BFF]/20 text-[#648BFF] border border-[#648BFF]/40 shadow-sm'
-                    : 'bg-[#0E1420] text-[#929DB2] hover:text-[#F1F5FC] border border-[#273249]'
+                    ? 'bg-[#6D95FF]/20 text-[#6D95FF] border border-[#6D95FF]/40 shadow-sm'
+                    : 'bg-[#151F30] text-[#929DB2] hover:text-[#F4F6FC] border border-[#273249]'
                 }`}
               >
                 {cat}
@@ -237,14 +237,14 @@ export const ProjectsPage: React.FC = () => {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className="h-64 rounded-2xl border border-[#273249] bg-[#141C2B] animate-pulse"
+              className="h-64 rounded-2xl border border-[#273249] bg-[#101725] animate-pulse"
             />
           ))}
         </div>
       ) : projects.length === 0 ? (
-        <div className="p-12 text-center border border-dashed border-[#273249] rounded-2xl bg-[#141C2B]">
+        <div className="p-12 text-center border border-dashed border-[#273249] rounded-2xl bg-[#101725]">
           <FolderGit2 className="h-12 w-12 text-[#929DB2]/40 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-[#F1F5FC] mb-1">No Projects Found</h3>
+          <h3 className="text-lg font-bold font-display text-[#F4F6FC] mb-1">No Projects Found</h3>
           <p className="text-xs text-[#929DB2] max-w-sm mx-auto mb-5 leading-relaxed">
             {activeTab === 'my-projects'
               ? "You haven't published any projects yet. Launch your vision today!"
@@ -287,11 +287,11 @@ export const ProjectsPage: React.FC = () => {
                   show: { opacity: 1, y: 0 },
                 }}
               >
-                <CardSpotlight className="h-full flex flex-col justify-between overflow-hidden group bg-[#141C2B] border-[#273249]">
+                <CardSpotlight className="h-full flex flex-col justify-between overflow-hidden group bg-[#151F30] border-[#273249]">
                   <div className="space-y-4">
                     {/* Top: Category & Status */}
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#0E1420] border border-[#273249] text-[#F1F5FC]">
+                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#101725] border border-[#273249] text-[#F4F6FC]">
                         {proj.category}
                       </span>
                       {getStatusBadge(proj.status)}
@@ -299,7 +299,7 @@ export const ProjectsPage: React.FC = () => {
 
                     {/* Title & Tagline */}
                     <div>
-                      <h3 className="text-base font-bold text-[#F1F5FC] group-hover:text-[#648BFF] transition-colors line-clamp-1">
+                      <h3 className="text-base font-bold font-display text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors line-clamp-1">
                         {proj.title}
                       </h3>
                       <p className="text-xs text-[#929DB2] mt-1 line-clamp-2 leading-relaxed">
@@ -312,7 +312,7 @@ export const ProjectsPage: React.FC = () => {
                       {(proj.required_skills || []).slice(0, 3).map((sk) => (
                         <span
                           key={sk}
-                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#0E1420] border border-[#273249] text-[#648BFF]"
+                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#101725] border border-[#273249] text-[#6D95FF]"
                         >
                           {sk}
                         </span>
@@ -328,13 +328,13 @@ export const ProjectsPage: React.FC = () => {
                     <div className="space-y-1.5 pt-2 border-t border-[#273249]/60">
                       <div className="flex items-center justify-between text-[11px] font-mono text-[#929DB2]">
                         <span className="flex items-center gap-1.5">
-                          <Users className="h-3.5 w-3.5 text-[#648BFF]" /> Team: {currentMembersCount} / {targetMembersCount}
+                          <Users className="h-3.5 w-3.5 text-[#6D95FF]" /> Team: {currentMembersCount} / {targetMembersCount}
                         </span>
                         <span>{teamFillPercent}% Full</span>
                       </div>
-                      <div className="h-1.5 w-full bg-[#0E1420] rounded-full overflow-hidden border border-[#273249]">
+                      <div className="h-1.5 w-full bg-[#101725] rounded-full overflow-hidden border border-[#273249]">
                         <div
-                          className="h-full bg-gradient-to-r from-[#648BFF] to-[#9B7BFF] rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-[#6D95FF] to-[#9D83FF] rounded-full transition-all duration-500"
                           style={{ width: `${teamFillPercent}%` }}
                         />
                       </div>
@@ -356,7 +356,7 @@ export const ProjectsPage: React.FC = () => {
                     </div>
 
                     <Link to={`/projects/${proj.id}`}>
-                      <Button variant="secondary" size="xs" className="h-7 text-xs font-semibold border-[#273249]">
+                      <Button variant="secondary" size="xs" className="h-7 text-xs font-semibold border-[#273249] bg-[#101725] hover:bg-[#151F30]">
                         {isMember || isOwner ? 'Workspace' : 'Details'}{' '}
                         <ArrowRight className="h-3 w-3 ml-1" />
                       </Button>
