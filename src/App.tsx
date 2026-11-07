@@ -9,6 +9,7 @@ import { ProtectedRoute, PublicOnlyRoute } from '@/components/common/ProtectedRo
 import { AppLayout } from '@/components/layout/AppLayout';
 
 import { AuthPage } from '@/pages/AuthPage';
+import { AuthCallbackPage } from '@/pages/AuthCallbackPage';
 import { OnboardingPage } from '@/pages/OnboardingPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { DiscoveryPage } from '@/pages/DiscoveryPage';
@@ -50,6 +51,8 @@ export function App() {
                       </PublicOnlyRoute>
                     }
                   />
+                  {/* OAuth PKCE Callback Route */}
+                  <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
                   {/* Onboarding Wizard Route */}
                   <Route

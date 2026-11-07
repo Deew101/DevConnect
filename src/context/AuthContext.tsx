@@ -3,6 +3,17 @@ import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Profile } from '@/types/database.types';
 
+/**
+ * Resolves canonical OAuth callback URL based on environment:
+ * - Production GitHub Pages: https://deew101.github.io/DevConnect/auth/callback
+ * - Localhost dev server: http://localhost:5173/auth/callback
+ */
+export function getOAuthRedirectUrl(): string {
+  const origin = window.location.origin;
+  const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  return `${origin}${base}/auth/callback`;
+}
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
@@ -75,7 +86,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .single();
 
       if (insertError) {
-        console.error('Failed to auto-create profile:', insertError);
+        // If trigger inserted concurrently or row exists, re-fetch
+        const { data: existingAfterError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', supabaseUser.id)
+          .maybeSingle();
+
+        if (existingAfterError) {
+          setProfile(existingAfterError as Profile);
+          return existingAfterError as Profile;
+        }
+
+        console.warn('Could not auto-create profile in Supabase table:', insertError.message);
         return null;
       }
 
@@ -187,9 +210,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signInWithGoogle = async () => {
-    // Current origin + clean path for OAuth callback
-    const redirectUrl = `${window.location.origin}${window.location.pathname}`;
-    await supabase.auth.signInWithOAuth({
+    const redirectUrl = getOAuthRedirectUrl();
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: redirectUrl,
@@ -199,17 +221,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         },
       },
     });
+
+    if (error) {
+      console.error('Supabase Google OAuth initialization error:', error);
+      throw error;
+    }
   };
 
   const signInWithGitHub = async () => {
-    const redirectUrl = `${window.location.origin}${window.location.pathname}`;
-    await supabase.auth.signInWithOAuth({
+    const redirectUrl = getOAuthRedirectUrl();
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
         redirectTo: redirectUrl,
         scopes: 'read:user user:email repo',
       },
     });
+
+    if (error) {
+      console.error('Supabase GitHub OAuth initialization error:', error);
+      throw error;
+    }
   };
 
   const signOut = async () => {

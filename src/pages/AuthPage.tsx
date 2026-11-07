@@ -22,6 +22,22 @@ export const AuthPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<string | null>(null);
 
+  // Detect and forward OAuth code or report provider error if landed on /auth
+  React.useEffect(() => {
+    const code = searchParams.get('code');
+    const errorParam = searchParams.get('error_description') || searchParams.get('error');
+
+    if (code) {
+      navigate(`/auth/callback${window.location.search}`, { replace: true });
+    } else if (errorParam) {
+      toast({
+        title: 'Authentication Provider Notice',
+        description: decodeURIComponent(errorParam).replace(/\+/g, ' '),
+        type: 'error',
+      });
+    }
+  }, [searchParams, navigate, toast]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !password.trim()) return;
@@ -64,9 +80,14 @@ export const AuthPage: React.FC = () => {
     try {
       await signInWithGoogle();
     } catch (err: any) {
+      const msg = err.message || '';
+      let friendlyDesc = msg;
+      if (msg.includes('provider is not enabled') || msg.includes('validation_failed')) {
+        friendlyDesc = 'Google OAuth provider is not yet enabled in your Supabase project. Please enable Google in Supabase Dashboard -> Authentication -> Providers.';
+      }
       toast({
-        title: 'Google OAuth failed',
-        description: err.message,
+        title: 'Google OAuth Initiation Notice',
+        description: friendlyDesc,
         type: 'error',
       });
       setOauthLoading(null);
@@ -78,9 +99,14 @@ export const AuthPage: React.FC = () => {
     try {
       await signInWithGitHub();
     } catch (err: any) {
+      const msg = err.message || '';
+      let friendlyDesc = msg;
+      if (msg.includes('provider is not enabled') || msg.includes('validation_failed')) {
+        friendlyDesc = 'GitHub OAuth provider is not yet enabled in your Supabase project. Please enable GitHub in Supabase Dashboard -> Authentication -> Providers.';
+      }
       toast({
-        title: 'GitHub OAuth failed',
-        description: err.message,
+        title: 'GitHub OAuth Initiation Notice',
+        description: friendlyDesc,
         type: 'error',
       });
       setOauthLoading(null);
