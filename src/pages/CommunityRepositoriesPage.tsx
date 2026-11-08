@@ -30,11 +30,6 @@ import { githubService } from '@/services/githubService';
 import { useToast } from '@/components/ui/Toast';
 import { formatTimeAgo } from '@/lib/utils';
 import { Link } from 'react-router-dom';
-import {
-  staggerContainerVariants,
-  staggerItemVariants,
-  cardVariants,
-} from '@/components/animation';
 
 const LANGUAGE_COLORS: Record<string, string> = {
   TypeScript: '#3178C6',
@@ -179,14 +174,9 @@ export const CommunityRepositoriesPage: React.FC = () => {
   const totalStars = repositories.reduce((acc, r) => acc + (r.stars || 0), 0);
 
   return (
-    <motion.div
-      variants={staggerContainerVariants}
-      initial="hidden"
-      animate="show"
-      className="space-y-6 max-w-7xl mx-auto pb-16 font-sans"
-    >
+    <div className="space-y-6 max-w-7xl mx-auto pb-16 font-sans">
       {/* Header Banner */}
-      <motion.div variants={staggerItemVariants} className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 border-b border-[rgba(167,139,250,0.20)] pb-6">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 border-b border-[rgba(167,139,250,0.20)] pb-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold flex items-center gap-1.5">
@@ -221,10 +211,10 @@ export const CommunityRepositoriesPage: React.FC = () => {
             <ShieldCheck className="w-3.5 h-3.5 mr-1 text-[#34D399]" /> 100% Genuine GitHub Attribution
           </Badge>
         </div>
-      </motion.div>
+      </div>
 
       {/* Metrics Banner */}
-      <motion.div variants={staggerItemVariants} className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <div className="p-4 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-lg">
           <div className="text-[10px] font-mono uppercase text-[#B8ACD9]">Verified Public Repos</div>
           <div className="text-2xl font-bold font-display text-[#F8F7FF] mt-1">{repositories.length}</div>
@@ -247,10 +237,10 @@ export const CommunityRepositoriesPage: React.FC = () => {
           <div className="text-2xl font-bold font-display text-[#34D399] mt-1">Supabase Synced</div>
           <div className="text-[10px] font-mono text-[#B8ACD9] mt-0.5">Zero Rate-Limit Lockout</div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Filter and Search Bar */}
-      <motion.div variants={staggerItemVariants} className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
+      <div className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row gap-2.5">
           <div className="flex-1 relative">
             <Input
@@ -334,7 +324,7 @@ export const CommunityRepositoriesPage: React.FC = () => {
             </select>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Repositories Grid */}
       {filteredRepos.length === 0 ? (
@@ -356,18 +346,15 @@ export const CommunityRepositoriesPage: React.FC = () => {
           </Button>
         </div>
       ) : (
-        <motion.div
-          variants={staggerContainerVariants}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredRepos.map((repo) => {
             const isSaved = savedRepoNames.includes(repo.full_name);
             const langColor = LANGUAGE_COLORS[repo.language] || '#8B5CF6';
 
             return (
-              <motion.div
+              <div
                 key={repo.full_name}
-                variants={cardVariants}
+                className="h-full"
               >
                 <CardSpotlight className="h-full flex flex-col justify-between overflow-hidden group bg-[#160E30]/75 backdrop-blur-xl border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] transition-all duration-300 p-5 rounded-2xl">
                   <div className="space-y-4">
@@ -509,11 +496,11 @@ export const CommunityRepositoriesPage: React.FC = () => {
                     </a>
                   </div>
                 </CardSpotlight>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 };

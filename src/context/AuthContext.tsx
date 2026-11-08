@@ -21,7 +21,7 @@ export function getOAuthRedirectUrl(): string {
 
     // 2. Local development on localhost / 127.0.0.1
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      const port = window.location.port || '5173';
+      const port = window.location.port || '3000';
       // If opened under /DevConnect/ locally, preserve that base
       if (pathname.startsWith('/DevConnect')) {
         return `http://localhost:${port}/DevConnect/auth/callback`;

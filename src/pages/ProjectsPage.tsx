@@ -27,11 +27,6 @@ import { Avatar } from '@/components/ui/Avatar';
 import { formatDate } from '@/lib/utils';
 import { CardSpotlight } from '@/components/ui/CardSpotlight';
 import { DEMO_PROJECTS, DEMO_PROFILES } from '@/data/demoCommunityData';
-import {
-  staggerContainerVariants,
-  staggerItemVariants,
-  cardVariants,
-} from '@/components/animation';
 
 export interface ProjectsPageProps {
   defaultFilter?: 'all' | 'my-projects' | 'my-teams' | 'saved';
@@ -164,14 +159,9 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => 
   };
 
   return (
-    <motion.div
-      variants={staggerContainerVariants}
-      initial="hidden"
-      animate="show"
-      className="space-y-6 font-sans pb-12"
-    >
+    <div className="space-y-6 font-sans pb-12">
       {/* Editorial Header */}
-      <motion.div variants={staggerItemVariants} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(167,139,250,0.20)] pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(167,139,250,0.20)] pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[11px] font-mono tracking-wider text-[#A855F7] uppercase font-semibold">
@@ -199,10 +189,10 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => 
             <Plus className="h-4 w-4 mr-1.5" /> Start Project
           </Button>
         </Link>
-      </motion.div>
+      </div>
 
       {/* Tabs Row */}
-      <motion.div variants={staggerItemVariants} className="flex items-center gap-2 border-b border-[rgba(167,139,250,0.20)] pb-3">
+      <div className="flex items-center gap-2 border-b border-[rgba(167,139,250,0.20)] pb-3">
         {[
           { id: 'all', label: 'All Projects', icon: Compass },
           { id: 'my-projects', label: 'My Projects', icon: FolderGit2 },
@@ -232,10 +222,10 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => 
             </button>
           );
         })}
-      </motion.div>
+      </div>
 
       {/* Filter and Search Bar */}
-      <motion.div variants={staggerItemVariants} className="p-4 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-3.5">
+      <div className="p-4 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-3.5">
         <form onSubmit={handleSearchSubmit} className="flex gap-2">
           <Input
             value={searchQuery}
@@ -273,7 +263,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => 
             );
           })}
         </div>
-      </motion.div>
+      </div>
 
       {/* Projects Grid */}
       {loading ? (
@@ -298,11 +288,11 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => 
           </Link>
         </div>
       ) : (
-        <motion.div variants={staggerContainerVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {projects.map((project) => (
-            <motion.div
+            <div
               key={project.id}
-              variants={cardVariants}
+              className="h-full"
             >
               <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300 group">
                 <div>
@@ -368,11 +358,11 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => 
                   </Link>
                 </div>
               </CardSpotlight>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 };
 

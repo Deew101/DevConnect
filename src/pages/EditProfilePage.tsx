@@ -12,10 +12,6 @@ import { Avatar } from '@/components/ui/Avatar';
 import { useToast } from '@/components/ui/Toast';
 import { ExperienceLevel, AvailabilityStatus, Skill } from '@/types/database.types';
 import { AvatarSelector } from '@/components/avatar/AvatarSelector';
-import {
-  staggerContainerVariants,
-  staggerItemVariants,
-} from '@/components/animation';
 
 export const EditProfilePage: React.FC = () => {
   const { profile, user, refreshProfile, updateProfile } = useAuth();
@@ -200,13 +196,8 @@ export const EditProfilePage: React.FC = () => {
   };
 
   return (
-    <motion.div
-      variants={staggerContainerVariants}
-      initial="hidden"
-      animate="show"
-      className="max-w-4xl mx-auto space-y-6 pb-16 font-sans"
-    >
-      <motion.div variants={staggerItemVariants} className="flex items-center justify-between border-b border-[rgba(167,139,250,0.20)] pb-5">
+    <div className="max-w-4xl mx-auto space-y-6 pb-16 font-sans">
+      <div className="flex items-center justify-between border-b border-[rgba(167,139,250,0.20)] pb-5">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
@@ -228,11 +219,11 @@ export const EditProfilePage: React.FC = () => {
             </p>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Details */}
-        <motion.div variants={staggerItemVariants}>
+        <div>
           <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-5 rounded-2xl">
           <CardTitle className="text-xs font-bold text-[#A855F7] uppercase tracking-wider font-mono">
             General Information
@@ -344,10 +335,10 @@ export const EditProfilePage: React.FC = () => {
             />
           </div>
         </Card>
-        </motion.div>
+        </div>
 
         {/* Dedicated Professional Description Card */}
-        <motion.div variants={staggerItemVariants}>
+        <div>
         <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-4 rounded-2xl">
           <div className="flex items-center gap-2">
             <Compass className="h-4 w-4 text-[#A855F7]" />
@@ -403,10 +394,10 @@ export const EditProfilePage: React.FC = () => {
             </div>
           </div>
         </Card>
-        </motion.div>
+        </div>
 
         {/* Experience & Professional Links */}
-        <motion.div variants={staggerItemVariants}>
+        <div>
         <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-5 rounded-2xl">
           <CardTitle className="text-xs font-bold text-[#A855F7] uppercase tracking-wider font-mono">
             Experience & Professional Links
@@ -497,10 +488,10 @@ export const EditProfilePage: React.FC = () => {
             </div>
           </div>
         </Card>
-        </motion.div>
+        </div>
 
         {/* Technical Skills Catalog Management */}
-        <motion.div variants={staggerItemVariants}>
+        <div>
         <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-4 rounded-2xl">
           <CardTitle className="text-xs font-bold text-[#A855F7] uppercase tracking-wider font-mono flex items-center gap-2">
             <Code2 className="h-4 w-4 text-[#A855F7]" /> Technical Skills Catalog
@@ -556,10 +547,10 @@ export const EditProfilePage: React.FC = () => {
             })}
           </div>
         </Card>
-        </motion.div>
+        </div>
 
         {/* Interests */}
-        <motion.div variants={staggerItemVariants}>
+        <div>
         <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-4 rounded-2xl">
           <CardTitle className="text-xs font-bold text-[#A855F7] uppercase tracking-wider font-mono flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-[#A855F7]" /> Focus Areas & Topics
@@ -592,10 +583,10 @@ export const EditProfilePage: React.FC = () => {
             ))}
           </div>
         </Card>
-        </motion.div>
+        </div>
 
         {/* Form Action */}
-        <motion.div variants={staggerItemVariants} className="flex items-center justify-end gap-3 pt-2">
+        <div className="flex items-center justify-end gap-3 pt-2">
           <Button
             type="button"
             variant="outline"
@@ -612,8 +603,8 @@ export const EditProfilePage: React.FC = () => {
           >
             <Save className="h-4 w-4 mr-1.5" /> Save Profile
           </Button>
-        </motion.div>
+        </div>
       </form>
-    </motion.div>
+    </div>
   );
 };

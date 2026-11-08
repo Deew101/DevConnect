@@ -27,11 +27,6 @@ import { Avatar } from '@/components/ui/Avatar';
 import { LoadingScreen } from '@/components/common/LoadingScreen';
 import { useToast } from '@/components/ui/Toast';
 import { DEMO_CONVERSATIONS } from '@/data/demoCommunityData';
-import { motion } from 'framer-motion';
-import {
-  staggerContainerVariants,
-  staggerItemVariants,
-} from '@/components/animation';
 
 export const MessagesPage: React.FC = () => {
   const { user } = useAuth();
@@ -209,12 +204,7 @@ export const MessagesPage: React.FC = () => {
     : null;
 
   return (
-    <motion.div
-      variants={staggerContainerVariants}
-      initial="hidden"
-      animate="show"
-      className="h-[calc(100vh-8rem)] rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#100A24]/90 backdrop-blur-xl shadow-2xl flex overflow-hidden font-sans"
-    >
+    <div className="h-[calc(100vh-8rem)] rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#100A24]/90 backdrop-blur-xl shadow-2xl flex overflow-hidden font-sans">
       {/* Column 1: Conversations List Sidebar */}
       <ChatSidebar
         conversations={conversations}
@@ -430,6 +420,6 @@ export const MessagesPage: React.FC = () => {
           </div>
         </div>
       </Dialog>
-    </motion.div>
+    </div>
   );
 };

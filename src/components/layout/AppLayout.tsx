@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { useLocation, useOutlet } from 'react-router-dom';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { Outlet, useLocation } from 'react-router-dom';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
 import { SupabaseConfigBanner } from '@/components/common/SupabaseConfigBanner';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 import { GalaxyBackground } from '@/components/galaxy';
-import { pageVariants } from '@/components/animation';
 
 export const AppLayout: React.FC = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const location = useLocation();
-  const currentOutlet = useOutlet();
   const shouldReduceMotion = useReducedMotion();
 
   // Initialize Lenis smooth scroll on long-form views
@@ -33,20 +31,15 @@ export const AppLayout: React.FC = () => {
           <main className="flex-1 min-w-0 min-h-[calc(100vh-3.5rem)] px-4 sm:px-6 lg:px-8 py-6 relative">
             <div className="max-w-7xl mx-auto w-full">
               <ErrorBoundary>
-                <AnimatePresence mode="wait" initial={false}>
-                  {currentOutlet && (
-                    <motion.div
-                      key={location.pathname}
-                      variants={shouldReduceMotion ? undefined : pageVariants}
-                      initial={shouldReduceMotion ? undefined : 'initial'}
-                      animate={shouldReduceMotion ? undefined : 'animate'}
-                      exit={shouldReduceMotion ? undefined : 'exit'}
-                      className="w-full"
-                    >
-                      {currentOutlet}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <motion.div
+                  key={location.pathname}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-full"
+                >
+                  <Outlet />
+                </motion.div>
               </ErrorBoundary>
             </div>
           </main>

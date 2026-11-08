@@ -23,11 +23,6 @@ import { Avatar } from '@/components/ui/Avatar';
 import { SkeletonCard } from '@/components/ui/Skeleton';
 import { ExternalGitHubDeveloper, EXTERNAL_GITHUB_DEVELOPERS } from '@/data/githubData';
 import { githubService } from '@/services/githubService';
-import {
-  staggerContainerVariants,
-  staggerItemVariants,
-  cardVariants,
-} from '@/components/animation';
 
 export const GitHubDevelopersPage: React.FC = () => {
   const [externalDevs, setExternalDevs] = useState<ExternalGitHubDeveloper[]>(EXTERNAL_GITHUB_DEVELOPERS);
@@ -77,14 +72,9 @@ export const GitHubDevelopersPage: React.FC = () => {
     });
 
   return (
-    <motion.div
-      variants={staggerContainerVariants}
-      initial="hidden"
-      animate="show"
-      className="space-y-6 font-sans pb-16"
-    >
+    <div className="space-y-6 font-sans pb-16">
       {/* Top Header */}
-      <motion.div variants={staggerItemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[rgba(167,139,250,0.20)]">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[rgba(167,139,250,0.20)]">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold flex items-center gap-1.5">
@@ -120,10 +110,10 @@ export const GitHubDevelopersPage: React.FC = () => {
             </Button>
           </Link>
         </div>
-      </motion.div>
+      </div>
 
       {/* Official Attribution Banner */}
-      <motion.div variants={staggerItemVariants} className="p-4 sm:p-5 rounded-2xl border border-emerald-500/30 bg-[#160E30]/75 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+      <div className="p-4 sm:p-5 rounded-2xl border border-emerald-500/30 bg-[#160E30]/75 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
         <div className="flex items-start gap-3">
           <ShieldAlert className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
           <div>
@@ -142,10 +132,10 @@ export const GitHubDevelopersPage: React.FC = () => {
             <Github className="w-3 h-3" /> Official REST API Synced
           </span>
         </div>
-      </motion.div>
+      </div>
 
       {/* Filter and Search Bar */}
-      <motion.div variants={staggerItemVariants} className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
+      <div className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row gap-2.5">
           <div className="flex-1 relative">
             <Input
@@ -172,7 +162,7 @@ export const GitHubDevelopersPage: React.FC = () => {
             </select>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Grid */}
       {loading ? (
@@ -198,117 +188,112 @@ export const GitHubDevelopersPage: React.FC = () => {
           </Button>
         </div>
       ) : (
-        <motion.div layout variants={staggerContainerVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          <AnimatePresence>
-            {filteredDevs.map((dev) => (
-              <motion.div
-                key={dev.username}
-                layout
-                variants={cardVariants}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.25 }}
-              >
-                <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300 group">
-                  <div>
-                    {/* Top Badges */}
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center gap-1.5 shadow-sm">
-                        <Github className="w-3 h-3" /> External Public Profile
-                      </span>
-                      <span className="text-[10px] font-mono text-[#B8ACD9] bg-[#100A24] border border-[rgba(167,139,250,0.20)] px-2 py-0.5 rounded-full">
-                        id: #{dev.github_id}
-                      </span>
-                    </div>
-
-                    {/* Header */}
-                    <div className="flex items-start gap-3.5">
-                      <Avatar
-                        src={dev.avatar_url}
-                        name={dev.name || dev.username}
-                        size="lg"
-                        className="border-2 border-emerald-500/30 ring-2 ring-[#080514] shadow-md group-hover:scale-105 transition-transform"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <h4 className="font-display font-bold text-sm text-[#F8F7FF] group-hover:text-[#C4B5FD] transition-colors truncate">
-                          {dev.name || dev.username}
-                        </h4>
-                        <a
-                          href={dev.html_url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-xs text-emerald-400 hover:text-emerald-300 font-mono flex items-center gap-1 transition-colors"
-                        >
-                          @{dev.username}
-                          <ExternalLink className="w-2.5 h-2.5" />
-                        </a>
-                        {dev.company && (
-                          <span className="text-[11px] text-[#B8ACD9] font-sans flex items-center gap-1 mt-0.5 truncate">
-                            <Building className="w-3 h-3 text-[#B8ACD9] shrink-0" />
-                            {dev.company}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Bio */}
-                    <p className="text-xs text-[#B8ACD9] mt-3 line-clamp-2 leading-relaxed">
-                      {dev.bio || 'Public open-source developer on GitHub.'}
-                    </p>
-
-                    {/* Location */}
-                    {dev.location && (
-                      <div className="flex items-center gap-1 text-[11px] text-[#B8ACD9] font-mono mt-2.5">
-                        <MapPin className="w-3 h-3 text-[#A855F7] shrink-0" />
-                        <span className="truncate">{dev.location}</span>
-                      </div>
-                    )}
-
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[rgba(167,139,250,0.20)]">
-                      <div className="p-2.5 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.15)] text-center">
-                        <span className="block text-xs font-mono font-bold text-[#F8F7FF]">
-                          {dev.followers.toLocaleString()}
-                        </span>
-                        <span className="text-[10px] font-mono text-[#B8ACD9] uppercase tracking-wider flex items-center justify-center gap-1 mt-0.5">
-                          <Users className="w-2.5 h-2.5 text-[#8B5CF6]" /> Followers
-                        </span>
-                      </div>
-                      <div className="p-2.5 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.15)] text-center">
-                        <span className="block text-xs font-mono font-bold text-[#F8F7FF]">
-                          {dev.public_repos.toLocaleString()}
-                        </span>
-                        <span className="text-[10px] font-mono text-[#B8ACD9] uppercase tracking-wider flex items-center justify-center gap-1 mt-0.5">
-                          <BookOpen className="w-2.5 h-2.5 text-[#D946EF]" /> Repos
-                        </span>
-                      </div>
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredDevs.map((dev) => (
+            <div
+              key={dev.username}
+              className="h-full"
+            >
+              <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300 group">
+                <div>
+                  {/* Top Badges */}
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center gap-1.5 shadow-sm">
+                      <Github className="w-3 h-3" /> External Public Profile
+                    </span>
+                    <span className="text-[10px] font-mono text-[#B8ACD9] bg-[#100A24] border border-[rgba(167,139,250,0.20)] px-2 py-0.5 rounded-full">
+                      id: #{dev.github_id}
+                    </span>
                   </div>
 
-                  {/* External GitHub Action Button */}
-                  <div className="pt-3 border-t border-[rgba(167,139,250,0.20)]">
-                    <a
-                      href={dev.html_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="block w-full"
-                    >
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full text-xs font-semibold h-9 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/10 hover:border-emerald-500/50 shadow-sm transition-all"
+                  {/* Header */}
+                  <div className="flex items-start gap-3.5">
+                    <Avatar
+                      src={dev.avatar_url}
+                      name={dev.name || dev.username}
+                      size="lg"
+                      className="border-2 border-emerald-500/30 ring-2 ring-[#080514] shadow-md group-hover:scale-105 transition-transform"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-display font-bold text-sm text-[#F8F7FF] group-hover:text-[#C4B5FD] transition-colors truncate">
+                        {dev.name || dev.username}
+                      </h4>
+                      <a
+                        href={dev.html_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-emerald-400 hover:text-emerald-300 font-mono flex items-center gap-1 transition-colors"
                       >
-                        <Github className="w-3.5 h-3.5 mr-1.5" /> Connect on GitHub
-                        <ExternalLink className="w-3 h-3 ml-auto opacity-70" />
-                      </Button>
-                    </a>
+                        @{dev.username}
+                        <ExternalLink className="w-2.5 h-2.5" />
+                      </a>
+                      {dev.company && (
+                        <span className="text-[11px] text-[#B8ACD9] font-sans flex items-center gap-1 mt-0.5 truncate">
+                          <Building className="w-3 h-3 text-[#B8ACD9] shrink-0" />
+                          {dev.company}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </CardSpotlight>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+
+                  {/* Bio */}
+                  <p className="text-xs text-[#B8ACD9] mt-3 line-clamp-2 leading-relaxed">
+                    {dev.bio || 'Public open-source developer on GitHub.'}
+                  </p>
+
+                  {/* Location */}
+                  {dev.location && (
+                    <div className="flex items-center gap-1 text-[11px] text-[#B8ACD9] font-mono mt-2.5">
+                      <MapPin className="w-3 h-3 text-[#A855F7] shrink-0" />
+                      <span className="truncate">{dev.location}</span>
+                    </div>
+                  )}
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[rgba(167,139,250,0.20)]">
+                    <div className="p-2.5 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.15)] text-center">
+                      <span className="block text-xs font-mono font-bold text-[#F8F7FF]">
+                        {dev.followers.toLocaleString()}
+                      </span>
+                      <span className="text-[10px] font-mono text-[#B8ACD9] uppercase tracking-wider flex items-center justify-center gap-1 mt-0.5">
+                        <Users className="w-2.5 h-2.5 text-[#8B5CF6]" /> Followers
+                      </span>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.15)] text-center">
+                      <span className="block text-xs font-mono font-bold text-[#F8F7FF]">
+                        {dev.public_repos.toLocaleString()}
+                      </span>
+                      <span className="text-[10px] font-mono text-[#B8ACD9] uppercase tracking-wider flex items-center justify-center gap-1 mt-0.5">
+                        <BookOpen className="w-2.5 h-2.5 text-[#D946EF]" /> Repos
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* External GitHub Action Button */}
+                <div className="pt-3 border-t border-[rgba(167,139,250,0.20)]">
+                  <a
+                    href={dev.html_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block w-full"
+                  >
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full text-xs font-semibold h-9 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/10 hover:border-emerald-500/50 shadow-sm transition-all"
+                    >
+                      <Github className="w-3.5 h-3.5 mr-1.5" /> Connect on GitHub
+                      <ExternalLink className="w-3 h-3 ml-auto opacity-70" />
+                    </Button>
+                  </a>
+                </div>
+              </CardSpotlight>
+            </div>
+          ))}
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 };
 
