@@ -71,21 +71,21 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
   const content = (
     <aside
       className={cn(
-        'h-[calc(100vh-3.5rem)] sticky top-14 flex flex-col justify-between border-r border-[#273249] bg-[#090C13] p-3 text-[#929DB2] transition-all duration-300 select-none z-30 font-sans',
+        'h-[calc(100vh-3.5rem)] sticky top-14 flex flex-col justify-between border-r border-[rgba(167,139,250,0.20)] bg-[#080514]/85 backdrop-blur-xl p-3 text-[#B8ACD9] transition-all duration-300 select-none z-30 font-sans',
         isCollapsed ? 'w-[68px]' : 'w-64'
       )}
     >
       <div className="space-y-5 overflow-y-auto pr-1 no-scrollbar">
         {/* Collapse Toggle Header (desktop only) */}
-        <div className="hidden lg:flex items-center justify-between px-2 pt-1 pb-1 border-b border-[#273249]/60">
+        <div className="hidden lg:flex items-center justify-between px-2 pt-1 pb-1 border-b border-[rgba(167,139,250,0.20)]">
           {!isCollapsed && (
-            <span className="text-[10px] font-mono tracking-widest text-[#929DB2] uppercase font-semibold">
+            <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold">
               NAVIGATION
             </span>
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1.5 rounded-lg text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30] transition-colors ml-auto"
+            className="p-1.5 rounded-lg text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30] transition-colors ml-auto"
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {isCollapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
@@ -94,10 +94,10 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
 
         {navigationSections.map((section, idx) => (
           <div key={section.id} className="space-y-1">
-            {idx > 0 && <div className="h-px bg-[#273249]/50 my-2 mx-2" />}
+            {idx > 0 && <div className="h-px bg-[rgba(167,139,250,0.15)] my-2.5 mx-2" />}
             {!isCollapsed && (
               <div className="px-2.5 pt-2 pb-1">
-                <span className="text-[10px] font-mono font-semibold tracking-wider text-[#6D95FF]/90 uppercase">
+                <span className="text-[10px] font-mono font-semibold tracking-wider text-[#C4B5FD] uppercase">
                   {section.title}
                 </span>
               </div>
@@ -111,11 +111,12 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
                     onClick={onClose}
                     className={({ isActive }) =>
                       cn(
-                        'flex items-center rounded-lg text-xs font-medium transition-all group relative',
+                        'flex items-center rounded-xl text-xs font-medium transition-all duration-200 group relative',
+                        'hover:translate-x-1.5',
                         isCollapsed ? 'justify-center p-2.5' : 'justify-between px-3 py-2',
                         isActive
-                          ? 'bg-[#151F30] text-[#F4F6FC] border border-[#273249] shadow-sm font-semibold'
-                          : 'text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30]/50'
+                          ? 'bg-[#8B5CF6]/15 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_15px_rgba(139,92,246,0.2)] font-semibold'
+                          : 'text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30]/70'
                       )
                     }
                   >
@@ -124,15 +125,17 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
                         <div className="flex items-center gap-3">
                           <item.icon
                             className={cn(
-                              'h-4 w-4 transition-colors flex-shrink-0',
-                              isActive ? 'text-[#6D95FF]' : 'text-[#929DB2] group-hover:text-[#F4F6FC]'
+                              'h-4 w-4 transition-all duration-200 flex-shrink-0',
+                              isActive
+                                ? 'text-[#A855F7] drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
+                                : 'text-[#B8ACD9] group-hover:text-[#F8F7FF] group-hover:scale-110'
                             )}
                           />
                           {!isCollapsed && <span>{item.label}</span>}
                         </div>
 
                         {!isCollapsed && item.badge && (
-                          <span className="flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#6D95FF] px-1 text-[10px] font-mono font-bold text-[#090C13]">
+                          <span className="flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#D946EF] px-1 text-[10px] font-mono font-bold text-[#080514] shadow-[0_0_8px_rgba(217,70,239,0.5)]">
                             {item.badge}
                           </span>
                         )}
@@ -140,7 +143,8 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
                         {isActive && (
                           <motion.div
                             layoutId="activeSidebarIndicator"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 rounded-r-full bg-[#6D95FF]"
+                            transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-gradient-to-b from-[#8B5CF6] via-[#A855F7] to-[#D946EF] shadow-[0_0_10px_#A855F7]"
                           />
                         )}
                       </>
@@ -152,7 +156,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
                   return (
                     <Tooltip key={item.path}>
                       <TooltipTrigger className="block w-full text-left">{navLink}</TooltipTrigger>
-                      <TooltipContent side="right" className="bg-[#151F30] text-[#F4F6FC] border border-[#273249] font-mono text-xs">
+                      <TooltipContent side="right" className="bg-[#160E30] text-[#F8F7FF] border border-[rgba(167,139,250,0.25)] font-mono text-xs">
                         {item.label}
                       </TooltipContent>
                     </Tooltip>
@@ -168,12 +172,12 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
 
       {/* Footer User Profile mini-card */}
       {user && (
-        <div className="pt-3 border-t border-[#273249]">
+        <div className="pt-3 border-t border-[rgba(167,139,250,0.20)]">
           <NavLink
             to={`/profile/${profile?.username || 'me'}`}
             onClick={onClose}
             className={cn(
-              'flex items-center gap-2.5 rounded-xl p-2 transition-all hover:bg-[#151F30] border border-transparent hover:border-[#273249] group',
+              'flex items-center gap-2.5 rounded-xl p-2 transition-all hover:translate-x-1 duration-200 bg-[#160E30]/60 hover:bg-[#1E1442] border border-[rgba(167,139,250,0.15)] hover:border-[#8B5CF6]/40 group shadow-sm',
               isCollapsed && 'justify-center p-1.5'
             )}
           >
@@ -186,17 +190,17 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
 
             {!isCollapsed && (
               <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-semibold text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors">
+                <p className="truncate text-xs font-semibold text-[#F8F7FF] group-hover:text-[#A855F7] transition-colors">
                   {profile?.full_name || 'Developer'}
                 </p>
-                <p className="truncate text-[10px] text-[#929DB2] font-mono">
+                <p className="truncate text-[10px] text-[#B8ACD9] font-mono">
                   @{profile?.username || 'anonymous'}
                 </p>
               </div>
             )}
 
             {!isCollapsed && (
-              <ChevronRight className="h-3.5 w-3.5 text-[#929DB2] group-hover:text-[#6D95FF] transition-colors flex-shrink-0" />
+              <ChevronRight className="h-3.5 w-3.5 text-[#B8ACD9] group-hover:text-[#A855F7] transition-colors flex-shrink-0" />
             )}
           </NavLink>
         </div>
@@ -213,10 +217,10 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
       {isOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden">
           <div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
             onClick={onClose}
           />
-          <div className="relative flex w-full max-w-xs flex-1 flex-col bg-[#090C13] border-r border-[#273249]">
+          <div className="relative flex w-full max-w-xs flex-1 flex-col bg-[#080514] border-r border-[rgba(167,139,250,0.20)]">
             {content}
           </div>
         </div>

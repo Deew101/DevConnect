@@ -176,21 +176,21 @@ export const CommunityRepositoriesPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16 font-sans">
       {/* Header Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 border-b border-[#273249]/60 pb-6">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 border-b border-[rgba(167,139,250,0.20)] pb-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold">
-              GITHUB OPEN SOURCE CATALOG
+            <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#A855F7]" /> GITHUB OPEN SOURCE CATALOG
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-mono text-[#929DB2]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse shadow-[0_0_8px_#34D399]" />
+            <span className="text-xs font-mono text-[#B8ACD9]">
               {repositories.length} Verified Repositories
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-display font-extrabold text-[#F8F7FF] tracking-tight">
             Community Open Source Repositories
           </h1>
-          <p className="text-sm text-[#929DB2] mt-1.5 max-w-3xl leading-relaxed">
+          <p className="text-sm text-[#B8ACD9] mt-1.5 max-w-3xl leading-relaxed">
             40+ real, publicly accessible GitHub repositories retrieved via the official GitHub REST API.
             Original repository URLs, authentic descriptions, live star metrics, and author attributions preserved.
           </p>
@@ -202,45 +202,45 @@ export const CommunityRepositoriesPage: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              className="text-xs font-mono border-[#273249] bg-[#101725] text-[#F4F6FC] hover:bg-[#151F30]"
+              className="text-xs font-mono border-[rgba(167,139,250,0.25)] bg-[#100A24] text-[#F8F7FF] hover:bg-[#160E30] hover:border-[#8B5CF6]/50 shadow-sm transition-all"
             >
-              <Github className="w-3.5 h-3.5 mr-1.5 text-[#6D95FF]" /> External Developers Directory
+              <Github className="w-3.5 h-3.5 mr-1.5 text-[#A855F7]" /> External Developers Directory
             </Button>
           </Link>
-          <Badge variant="cyan" className="text-xs font-mono py-1.5 px-3">
-            <ShieldCheck className="w-3.5 h-3.5 mr-1 text-emerald-400" /> 100% Genuine GitHub Attribution
+          <Badge variant="cyan" className="text-xs font-mono py-1.5 px-3 bg-[#8B5CF6]/15 border border-[#8B5CF6]/30 text-[#C4B5FD]">
+            <ShieldCheck className="w-3.5 h-3.5 mr-1 text-[#34D399]" /> 100% Genuine GitHub Attribution
           </Badge>
         </div>
       </div>
 
       {/* Metrics Banner */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div className="p-4 rounded-xl border border-[#273249] bg-[#101725]">
-          <div className="text-[10px] font-mono uppercase text-[#929DB2]">Verified Public Repos</div>
-          <div className="text-2xl font-bold font-display text-[#F4F6FC] mt-1">{repositories.length}</div>
-          <div className="text-[10px] font-mono text-[#6D95FF] mt-0.5">Authentic Open Source</div>
+        <div className="p-4 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-lg">
+          <div className="text-[10px] font-mono uppercase text-[#B8ACD9]">Verified Public Repos</div>
+          <div className="text-2xl font-bold font-display text-[#F8F7FF] mt-1">{repositories.length}</div>
+          <div className="text-[10px] font-mono text-[#C4B5FD] mt-0.5">Authentic Open Source</div>
         </div>
-        <div className="p-4 rounded-xl border border-[#273249] bg-[#101725]">
-          <div className="text-[10px] font-mono uppercase text-[#929DB2]">Collective Stars</div>
-          <div className="text-2xl font-bold font-display text-amber-400 mt-1">
+        <div className="p-4 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-lg">
+          <div className="text-[10px] font-mono uppercase text-[#B8ACD9]">Collective Stars</div>
+          <div className="text-2xl font-bold font-display text-[#D946EF] mt-1">
             {(totalStars / 1000000).toFixed(2)}M+
           </div>
-          <div className="text-[10px] font-mono text-[#929DB2] mt-0.5">Global GitHub Community</div>
+          <div className="text-[10px] font-mono text-[#B8ACD9] mt-0.5">Global GitHub Community</div>
         </div>
-        <div className="p-4 rounded-xl border border-[#273249] bg-[#101725]">
-          <div className="text-[10px] font-mono uppercase text-[#929DB2]">Ecosystem Diversity</div>
-          <div className="text-2xl font-bold font-display text-[#9D83FF] mt-1">10+ Stacks</div>
-          <div className="text-[10px] font-mono text-[#929DB2] mt-0.5">TS, Rust, Go, Python, C++</div>
+        <div className="p-4 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-lg">
+          <div className="text-[10px] font-mono uppercase text-[#B8ACD9]">Ecosystem Diversity</div>
+          <div className="text-2xl font-bold font-display text-[#A855F7] mt-1">10+ Stacks</div>
+          <div className="text-[10px] font-mono text-[#B8ACD9] mt-0.5">TS, Rust, Go, Python, C++</div>
         </div>
-        <div className="p-4 rounded-xl border border-[#273249] bg-[#101725]">
-          <div className="text-[10px] font-mono uppercase text-[#929DB2]">REST API Cache</div>
-          <div className="text-2xl font-bold font-display text-emerald-400 mt-1">Supabase Synced</div>
-          <div className="text-[10px] font-mono text-[#929DB2] mt-0.5">Zero Rate-Limit Lockout</div>
+        <div className="p-4 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-lg">
+          <div className="text-[10px] font-mono uppercase text-[#B8ACD9]">REST API Cache</div>
+          <div className="text-2xl font-bold font-display text-[#34D399] mt-1">Supabase Synced</div>
+          <div className="text-[10px] font-mono text-[#B8ACD9] mt-0.5">Zero Rate-Limit Lockout</div>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 sm:p-5 rounded-2xl border border-[#273249] bg-[#101725] shadow-xl space-y-4">
+      <div className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row gap-2.5">
           <div className="flex-1 relative">
             <Input
@@ -250,8 +250,8 @@ export const CommunityRepositoriesPage: React.FC = () => {
                 if (e.key === 'Enter') handleLiveGitHubSearch();
               }}
               placeholder="Search by repo (e.g. react, next.js, supabase, linux) or owner (e.g. vercel, microsoft)..."
-              icon={<Search className="h-4 w-4" />}
-              className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+              icon={<Search className="h-4 w-4 text-[#B8ACD9]" />}
+              className="h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF] placeholder-[#B8ACD9] focus:border-[#8B5CF6]"
             />
           </div>
           <Button
@@ -259,7 +259,7 @@ export const CommunityRepositoriesPage: React.FC = () => {
             variant="primary"
             onClick={handleLiveGitHubSearch}
             isLoading={isSearchingLive}
-            className="h-10 px-4 text-xs font-semibold shrink-0"
+            className="h-10 px-4 text-xs font-semibold shrink-0 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF] shadow-sm shadow-[#8B5CF6]/25"
           >
             <Github className="w-3.5 h-3.5 mr-1.5" /> Search Live GitHub
           </Button>
@@ -268,19 +268,19 @@ export const CommunityRepositoriesPage: React.FC = () => {
               type="button"
               variant="outline"
               onClick={handleResetCatalog}
-              className="h-10 text-xs border-[#273249] text-[#F4F6FC] bg-[#151F30] hover:bg-[#1a273e] shrink-0"
+              className="h-10 text-xs border-[rgba(167,139,250,0.25)] text-[#F8F7FF] bg-[#100A24] hover:bg-[#8B5CF6]/20 shrink-0 font-mono"
             >
-              <RefreshCw className="w-3.5 h-3.5 mr-1 text-[#6D95FF]" /> Reset
+              <RefreshCw className="w-3.5 h-3.5 mr-1 text-[#A855F7]" /> Reset
             </Button>
           )}
         </div>
 
         {/* Sort and Language Row */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-2 border-t border-[#273249]/60">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-2 border-t border-[rgba(167,139,250,0.15)]">
           {/* Language Filter Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-            <span className="text-xs font-mono text-[#929DB2] mr-1 flex items-center gap-1 shrink-0">
-              <Filter className="w-3 h-3" /> Language:
+            <span className="text-xs font-mono text-[#B8ACD9] mr-1 flex items-center gap-1 shrink-0">
+              <Filter className="w-3 h-3 text-[#A855F7]" /> Language:
             </span>
             {languages.map((lang) => {
               const isSelected = selectedLanguage === lang;
@@ -290,10 +290,10 @@ export const CommunityRepositoriesPage: React.FC = () => {
                   key={lang}
                   type="button"
                   onClick={() => setSelectedLanguage(lang)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                  className={`px-3 py-1 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
                     isSelected
-                      ? 'bg-[#6D95FF]/20 text-[#6D95FF] border border-[#6D95FF]/50 shadow-sm'
-                      : 'bg-[#151F30] text-[#929DB2] hover:text-[#F4F6FC] border border-[#273249]'
+                      ? 'bg-[#8B5CF6] text-[#080514] font-bold shadow-[0_0_12px_rgba(139,92,246,0.35)]'
+                      : 'bg-[#100A24] text-[#B8ACD9] hover:text-[#F8F7FF] border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/40'
                   }`}
                 >
                   {color && (
@@ -310,13 +310,13 @@ export const CommunityRepositoriesPage: React.FC = () => {
 
           {/* Sort Selector */}
           <div className="flex items-center gap-2 shrink-0">
-            <span className="text-xs font-mono text-[#929DB2] flex items-center gap-1">
-              <ArrowUpDown className="w-3 h-3" /> Sort:
+            <span className="text-xs font-mono text-[#B8ACD9] flex items-center gap-1">
+              <ArrowUpDown className="w-3 h-3 text-[#A855F7]" /> Sort:
             </span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="h-8 rounded-lg border border-[#273249] bg-[#151F30] px-2.5 text-xs text-[#F4F6FC] font-mono focus:outline-none focus:border-[#6D95FF] cursor-pointer"
+              className="h-8 rounded-xl border border-[rgba(167,139,250,0.20)] bg-[#100A24] px-2.5 text-xs text-[#F8F7FF] font-mono focus:outline-none focus:border-[#8B5CF6] cursor-pointer"
             >
               <option value="stars">Most Stars</option>
               <option value="forks">Most Forks</option>
@@ -370,7 +370,7 @@ export const CommunityRepositoriesPage: React.FC = () => {
                   show: { opacity: 1, y: 0 },
                 }}
               >
-                <CardSpotlight className="h-full flex flex-col justify-between overflow-hidden group bg-[#151F30] border-[#273249] hover:border-[#6D95FF]/40 transition-all p-5">
+                <CardSpotlight className="h-full flex flex-col justify-between overflow-hidden group bg-[#160E30]/75 backdrop-blur-xl border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] transition-all duration-300 p-5 rounded-2xl">
                   <div className="space-y-4">
                     {/* Top Owner Header with Real GitHub Avatar */}
                     <div className="flex items-center justify-between gap-3">
@@ -379,7 +379,7 @@ export const CommunityRepositoriesPage: React.FC = () => {
                           <img
                             src={repo.owner_avatar_url}
                             alt={repo.owner}
-                            className="w-7 h-7 rounded-lg border border-[#273249] object-cover shrink-0 bg-[#101725]"
+                            className="w-7 h-7 rounded-lg border border-[rgba(167,139,250,0.25)] object-cover shrink-0 bg-[#100A24]"
                             loading="lazy"
                             onError={(e) => {
                               // fallback on image error
@@ -387,7 +387,7 @@ export const CommunityRepositoriesPage: React.FC = () => {
                             }}
                           />
                         ) : (
-                          <div className="w-7 h-7 rounded-lg border border-[#273249] bg-[#101725] flex items-center justify-center text-xs font-mono font-bold text-[#6D95FF]">
+                          <div className="w-7 h-7 rounded-lg border border-[rgba(167,139,250,0.25)] bg-[#100A24] flex items-center justify-center text-xs font-mono font-bold text-[#A855F7]">
                             {repo.owner.substring(0, 2).toUpperCase()}
                           </div>
                         )}
@@ -396,13 +396,13 @@ export const CommunityRepositoriesPage: React.FC = () => {
                             href={`https://github.com/${repo.owner}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs font-mono font-semibold text-[#6D95FF] hover:underline truncate block"
+                            className="text-xs font-mono font-semibold text-[#A855F7] hover:text-[#D946EF] hover:underline truncate block transition-colors"
                             title={`View @${repo.owner} on GitHub`}
                           >
                             @{repo.owner}
                           </a>
-                          <div className="text-[10px] font-mono text-[#929DB2] flex items-center gap-1">
-                            <span className="w-1 h-1 rounded-full bg-emerald-400" />
+                          <div className="text-[10px] font-mono text-[#B8ACD9] flex items-center gap-1">
+                            <span className="w-1 h-1 rounded-full bg-[#34D399]" />
                             {repo.owner_type || 'Organization'}
                           </div>
                         </div>
@@ -413,7 +413,7 @@ export const CommunityRepositoriesPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleCopyUrl(repo.html_url, repo.name)}
-                          className="p-1.5 rounded-lg border border-[#273249] bg-[#101725] text-[#929DB2] hover:text-[#F4F6FC] transition-colors"
+                          className="p-1.5 rounded-lg border border-[rgba(167,139,250,0.20)] bg-[#100A24] text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#8B5CF6]/20 transition-all"
                           title="Copy GitHub URL"
                         >
                           <Copy className="h-3 w-3" />
@@ -421,10 +421,10 @@ export const CommunityRepositoriesPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleToggleSave(repo.full_name)}
-                          className={`p-1.5 rounded-lg border transition-colors ${
+                          className={`p-1.5 rounded-lg border transition-all ${
                             isSaved
-                              ? 'bg-[#6D95FF]/20 border-[#6D95FF] text-[#6D95FF]'
-                              : 'bg-[#101725] border-[#273249] text-[#929DB2] hover:text-[#F4F6FC]'
+                              ? 'bg-[#8B5CF6]/25 border-[#8B5CF6] text-[#F8F7FF] shadow-[0_0_8px_rgba(139,92,246,0.3)]'
+                              : 'bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#8B5CF6]/20'
                           }`}
                           title={isSaved ? 'Bookmarked' : 'Bookmark repository'}
                         >
@@ -436,12 +436,12 @@ export const CommunityRepositoriesPage: React.FC = () => {
                     {/* Repo Title & Language */}
                     <div>
                       <div className="flex items-center justify-between gap-2">
-                        <h3 className="text-base font-bold font-display text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors truncate">
+                        <h3 className="text-base font-bold font-display text-[#F8F7FF] group-hover:text-[#C4B5FD] transition-colors truncate">
                           {repo.name}
                         </h3>
                         {repo.language && (
                           <span
-                            className="text-[10px] font-mono px-2 py-0.5 rounded border border-[#273249] bg-[#101725] text-[#F4F6FC] shrink-0 flex items-center gap-1"
+                            className="text-[10px] font-mono px-2.5 py-0.5 rounded-full border border-[rgba(167,139,250,0.25)] bg-[#100A24] text-[#F8F7FF] shrink-0 flex items-center gap-1"
                           >
                             <span
                               className="w-1.5 h-1.5 rounded-full inline-block"
@@ -452,7 +452,7 @@ export const CommunityRepositoriesPage: React.FC = () => {
                         )}
                       </div>
 
-                      <p className="text-xs text-[#929DB2] mt-2 line-clamp-3 leading-relaxed">
+                      <p className="text-xs text-[#B8ACD9] mt-2 line-clamp-3 leading-relaxed">
                         {repo.description || 'Verified authentic open source repository on GitHub.'}
                       </p>
                     </div>
@@ -462,13 +462,13 @@ export const CommunityRepositoriesPage: React.FC = () => {
                       {(repo.topics || []).slice(0, 4).map((topic) => (
                         <span
                           key={topic}
-                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#101725] border border-[#273249] text-[#929DB2]"
+                          className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#100A24] border border-[rgba(167,139,250,0.20)] text-[#C4B5FD]"
                         >
                           #{topic}
                         </span>
                       ))}
                       {(repo.topics || []).length > 4 && (
-                        <span className="text-[10px] text-[#929DB2] font-mono px-1">
+                        <span className="text-[10px] text-[#B8ACD9] font-mono px-1">
                           +{repo.topics.length - 4}
                         </span>
                       )}
@@ -476,22 +476,22 @@ export const CommunityRepositoriesPage: React.FC = () => {
                   </div>
 
                   {/* Card Footer: Metrics & Direct GitHub Outlink */}
-                  <div className="pt-4 mt-4 border-t border-[#273249]/60 space-y-3">
-                    <div className="flex items-center justify-between text-xs font-mono text-[#929DB2]">
+                  <div className="pt-4 mt-4 border-t border-[rgba(167,139,250,0.15)] space-y-3">
+                    <div className="flex items-center justify-between text-xs font-mono text-[#B8ACD9]">
                       <div className="flex items-center gap-3">
                         <span className="flex items-center gap-1 text-amber-400 font-semibold" title="GitHub Stars">
                           <Star className="h-3.5 w-3.5 fill-amber-400" />
                           {repo.stars >= 1000 ? `${(repo.stars / 1000).toFixed(1)}k` : repo.stars.toLocaleString()}
                         </span>
                         <span className="flex items-center gap-1" title="Forks">
-                          <GitFork className="h-3.5 w-3.5 text-[#929DB2]" />
+                          <GitFork className="h-3.5 w-3.5 text-[#B8ACD9]" />
                           {repo.forks >= 1000 ? `${(repo.forks / 1000).toFixed(1)}k` : repo.forks.toLocaleString()}
                         </span>
                       </div>
 
                       {repo.updated_at && (
-                        <span className="text-[10px] text-[#929DB2] flex items-center gap-1" title="Last updated">
-                          <Clock className="w-3 h-3" />
+                        <span className="text-[10px] text-[#B8ACD9] flex items-center gap-1" title="Last updated">
+                          <Clock className="w-3 h-3 text-[#A855F7]" />
                           {formatTimeAgo(repo.updated_at)}
                         </span>
                       )}
@@ -502,11 +502,11 @@ export const CommunityRepositoriesPage: React.FC = () => {
                       href={repo.html_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold bg-[#101725] hover:bg-[#1a273e] border border-[#273249] hover:border-[#6D95FF]/50 text-[#F4F6FC] hover:text-[#6D95FF] transition-all group/btn shadow-sm"
+                      className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold bg-[#100A24] hover:bg-[#8B5CF6]/20 border border-[rgba(167,139,250,0.25)] hover:border-[#8B5CF6]/50 text-[#F8F7FF] hover:text-[#C4B5FD] transition-all group/btn shadow-sm"
                     >
                       <Github className="h-3.5 w-3.5" />
                       <span>Open GitHub Repository</span>
-                      <ExternalLink className="h-3 w-3 text-[#6D95FF] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform ml-auto" />
+                      <ExternalLink className="h-3 w-3 text-[#A855F7] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform ml-auto" />
                     </a>
                   </div>
                 </CardSpotlight>

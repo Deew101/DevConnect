@@ -149,29 +149,29 @@ export const NotificationsPage: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={markAllAsRead}
-              className="text-xs h-8 font-semibold border-[#273249] text-[#F1F5FC] hover:bg-[#141C2B]"
+              className="text-xs h-8 font-semibold border-[rgba(167,139,250,0.25)] text-[#F8F7FF] hover:bg-[#8B5CF6]/20 transition-all font-mono"
             >
-              <Check className="h-3.5 w-3.5 mr-1 text-[#648BFF]" /> Mark all read
+              <Check className="h-3.5 w-3.5 mr-1 text-[#A855F7]" /> Mark all read
             </Button>
           )}
 
-          <div className="flex rounded-lg bg-[#0E1420] border border-[#273249] p-0.5 text-xs">
+          <div className="flex rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)] p-0.5 text-xs">
             <button
               onClick={() => setFilter('all')}
-              className={`px-3 py-1 rounded-md font-semibold transition-all ${
+              className={`px-3 py-1 rounded-lg font-semibold font-mono transition-all duration-200 ${
                 filter === 'all'
-                  ? 'bg-[#141C2B] text-[#648BFF] border border-[#273249] shadow-sm'
-                  : 'text-[#929DB2] hover:text-[#F1F5FC]'
+                  ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_12px_rgba(139,92,246,0.25)]'
+                  : 'text-[#B8ACD9] hover:text-[#F8F7FF]'
               }`}
             >
               All
             </button>
             <button
               onClick={() => setFilter('unread')}
-              className={`px-3 py-1 rounded-md font-semibold transition-all ${
+              className={`px-3 py-1 rounded-lg font-semibold font-mono transition-all duration-200 ${
                 filter === 'unread'
-                  ? 'bg-[#141C2B] text-[#648BFF] border border-[#273249] shadow-sm'
-                  : 'text-[#929DB2] hover:text-[#F1F5FC]'
+                  ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_12px_rgba(139,92,246,0.25)]'
+                  : 'text-[#B8ACD9] hover:text-[#F8F7FF]'
               }`}
             >
               Unread
@@ -181,14 +181,14 @@ export const NotificationsPage: React.FC = () => {
       </div>
 
       {/* Notifications List */}
-      <Card className="border-[#273249] bg-[#0E1420] shadow-xl overflow-hidden divide-y divide-[#273249]/60">
+      <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl overflow-hidden divide-y divide-[rgba(167,139,250,0.15)] rounded-2xl">
         {filteredNotifications.length === 0 ? (
-          <div className="p-16 text-center text-[#929DB2] text-xs">
-            <div className="w-12 h-12 rounded-xl bg-[#141C2B] border border-[#273249] flex items-center justify-center mx-auto mb-3 text-[#929DB2]">
-              <Bell className="h-6 w-6" />
+          <div className="p-16 text-center text-[#B8ACD9] text-xs">
+            <div className="w-12 h-12 rounded-2xl bg-[#100A24] border border-[rgba(167,139,250,0.25)] flex items-center justify-center mx-auto mb-3 text-[#B8ACD9] shadow-inner shadow-[#8B5CF6]/10">
+              <Bell className="h-6 w-6 text-[#A855F7]" />
             </div>
-            <h4 className="font-bold text-[#F1F5FC] text-sm">All caught up!</h4>
-            <p className="mt-1 text-[#929DB2] max-w-xs mx-auto">
+            <h4 className="font-bold text-[#F8F7FF] text-sm">All caught up!</h4>
+            <p className="mt-1 text-[#B8ACD9] max-w-xs mx-auto">
               You have no {filter === 'unread' ? 'unread' : ''} notifications at this moment.
             </p>
           </div>
@@ -197,30 +197,30 @@ export const NotificationsPage: React.FC = () => {
             <div
               key={notif.id}
               className={`p-4 sm:p-5 flex items-start justify-between gap-4 transition-colors ${
-                notif.is_read ? 'hover:bg-[#141C2B]/40' : 'bg-[#141C2B]/30 hover:bg-[#141C2B]/70'
+                notif.is_read ? 'hover:bg-[#100A24]/40' : 'bg-[#8B5CF6]/10 hover:bg-[#8B5CF6]/15'
               }`}
             >
               <div className="flex items-start gap-3.5 min-w-0">
-                <div className="p-2 rounded-xl bg-[#141C2B] border border-[#273249] flex-shrink-0 mt-0.5">
+                <div className="p-2 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)] flex-shrink-0 mt-0.5">
                   {getNotificationIcon(notif.type)}
                 </div>
 
                 <div className="space-y-1 min-w-0 text-xs">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-[#F1F5FC]">{notif.title}</span>
+                    <span className="font-bold text-[#F8F7FF]">{notif.title}</span>
                     {!notif.is_read && (
-                      <span className="h-2 w-2 rounded-full bg-[#648BFF]" />
+                      <span className="h-2 w-2 rounded-full bg-[#D946EF] shadow-[0_0_8px_#D946EF]" />
                     )}
-                    <span className="text-[10px] text-[#929DB2] font-mono">
+                    <span className="text-[10px] text-[#B8ACD9] font-mono">
                       {formatTimeAgo(notif.created_at)}
                     </span>
                   </div>
 
-                  <p className="text-[#929DB2] leading-relaxed">
+                  <p className="text-[#B8ACD9] leading-relaxed">
                     {notif.sender && (
                       <Link
                         to={`/profile/${notif.sender.username}`}
-                        className="font-semibold text-[#F1F5FC] hover:underline mr-1"
+                        className="font-semibold text-[#F8F7FF] hover:text-[#C4B5FD] mr-1 transition-colors"
                       >
                         {notif.sender.full_name}
                       </Link>
@@ -236,7 +236,7 @@ export const NotificationsPage: React.FC = () => {
                         variant="primary"
                         onClick={() => handleAcceptConnection(notif)}
                         isLoading={actionLoadingId === notif.id}
-                        className="h-7 text-xs font-semibold px-3"
+                        className="h-7 text-xs font-semibold px-3 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-white shadow-sm shadow-[#8B5CF6]/25"
                       >
                         Accept Request
                       </Button>
@@ -244,7 +244,7 @@ export const NotificationsPage: React.FC = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => clearNotification(notif.id)}
-                        className="h-7 text-xs border-[#273249] text-[#F1F5FC]"
+                        className="h-7 text-xs border-[rgba(167,139,250,0.25)] text-[#F8F7FF] hover:bg-[#8B5CF6]/20 font-mono"
                       >
                         Ignore
                       </Button>
@@ -258,7 +258,7 @@ export const NotificationsPage: React.FC = () => {
                         variant="primary"
                         onClick={() => handleAcceptInvite(notif)}
                         isLoading={actionLoadingId === notif.id}
-                        className="h-7 text-xs font-semibold px-3"
+                        className="h-7 text-xs font-semibold px-3 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-white shadow-sm shadow-[#8B5CF6]/25"
                       >
                         Join Workspace
                       </Button>
@@ -266,7 +266,7 @@ export const NotificationsPage: React.FC = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => clearNotification(notif.id)}
-                        className="h-7 text-xs border-[#273249] text-[#F1F5FC]"
+                        className="h-7 text-xs border-[rgba(167,139,250,0.25)] text-[#F8F7FF] hover:bg-[#8B5CF6]/20 font-mono"
                       >
                         Decline
                       </Button>
@@ -279,7 +279,7 @@ export const NotificationsPage: React.FC = () => {
                 {!notif.is_read && (
                   <button
                     onClick={() => markAsRead(notif.id)}
-                    className="p-1.5 rounded-lg text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#141C2B] transition-colors"
+                    className="p-1.5 rounded-lg text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#8B5CF6]/20 transition-all"
                     title="Mark as read"
                   >
                     <Check className="h-4 w-4" />
@@ -287,7 +287,7 @@ export const NotificationsPage: React.FC = () => {
                 )}
                 <button
                   onClick={() => clearNotification(notif.id)}
-                  className="p-1.5 rounded-lg text-[#929DB2] hover:text-rose-400 hover:bg-[#141C2B] transition-colors"
+                  className="p-1.5 rounded-lg text-[#B8ACD9] hover:text-rose-400 hover:bg-rose-500/10 transition-all"
                   title="Remove notification"
                 >
                   <Trash2 className="h-4 w-4" />

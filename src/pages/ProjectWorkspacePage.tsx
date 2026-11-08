@@ -416,35 +416,36 @@ export const ProjectWorkspacePage: React.FC = () => {
       className="space-y-6 max-w-7xl mx-auto pb-12 font-sans"
     >
       {/* Breadcrumb nav */}
-      <div className="flex items-center gap-2 text-xs font-mono text-[#929DB2]">
-        <Link to="/projects" className="hover:text-[#6D95FF] transition-colors flex items-center gap-1">
-          <ArrowLeft className="w-3.5 h-3.5" /> Workspaces
+      <div className="flex items-center gap-2 text-xs font-mono text-[#B8ACD9]">
+        <Link to="/projects" className="hover:text-[#C4B5FD] transition-colors flex items-center gap-1">
+          <ArrowLeft className="w-3.5 h-3.5 text-[#A855F7]" /> Workspaces
         </Link>
-        <ChevronRight className="w-3.5 h-3.5 text-[#273249]" />
-        <span className="text-[#F4F6FC] truncate max-w-xs">{project.title}</span>
+        <ChevronRight className="w-3.5 h-3.5 text-[rgba(167,139,250,0.3)]" />
+        <span className="text-[#F8F7FF] truncate max-w-xs">{project.title}</span>
       </div>
 
       {/* Workspace Header Hero */}
-      <div className="relative rounded-xl border border-[#273249] bg-[#101725] p-6 shadow-2xl overflow-hidden">
+      <div className="relative rounded-2xl border border-[rgba(167,139,250,0.25)] bg-[#160E30]/85 backdrop-blur-xl p-6 shadow-2xl overflow-hidden group">
         <GridPattern className="opacity-15" />
+        <div className="absolute right-0 top-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-[#8B5CF6]/15 blur-3xl pointer-events-none" />
         <div className="relative z-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
             <div className="space-y-2 max-w-2xl">
               <div className="flex items-center gap-3">
-                <span className="p-2.5 rounded-lg bg-[#151F30] border border-[#6D95FF]/30 text-[#6D95FF] shadow-inner">
-                  <FolderGit2 className="h-5 w-5" />
+                <span className="p-2.5 rounded-xl bg-[#100A24] border border-[#8B5CF6]/30 text-[#C4B5FD] shadow-inner shadow-[#8B5CF6]/20">
+                  <FolderGit2 className="h-5 w-5 text-[#A855F7]" />
                 </span>
                 <div>
-                  <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[#F4F6FC] tracking-tight flex items-center gap-2.5">
+                  <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[#F8F7FF] tracking-tight flex items-center gap-2.5">
                     {project.title}
-                    <span className="px-2.5 py-0.5 rounded text-[10px] font-mono capitalize bg-[#151F30] text-[#6D95FF] border border-[#273249]">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono capitalize bg-[#8B5CF6]/15 text-[#C4B5FD] border border-[rgba(167,139,250,0.25)]">
                       {project.status?.replace(/_/g, ' ')}
                     </span>
                   </h1>
-                  <span className="text-xs text-[#6D95FF] font-mono">{project.category}</span>
+                  <span className="text-xs text-[#A855F7] font-mono">{project.category}</span>
                 </div>
               </div>
-              <p className="text-xs sm:text-sm text-[#929DB2] pt-1 leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#B8ACD9] pt-1 leading-relaxed">
                 {project.tagline || project.description}
               </p>
             </div>
@@ -455,7 +456,7 @@ export const ProjectWorkspacePage: React.FC = () => {
                 variant="glow"
                 size="sm"
                 onClick={() => setIsAIModalOpen(true)}
-                className="font-semibold text-xs shadow-md shadow-[#6D95FF]/20"
+                className="font-semibold text-xs bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] text-[#F8F7FF] shadow-md shadow-[#8B5CF6]/30 border-0"
               >
                 <Sparkles className="h-4 w-4 mr-1.5" /> AI Matchmaker
               </Button>
@@ -465,9 +466,9 @@ export const ProjectWorkspacePage: React.FC = () => {
                   href={project.github_repo_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#151F30] hover:bg-[#1C2940] border border-[#273249] text-xs font-mono text-[#F4F6FC] transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#100A24] hover:bg-[#8B5CF6]/20 border border-[rgba(167,139,250,0.25)] text-xs font-mono text-[#F8F7FF] transition-all"
                 >
-                  <GitBranch className="h-3.5 w-3.5" /> Repo <ExternalLink className="h-3 w-3" />
+                  <GitBranch className="h-3.5 w-3.5 text-[#A855F7]" /> Repo <ExternalLink className="h-3 w-3 text-[#B8ACD9]" />
                 </a>
               )}
 
@@ -476,7 +477,7 @@ export const ProjectWorkspacePage: React.FC = () => {
                   variant="destructive"
                   size="sm"
                   onClick={handleDeleteProject}
-                  className="h-8 px-2.5"
+                  className="h-8 px-2.5 rounded-xl"
                   title="Delete project"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -486,31 +487,31 @@ export const ProjectWorkspacePage: React.FC = () => {
           </div>
 
           {/* Workspace Metrics & Progress Bar */}
-          <div className="mt-6 pt-5 border-t border-[#273249] grid grid-cols-1 sm:grid-cols-3 gap-5 items-center">
+          <div className="mt-6 pt-5 border-t border-[rgba(167,139,250,0.20)] grid grid-cols-1 sm:grid-cols-3 gap-5 items-center">
             <div>
               <div className="flex items-center justify-between text-xs mb-1.5 font-mono">
-                <span className="text-[#929DB2] flex items-center gap-1.5">
-                  <TrendingUp className="w-3.5 h-3.5 text-[#6D95FF]" /> Workspace Velocity
+                <span className="text-[#B8ACD9] flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5 text-[#A855F7]" /> Workspace Velocity
                 </span>
-                <span className="font-bold text-[#6D95FF]">{progressPercent}%</span>
+                <span className="font-bold text-[#C4B5FD]">{progressPercent}%</span>
               </div>
-              <div className="h-2 w-full rounded-full bg-[#151F30] border border-[#273249] overflow-hidden">
+              <div className="h-2 w-full rounded-full bg-[#100A24] border border-[rgba(167,139,250,0.20)] overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-[#6D95FF] to-[#9D83FF] rounded-full transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] rounded-full transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-xs font-mono text-[#929DB2]">
-              <CheckSquare className="h-4 w-4 text-[#35C98A]" />
+            <div className="flex items-center gap-2 text-xs font-mono text-[#B8ACD9]">
+              <CheckSquare className="h-4 w-4 text-[#34D399]" />
               <span>
                 {completedTasks} / {tasks.length} tasks completed
               </span>
             </div>
 
-            <div className="flex items-center gap-2 text-xs font-mono text-[#929DB2] sm:justify-end">
-              <Users className="h-4 w-4 text-[#6D95FF]" />
+            <div className="flex items-center gap-2 text-xs font-mono text-[#B8ACD9] sm:justify-end">
+              <Users className="h-4 w-4 text-[#A855F7]" />
               <span>
                 {members.length} / {project.team_size_needed} active contributors
               </span>
@@ -521,18 +522,18 @@ export const ProjectWorkspacePage: React.FC = () => {
 
       {/* Workspace Tabs: Kanban Board, Milestones, Team, Chat */}
       <Tabs defaultValue="kanban">
-        <TabsList className="w-full sm:w-auto grid grid-cols-4 sm:inline-flex mb-2 bg-[#101725] border border-[#273249]">
-          <TabsTrigger value="kanban" className="text-xs gap-1.5 font-mono data-[state=active]:bg-[#151F30] data-[state=active]:text-[#F4F6FC]">
-            <CheckSquare className="h-3.5 w-3.5 text-[#6D95FF]" /> Kanban Board
+        <TabsList className="w-full sm:w-auto grid grid-cols-4 sm:inline-flex mb-2 bg-[#100A24]/90 border border-[rgba(167,139,250,0.20)] rounded-2xl p-1 backdrop-blur-xl">
+          <TabsTrigger value="kanban" className="text-xs gap-1.5 font-mono rounded-xl data-[state=active]:bg-[#8B5CF6]/25 data-[state=active]:text-[#F8F7FF] data-[state=active]:border data-[state=active]:border-[#8B5CF6]/40 data-[state=active]:shadow-[0_0_12px_rgba(139,92,246,0.25)] text-[#B8ACD9]">
+            <CheckSquare className="h-3.5 w-3.5 text-[#A855F7]" /> Kanban Board
           </TabsTrigger>
-          <TabsTrigger value="milestones" className="text-xs gap-1.5 font-mono data-[state=active]:bg-[#151F30] data-[state=active]:text-[#F4F6FC]">
-            <MilestoneIcon className="h-3.5 w-3.5 text-[#9D83FF]" /> Milestones ({milestones.length})
+          <TabsTrigger value="milestones" className="text-xs gap-1.5 font-mono rounded-xl data-[state=active]:bg-[#8B5CF6]/25 data-[state=active]:text-[#F8F7FF] data-[state=active]:border data-[state=active]:border-[#8B5CF6]/40 data-[state=active]:shadow-[0_0_12px_rgba(139,92,246,0.25)] text-[#B8ACD9]">
+            <MilestoneIcon className="h-3.5 w-3.5 text-[#D946EF]" /> Milestones ({milestones.length})
           </TabsTrigger>
-          <TabsTrigger value="team" className="text-xs gap-1.5 font-mono data-[state=active]:bg-[#151F30] data-[state=active]:text-[#F4F6FC]">
-            <Users className="h-3.5 w-3.5 text-[#6D95FF]" /> Team ({members.length})
+          <TabsTrigger value="team" className="text-xs gap-1.5 font-mono rounded-xl data-[state=active]:bg-[#8B5CF6]/25 data-[state=active]:text-[#F8F7FF] data-[state=active]:border data-[state=active]:border-[#8B5CF6]/40 data-[state=active]:shadow-[0_0_12px_rgba(139,92,246,0.25)] text-[#B8ACD9]">
+            <Users className="h-3.5 w-3.5 text-[#A855F7]" /> Team ({members.length})
           </TabsTrigger>
-          <TabsTrigger value="chat" className="text-xs gap-1.5 font-mono data-[state=active]:bg-[#151F30] data-[state=active]:text-[#F4F6FC]">
-            <MessageSquare className="h-3.5 w-3.5 text-[#35C98A]" /> Team Stream
+          <TabsTrigger value="chat" className="text-xs gap-1.5 font-mono rounded-xl data-[state=active]:bg-[#8B5CF6]/25 data-[state=active]:text-[#F8F7FF] data-[state=active]:border data-[state=active]:border-[#8B5CF6]/40 data-[state=active]:shadow-[0_0_12px_rgba(139,92,246,0.25)] text-[#B8ACD9]">
+            <MessageSquare className="h-3.5 w-3.5 text-[#34D399]" /> Team Stream
           </TabsTrigger>
         </TabsList>
 

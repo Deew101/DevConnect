@@ -31,10 +31,10 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   });
 
   const columnColors: Record<TaskStatus, { dot: string; border: string }> = {
-    todo: { dot: 'bg-[#929DB2]', border: 'border-[#273249]' },
-    in_progress: { dot: 'bg-[#6D95FF]', border: 'border-[#6D95FF]/30' },
-    review: { dot: 'bg-[#9D83FF]', border: 'border-[#9D83FF]/30' },
-    done: { dot: 'bg-[#35C98A]', border: 'border-[#35C98A]/30' },
+    todo: { dot: 'bg-[#B8ACD9]', border: 'border-[rgba(167,139,250,0.20)]' },
+    in_progress: { dot: 'bg-[#8B5CF6] shadow-[0_0_6px_#8B5CF6]', border: 'border-[#8B5CF6]/40' },
+    review: { dot: 'bg-[#D946EF] shadow-[0_0_6px_#D946EF]', border: 'border-[#D946EF]/40' },
+    done: { dot: 'bg-[#34D399] shadow-[0_0_6px_#34D399]', border: 'border-[#34D399]/40' },
   };
 
   const cConfig = columnColors[id] || columnColors.todo;
@@ -42,21 +42,21 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   return (
     <div
       ref={setNodeRef}
-      className="flex flex-col w-72 sm:w-80 flex-shrink-0 rounded-xl border border-[#273249] bg-[#101725]/90 backdrop-blur-md p-3.5 max-h-[calc(100vh-14rem)] min-h-[450px]"
+      className="flex flex-col w-72 sm:w-80 flex-shrink-0 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-3.5 max-h-[calc(100vh-14rem)] min-h-[450px] shadow-xl"
     >
       {/* Column Header */}
-      <div className="flex items-center justify-between pb-3 px-1 border-b border-[#273249]">
+      <div className="flex items-center justify-between pb-3 px-1 border-b border-[rgba(167,139,250,0.20)]">
         <div className="flex items-center gap-2">
           <span className={`h-2.5 w-2.5 rounded-full ${cConfig.dot}`} />
-          <h4 className="font-display font-bold text-xs uppercase tracking-wider text-[#F4F6FC]">{title}</h4>
-          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[#151F30] border border-[#273249] font-mono text-[10px] font-bold text-[#929DB2]">
+          <h4 className="font-display font-bold text-xs uppercase tracking-wider text-[#F8F7FF]">{title}</h4>
+          <span className="flex h-5 w-5 items-center justify-center rounded-lg bg-[#100A24] border border-[rgba(167,139,250,0.20)] font-mono text-[10px] font-bold text-[#B8ACD9]">
             {count}
           </span>
         </div>
 
         <button
           onClick={() => onAddTask(id)}
-          className="p-1 rounded-md text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30] transition-colors"
+          className="p-1 rounded-lg text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#8B5CF6]/20 transition-all"
           title={`Add task to ${title}`}
         >
           <Plus className="h-4 w-4" />
@@ -72,11 +72,11 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
         </SortableContext>
 
         {tasks.length === 0 && (
-          <div className="h-32 flex flex-col items-center justify-center border border-dashed border-[#273249] rounded-xl text-center p-4">
-            <p className="text-xs text-[#929DB2]">No tasks in this lane</p>
+          <div className="h-32 flex flex-col items-center justify-center border border-dashed border-[rgba(167,139,250,0.20)] rounded-xl text-center p-4 bg-[#100A24]/40">
+            <p className="text-xs text-[#B8ACD9]">No tasks in this lane</p>
             <button
               onClick={() => onAddTask(id)}
-              className="mt-2 text-[11px] text-[#6D95FF] hover:underline font-mono"
+              className="mt-2 text-[11px] text-[#A855F7] hover:text-[#D946EF] hover:underline font-mono transition-colors"
             >
               + Create task
             </button>

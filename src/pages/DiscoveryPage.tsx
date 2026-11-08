@@ -299,17 +299,17 @@ export const DiscoveryPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto font-sans pb-16">
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#273249]">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[rgba(167,139,250,0.20)]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold">
-              TALENT DIRECTORY
+            <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold flex items-center gap-1.5">
+              <Sparkles className="h-3 w-3 text-[#A855F7]" /> TALENT DIRECTORY
             </span>
           </div>
-          <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-[#F4F6FC] tracking-tight flex items-center gap-3">
+          <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-[#F8F7FF] tracking-tight flex items-center gap-3">
             {activeTab === 'devconnect' ? 'Engineering Directory' : 'External GitHub Developers'}
           </h1>
-          <p className="text-xs sm:text-sm text-[#929DB2] mt-1 max-w-3xl">
+          <p className="text-xs sm:text-sm text-[#B8ACD9] mt-1 max-w-3xl">
             {activeTab === 'devconnect'
               ? 'Discover verified systems architects, full-stack builders, and prospective collaborators inside DevConnect.'
               : 'Real public GitHub profiles and influential open-source leaders retrieved via official GitHub REST API. External attribution preserved.'}
@@ -321,27 +321,27 @@ export const DiscoveryPage: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            className="text-xs font-mono border-[#273249] bg-[#101725] text-[#F4F6FC] hover:bg-[#151F30]"
+            className="text-xs font-mono border-[rgba(167,139,250,0.25)] bg-[#100A24] text-[#F8F7FF] hover:bg-[#160E30] hover:border-[#8B5CF6]/50 shadow-sm transition-all"
           >
-            <FolderGit2 className="w-3.5 h-3.5 mr-1.5 text-[#6D95FF]" /> Community Repositories (40+)
+            <FolderGit2 className="w-3.5 h-3.5 mr-1.5 text-[#A855F7]" /> Community Repositories (40+)
           </Button>
         </Link>
       </div>
 
       {/* Directory Tab Switcher */}
-      <div className="flex items-center gap-2 p-1.5 rounded-xl bg-[#101725] border border-[#273249] w-fit">
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#100A24]/90 border border-[rgba(167,139,250,0.20)] w-fit backdrop-blur-xl">
         <button
           type="button"
           onClick={() => handleTabChange('devconnect')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold font-mono transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all duration-200 ${
             activeTab === 'devconnect'
-              ? 'bg-[#151F30] text-[#6D95FF] border border-[#6D95FF]/40 shadow-md'
-              : 'text-[#929DB2] hover:text-[#F4F6FC]'
+              ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_15px_rgba(139,92,246,0.25)]'
+              : 'text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30]'
           }`}
         >
-          <Users className="w-3.5 h-3.5" />
+          <Users className={`w-3.5 h-3.5 ${activeTab === 'devconnect' ? 'text-[#C4B5FD]' : 'text-[#B8ACD9]'}`} />
           <span>DevConnect Engineers</span>
-          <span className="px-1.5 py-0.2 rounded text-[10px] bg-[#101725] border border-[#273249] text-[#929DB2]">
+          <span className="px-1.5 py-0.2 rounded text-[10px] bg-[#100A24] border border-[rgba(167,139,250,0.20)] text-[#B8ACD9]">
             {developers.length}
           </span>
         </button>
@@ -349,13 +349,13 @@ export const DiscoveryPage: React.FC = () => {
         <button
           type="button"
           onClick={() => handleTabChange('github')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold font-mono transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all duration-200 ${
             activeTab === 'github'
-              ? 'bg-[#151F30] text-[#6D95FF] border border-[#6D95FF]/40 shadow-md'
-              : 'text-[#929DB2] hover:text-[#F4F6FC]'
+              ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_15px_rgba(139,92,246,0.25)]'
+              : 'text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30]'
           }`}
         >
-          <Github className="w-3.5 h-3.5 text-emerald-400" />
+          <Github className={`w-3.5 h-3.5 ${activeTab === 'github' ? 'text-[#C4B5FD]' : 'text-emerald-400'}`} />
           <span>External GitHub Developers</span>
           <span className="px-1.5 py-0.2 rounded text-[10px] bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
             {externalDevs.length} Public Stars
@@ -369,16 +369,16 @@ export const DiscoveryPage: React.FC = () => {
       {activeTab === 'devconnect' && (
         <div className="space-y-6">
           {/* Filter and Search Bar */}
-          <div className="p-4 rounded-xl border border-[#273249] bg-[#101725] shadow-xl space-y-4">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
             <form onSubmit={handleSearchSubmit} className="flex gap-2">
               <Input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by name, @username, or technology (e.g. React, Rust, Python, Go)..."
-                icon={<Search className="h-4 w-4 text-[#929DB2]" />}
-                className="h-10 text-xs sm:text-sm bg-[#151F30] border-[#273249] text-[#F4F6FC] placeholder-[#929DB2]"
+                icon={<Search className="h-4 w-4 text-[#B8ACD9]" />}
+                className="h-10 text-xs sm:text-sm bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF] placeholder-[#B8ACD9] focus:border-[#8B5CF6]"
               />
-              <Button type="submit" variant="primary" className="h-10 px-6 font-semibold text-xs shadow-md shadow-[#6D95FF]/20">
+              <Button type="submit" variant="primary" className="h-10 px-6 font-semibold text-xs shadow-md shadow-[#8B5CF6]/25 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:from-[#7C3AED] hover:to-[#9333EA] text-[#F8F7FF]">
                 Query Index
               </Button>
             </form>
@@ -386,14 +386,14 @@ export const DiscoveryPage: React.FC = () => {
             {/* Filter Controls Bar */}
             <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
               <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5 text-[#929DB2] font-semibold font-mono text-[10px] tracking-wider uppercase">
-                  <Filter className="h-3 w-3 text-[#6D95FF]" /> FILTERS:
+                <div className="flex items-center gap-1.5 text-[#B8ACD9] font-semibold font-mono text-[10px] tracking-wider uppercase">
+                  <Filter className="h-3 w-3 text-[#A855F7]" /> FILTERS:
                 </div>
 
                 <select
                   value={selectedExperience}
                   onChange={(e) => setSelectedExperience(e.target.value)}
-                  className="h-8 rounded-lg bg-[#151F30] border border-[#273249] px-2.5 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF]/60 cursor-pointer font-mono"
+                  className="h-8 rounded-lg bg-[#100A24] border border-[rgba(167,139,250,0.20)] px-2.5 text-xs text-[#F8F7FF] focus:outline-none focus:border-[#8B5CF6] cursor-pointer font-mono"
                 >
                   <option value="all">All Seniority</option>
                   {experienceLevels.map((lvl) => (
@@ -406,7 +406,7 @@ export const DiscoveryPage: React.FC = () => {
                 <select
                   value={selectedAvailability}
                   onChange={(e) => setSelectedAvailability(e.target.value)}
-                  className="h-8 rounded-lg bg-[#151F30] border border-[#273249] px-2.5 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF]/60 cursor-pointer font-mono"
+                  className="h-8 rounded-lg bg-[#100A24] border border-[rgba(167,139,250,0.20)] px-2.5 text-xs text-[#F8F7FF] focus:outline-none focus:border-[#8B5CF6] cursor-pointer font-mono"
                 >
                   <option value="all">All Availability</option>
                   <option value="open_to_collaborate">Open to Collaborate</option>
@@ -414,12 +414,12 @@ export const DiscoveryPage: React.FC = () => {
                   <option value="busy">Busy</option>
                 </select>
 
-                <div className="flex items-center gap-1 pl-2 border-l border-[#273249]">
-                  <ArrowUpDown className="h-3 w-3 text-[#929DB2]" />
+                <div className="flex items-center gap-1 pl-2 border-l border-[rgba(167,139,250,0.20)]">
+                  <ArrowUpDown className="h-3 w-3 text-[#B8ACD9]" />
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="h-8 rounded-lg bg-[#151F30] border border-[#273249] px-2 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF]/60 cursor-pointer font-mono"
+                    className="h-8 rounded-lg bg-[#100A24] border border-[rgba(167,139,250,0.20)] px-2 text-xs text-[#F8F7FF] focus:outline-none focus:border-[#8B5CF6] cursor-pointer font-mono"
                   >
                     <option value="recent">Sort by: Recently Joined</option>
                     <option value="seniority">Sort by: Seniority</option>
@@ -432,10 +432,10 @@ export const DiscoveryPage: React.FC = () => {
               <div className="hidden xl:flex items-center gap-1 overflow-x-auto">
                 <button
                   onClick={() => setSelectedLanguage('all')}
-                  className={`px-2.5 py-1 rounded text-[11px] font-mono transition-all ${
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all duration-200 ${
                     selectedLanguage === 'all'
-                      ? 'bg-[#6D95FF] text-[#090C13] font-bold shadow-sm'
-                      : 'bg-[#151F30] text-[#929DB2] hover:text-[#F4F6FC] border border-[#273249]'
+                      ? 'bg-[#8B5CF6] text-[#080514] font-bold shadow-[0_0_12px_rgba(139,92,246,0.4)]'
+                      : 'bg-[#100A24] text-[#B8ACD9] hover:text-[#F8F7FF] border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/40'
                   }`}
                 >
                   All Skills
@@ -444,10 +444,10 @@ export const DiscoveryPage: React.FC = () => {
                   <button
                     key={lang}
                     onClick={() => setSelectedLanguage(lang)}
-                    className={`px-2.5 py-1 rounded text-[11px] font-mono transition-all ${
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all duration-200 ${
                       selectedLanguage.toLowerCase() === lang.toLowerCase()
-                        ? 'bg-[#6D95FF] text-[#090C13] font-bold shadow-sm'
-                        : 'bg-[#151F30] text-[#929DB2] hover:text-[#F4F6FC] border border-[#273249]'
+                        ? 'bg-[#8B5CF6] text-[#080514] font-bold shadow-[0_0_12px_rgba(139,92,246,0.4)]'
+                        : 'bg-[#100A24] text-[#B8ACD9] hover:text-[#F8F7FF] border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/40'
                     }`}
                   >
                     {lang}
@@ -465,10 +465,10 @@ export const DiscoveryPage: React.FC = () => {
               ))}
             </div>
           ) : developers.length === 0 ? (
-            <div className="p-16 text-center border border-dashed border-[#273249] rounded-xl bg-[#101725]">
-              <Sparkles className="h-10 w-10 text-[#929DB2] mx-auto mb-3 opacity-60" />
-              <h3 className="font-display text-base font-bold text-[#F4F6FC] mb-1">No Engineers Found</h3>
-              <p className="text-xs text-[#929DB2] max-w-sm mx-auto mb-4">
+            <div className="p-16 text-center border border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl bg-[#100A24]/60 backdrop-blur-md">
+              <Sparkles className="h-10 w-10 text-[#B8ACD9] mx-auto mb-3 opacity-60" />
+              <h3 className="font-display text-base font-bold text-[#F8F7FF] mb-1">No Engineers Found</h3>
+              <p className="text-xs text-[#B8ACD9] max-w-sm mx-auto mb-4">
                 Try adjusting your query criteria or resetting filters to surface more peers.
               </p>
               <Button
@@ -482,7 +482,7 @@ export const DiscoveryPage: React.FC = () => {
                   setSortBy('recent');
                   loadDevelopers();
                 }}
-                className="border-[#273249] text-[#F4F6FC] hover:bg-[#151F30] font-mono"
+                className="border-[rgba(167,139,250,0.25)] text-[#F8F7FF] hover:bg-[#8B5CF6]/15 hover:border-[#8B5CF6]/40 font-mono"
               >
                 <RotateCcw className="h-3.5 w-3.5 mr-1.5" /> Reset Filters
               </Button>
@@ -502,25 +502,25 @@ export const DiscoveryPage: React.FC = () => {
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[#273249] bg-[#151F30]">
+                    <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300 group">
                       <div>
                         {/* Top Status & GitHub Link */}
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-1.5">
-                            <span className="px-2 py-0.5 rounded text-[10px] font-mono border border-[#273249] bg-[#101725] text-[#929DB2] flex items-center gap-1.5">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono border border-[rgba(167,139,250,0.25)] bg-[#100A24]/90 text-[#B8ACD9] flex items-center gap-1.5 shadow-sm">
                               <span
                                 className={`h-1.5 w-1.5 rounded-full ${
                                   dev.availability_status === 'open_to_collaborate'
-                                    ? 'bg-[#35C98A]'
+                                    ? 'bg-[#34D399] shadow-[0_0_6px_#34D399]'
                                     : dev.availability_status === 'available'
-                                    ? 'bg-[#6D95FF]'
-                                    : 'bg-[#929DB2]'
+                                    ? 'bg-[#8B5CF6] shadow-[0_0_6px_#8B5CF6]'
+                                    : 'bg-[#B8ACD9]'
                                 }`}
                               />
                               {dev.availability_status.replace(/_/g, ' ')}
                             </span>
                             {dev.is_demo && (
-                              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                              <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-[#D946EF]/15 border border-[#D946EF]/30 text-[#D946EF] font-semibold">
                                 DEMO
                               </span>
                             )}
@@ -531,7 +531,7 @@ export const DiscoveryPage: React.FC = () => {
                               href={`https://github.com/${dev.github_username}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="p-1 rounded-md text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#1C2940] transition-colors"
+                              className="p-1.5 rounded-lg text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#8B5CF6]/20 transition-colors"
                               title={`github.com/${dev.github_username}`}
                             >
                               <Github className="h-3.5 w-3.5" />
@@ -540,7 +540,7 @@ export const DiscoveryPage: React.FC = () => {
                         </div>
 
                         {/* Developer Info */}
-                        <Link to={`/profile/${dev.username}`} className="flex items-start gap-3 group">
+                        <Link to={`/profile/${dev.username}`} className="flex items-start gap-3 group/link">
                           <Avatar
                             src={dev.avatar_url}
                             name={dev.full_name}
@@ -548,56 +548,56 @@ export const DiscoveryPage: React.FC = () => {
                             status={dev.availability_status}
                           />
                           <div className="min-w-0 flex-1">
-                            <h4 className="font-display font-bold text-sm text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors truncate">
+                            <h4 className="font-display font-bold text-sm text-[#F8F7FF] group-hover/link:text-[#C4B5FD] transition-colors truncate">
                               {dev.full_name}
                             </h4>
-                            <p className="text-xs text-[#6D95FF] font-mono">@{dev.username}</p>
-                            <span className="text-[10px] text-[#929DB2] font-mono block mt-0.5 uppercase tracking-wide">
+                            <p className="text-xs text-[#A855F7] font-mono">@{dev.username}</p>
+                            <span className="text-[10px] text-[#B8ACD9] font-mono block mt-0.5 uppercase tracking-wide">
                               {dev.experience_level}
                             </span>
                           </div>
                         </Link>
 
                         {/* Headline & Bio */}
-                        <p className="text-xs font-semibold text-[#F4F6FC] mt-3 line-clamp-1">
+                        <p className="text-xs font-semibold text-[#F8F7FF] mt-3 line-clamp-1">
                           {dev.headline || 'Software Engineer'}
                         </p>
-                        <p className="text-xs text-[#929DB2] mt-1 line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-[#B8ACD9] mt-1 line-clamp-2 leading-relaxed">
                           {dev.bio || 'Building modern software and open-source projects on DevConnect.'}
                         </p>
 
                         {/* Professional Description: Current Goal */}
                         {dev.professional_description?.current_goals && (
-                          <div className="mt-2.5 p-2 rounded-lg bg-[#101725] border border-[#273249]/60 text-[11px] text-[#929DB2] line-clamp-2 leading-relaxed font-sans">
-                            <span className="font-mono text-[#6D95FF] text-[10px] font-bold mr-1">FOCUS:</span>
+                          <div className="mt-2.5 p-2 rounded-xl bg-[#100A24]/90 border border-[rgba(167,139,250,0.20)] text-[11px] text-[#B8ACD9] line-clamp-2 leading-relaxed font-sans">
+                            <span className="font-mono text-[#A855F7] text-[10px] font-bold mr-1">FOCUS:</span>
                             {dev.professional_description.current_goals}
                           </div>
                         )}
 
                         {/* Metadata: Location & Hours */}
-                        <div className="flex items-center gap-4 text-[11px] text-[#929DB2] font-mono mt-3">
+                        <div className="flex items-center gap-4 text-[11px] text-[#B8ACD9] font-mono mt-3">
                           {dev.location && (
                             <span className="flex items-center gap-1">
-                              <MapPin className="h-3 w-3 text-[#929DB2]" /> {dev.location}
+                              <MapPin className="h-3 w-3 text-[#B8ACD9]" /> {dev.location}
                             </span>
                           )}
                           <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3 text-[#6D95FF]" /> {dev.weekly_hours_available}h/wk
+                            <Clock className="h-3 w-3 text-[#A855F7]" /> {dev.weekly_hours_available}h/wk
                           </span>
                         </div>
 
                         {/* Technical Skills Pills */}
-                        <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-[#273249]">
+                        <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-[rgba(167,139,250,0.20)]">
                           {(dev.skillsList || []).slice(0, 4).map((sk) => (
                             <span
                               key={sk}
-                              className="text-[10px] px-2 py-0.5 rounded bg-[#101725] border border-[#273249] text-[#F4F6FC] font-mono"
+                              className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#8B5CF6]/15 border border-[rgba(167,139,250,0.25)] text-[#C4B5FD] font-mono"
                             >
                               {sk}
                             </span>
                           ))}
                           {(dev.skillsList || []).length > 4 && (
-                            <span className="text-[10px] text-[#929DB2] font-mono px-1">
+                            <span className="text-[10px] text-[#B8ACD9] font-mono px-1">
                               +{dev.skillsList!.length - 4}
                             </span>
                           )}
@@ -605,9 +605,9 @@ export const DiscoveryPage: React.FC = () => {
                       </div>
 
                       {/* Actions Footer */}
-                      <div className="flex items-center justify-between gap-2 pt-3 border-t border-[#273249]">
+                      <div className="flex items-center justify-between gap-2 pt-3 border-t border-[rgba(167,139,250,0.20)]">
                         <Link to={`/profile/${dev.username}`} className="flex-1">
-                          <Button variant="outline" size="sm" className="w-full text-xs font-semibold h-8 border-[#273249] text-[#F4F6FC] hover:bg-[#1C2940]">
+                          <Button variant="outline" size="sm" className="w-full text-xs font-semibold h-8 border-[rgba(167,139,250,0.25)] text-[#F8F7FF] hover:bg-[#8B5CF6]/20 hover:border-[#8B5CF6]/50 transition-all">
                             Dossier
                           </Button>
                         </Link>
@@ -618,14 +618,18 @@ export const DiscoveryPage: React.FC = () => {
                           disabled={connectingId === dev.id}
                           isLoading={connectingId === dev.id}
                           onClick={() => handleConnectToggle(dev)}
-                          className="flex-1 text-xs font-semibold h-8"
+                          className={`flex-1 text-xs font-semibold h-8 ${
+                            !dev.isConnected && !dev.isPending
+                              ? 'bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:from-[#7C3AED] hover:to-[#9333EA] text-[#F8F7FF] shadow-sm shadow-[#8B5CF6]/30'
+                              : 'border-[rgba(167,139,250,0.25)] text-[#F8F7FF]'
+                          }`}
                         >
                           {dev.isConnected ? (
-                            <span className="flex items-center gap-1 text-[#35C98A]">
+                            <span className="flex items-center gap-1 text-[#34D399]">
                               <UserCheck className="h-3.5 w-3.5" /> Connected
                             </span>
                           ) : dev.isPending ? (
-                            <span className="flex items-center gap-1 text-[#9D83FF]">
+                            <span className="flex items-center gap-1 text-[#C4B5FD]">
                               <Clock className="h-3.5 w-3.5" /> Pending
                             </span>
                           ) : (
@@ -650,49 +654,49 @@ export const DiscoveryPage: React.FC = () => {
       {activeTab === 'github' && (
         <div className="space-y-6">
           {/* Disclaimer Banner */}
-          <div className="p-4 sm:p-5 rounded-2xl border border-emerald-500/30 bg-emerald-950/20 backdrop-blur-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-4 sm:p-5 rounded-2xl border border-emerald-500/30 bg-[#160E30]/75 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
             <div className="flex items-start gap-3">
               <ShieldAlert className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
               <div>
                 <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-emerald-300">
                   Public GitHub Directory • External Open Source Profiles
                 </h4>
-                <p className="text-xs text-[#929DB2] mt-0.5 leading-relaxed">
+                <p className="text-xs text-[#B8ACD9] mt-0.5 leading-relaxed">
                   These profiles represent real, publicly accessible GitHub creators and maintainers retrieved via the official GitHub REST API.
-                  They are <span className="text-[#F4F6FC] font-semibold">not registered DevConnect accounts</span>. Click "Connect on GitHub" to open their actual profile.
+                  They are <span className="text-[#F8F7FF] font-semibold">not registered DevConnect accounts</span>. Click "Connect on GitHub" to open their actual profile.
                 </p>
               </div>
             </div>
 
             <div className="shrink-0 flex items-center gap-2">
-              <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-lg">
+              <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-full shadow-[0_0_10px_rgba(52,211,153,0.15)]">
                 Official REST API Synced
               </span>
             </div>
           </div>
 
           {/* External Filter and Search Bar */}
-          <div className="p-4 sm:p-5 rounded-xl border border-[#273249] bg-[#101725] shadow-xl space-y-4">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
             <div className="flex flex-col sm:flex-row gap-2.5">
               <div className="flex-1 relative">
                 <Input
                   value={externalSearchQuery}
                   onChange={(e) => setExternalSearchQuery(e.target.value)}
                   placeholder="Search real GitHub developers (e.g. torvalds, gaearon, yyx990803, shadcn, karpathy)..."
-                  icon={<Search className="h-4 w-4 text-[#929DB2]" />}
-                  className="h-10 text-xs sm:text-sm bg-[#151F30] border-[#273249] text-[#F4F6FC] placeholder-[#929DB2]"
+                  icon={<Search className="h-4 w-4 text-[#B8ACD9]" />}
+                  className="h-10 text-xs sm:text-sm bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF] placeholder-[#B8ACD9] focus:border-[#8B5CF6]"
                 />
               </div>
 
               {/* Sort Selector */}
               <div className="flex items-center gap-2 shrink-0">
-                <span className="text-xs font-mono text-[#929DB2] flex items-center gap-1">
-                  <ArrowUpDown className="w-3 h-3" /> Sort:
+                <span className="text-xs font-mono text-[#B8ACD9] flex items-center gap-1">
+                  <ArrowUpDown className="w-3 h-3 text-[#A855F7]" /> Sort:
                 </span>
                 <select
                   value={externalSortBy}
                   onChange={(e) => setExternalSortBy(e.target.value as any)}
-                  className="h-10 rounded-lg bg-[#151F30] border border-[#273249] px-3 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF]/60 cursor-pointer font-mono"
+                  className="h-10 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)] px-3 text-xs text-[#F8F7FF] focus:outline-none focus:border-[#8B5CF6] cursor-pointer font-mono"
                 >
                   <option value="followers">Most Followers</option>
                   <option value="repos">Most Public Repos</option>
@@ -709,17 +713,17 @@ export const DiscoveryPage: React.FC = () => {
               ))}
             </div>
           ) : filteredExternalDevs.length === 0 ? (
-            <div className="p-16 text-center border border-dashed border-[#273249] rounded-xl bg-[#101725]">
-              <Github className="h-10 w-10 text-[#929DB2] mx-auto mb-3 opacity-60" />
-              <h3 className="font-display text-base font-bold text-[#F4F6FC] mb-1">No GitHub Developers Found</h3>
-              <p className="text-xs text-[#929DB2] max-w-sm mx-auto mb-4">
+            <div className="p-16 text-center border border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl bg-[#100A24]/60 backdrop-blur-md">
+              <Github className="h-10 w-10 text-[#B8ACD9] mx-auto mb-3 opacity-60" />
+              <h3 className="font-display text-base font-bold text-[#F8F7FF] mb-1">No GitHub Developers Found</h3>
+              <p className="text-xs text-[#B8ACD9] max-w-sm mx-auto mb-4">
                 Try searching for known handles like "torvalds", "gaearon", or "shadcn".
               </p>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setExternalSearchQuery('')}
-                className="border-[#273249] text-[#F4F6FC] hover:bg-[#151F30] font-mono"
+                className="border-[rgba(167,139,250,0.25)] text-[#F8F7FF] hover:bg-[#8B5CF6]/15 hover:border-[#8B5CF6]/40 font-mono"
               >
                 Clear Search
               </Button>
@@ -739,15 +743,15 @@ export const DiscoveryPage: React.FC = () => {
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[#273249] bg-[#151F30] hover:border-[#6D95FF]/40 transition-all">
+                    <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300 group">
                       <div>
                         {/* Top Badges */}
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center gap-1.5">
+                          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center gap-1.5 shadow-sm">
                             <Github className="h-3 w-3" /> External GitHub Developer
                           </span>
 
-                          <span className="text-[10px] font-mono text-[#929DB2] bg-[#101725] px-2 py-0.5 rounded border border-[#273249]">
+                          <span className="text-[10px] font-mono text-[#B8ACD9] bg-[#100A24] px-2.5 py-0.5 rounded-full border border-[rgba(167,139,250,0.20)]">
                             ID: {dev.github_id}
                           </span>
                         </div>
@@ -757,27 +761,27 @@ export const DiscoveryPage: React.FC = () => {
                           <img
                             src={dev.avatar_url}
                             alt={dev.username}
-                            className="w-12 h-12 rounded-xl border border-[#273249] object-cover bg-[#101725] shrink-0"
+                            className="w-12 h-12 rounded-xl border border-[rgba(167,139,250,0.25)] object-cover bg-[#100A24] shrink-0 shadow-md"
                             loading="lazy"
                             onError={(e) => {
                               (e.target as HTMLElement).style.display = 'none';
                             }}
                           />
                           <div className="min-w-0 flex-1">
-                            <h4 className="font-display font-bold text-sm text-[#F4F6FC] truncate">
+                            <h4 className="font-display font-bold text-sm text-[#F8F7FF] group-hover:text-[#C4B5FD] transition-colors truncate">
                               {dev.name || dev.username}
                             </h4>
                             <a
                               href={dev.html_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs text-[#6D95FF] font-mono hover:underline block truncate"
+                              className="text-xs text-[#A855F7] font-mono hover:underline block truncate"
                             >
                               @{dev.username}
                             </a>
                             {dev.company && (
-                              <span className="text-[10px] text-[#929DB2] font-mono block mt-0.5 truncate flex items-center gap-1">
-                                <Building className="w-2.5 h-2.5 text-[#929DB2]" />
+                              <span className="text-[10px] text-[#B8ACD9] font-mono block mt-0.5 truncate flex items-center gap-1">
+                                <Building className="w-2.5 h-2.5 text-[#B8ACD9]" />
                                 {dev.company}
                               </span>
                             )}
@@ -785,29 +789,29 @@ export const DiscoveryPage: React.FC = () => {
                         </div>
 
                         {/* Bio */}
-                        <p className="text-xs text-[#929DB2] mt-3 line-clamp-3 leading-relaxed">
+                        <p className="text-xs text-[#B8ACD9] mt-3 line-clamp-3 leading-relaxed">
                           {dev.bio || 'Public open-source developer on GitHub.'}
                         </p>
 
                         {/* Location */}
                         {dev.location && (
-                          <div className="flex items-center gap-1 text-[11px] text-[#929DB2] font-mono mt-3">
-                            <MapPin className="h-3 w-3 text-[#929DB2]" />
+                          <div className="flex items-center gap-1 text-[11px] text-[#B8ACD9] font-mono mt-3">
+                            <MapPin className="h-3 w-3 text-[#B8ACD9]" />
                             <span className="truncate">{dev.location}</span>
                           </div>
                         )}
 
                         {/* Metrics Bar: Repos & Followers */}
-                        <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[#273249]">
-                          <div className="p-2 rounded-lg bg-[#101725] border border-[#273249]/60">
-                            <div className="text-[9px] font-mono uppercase text-[#929DB2]">Public Repos</div>
-                            <div className="text-sm font-bold font-display text-[#F4F6FC] mt-0.5">
+                        <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[rgba(167,139,250,0.20)]">
+                          <div className="p-2.5 rounded-xl bg-[#100A24]/90 border border-[rgba(167,139,250,0.20)]">
+                            <div className="text-[9px] font-mono uppercase text-[#B8ACD9]">Public Repos</div>
+                            <div className="text-sm font-bold font-display text-[#F8F7FF] mt-0.5">
                               {dev.public_repos.toLocaleString()}
                             </div>
                           </div>
-                          <div className="p-2 rounded-lg bg-[#101725] border border-[#273249]/60">
-                            <div className="text-[9px] font-mono uppercase text-[#929DB2]">Followers</div>
-                            <div className="text-sm font-bold font-display text-[#6D95FF] mt-0.5">
+                          <div className="p-2.5 rounded-xl bg-[#100A24]/90 border border-[rgba(167,139,250,0.20)]">
+                            <div className="text-[9px] font-mono uppercase text-[#B8ACD9]">Followers</div>
+                            <div className="text-sm font-bold font-display text-[#A855F7] mt-0.5">
                               {dev.followers >= 1000
                                 ? `${(dev.followers / 1000).toFixed(1)}k`
                                 : dev.followers.toLocaleString()}
@@ -817,16 +821,16 @@ export const DiscoveryPage: React.FC = () => {
                       </div>
 
                       {/* Action Outlink Button: Connect on GitHub */}
-                      <div className="pt-3 border-t border-[#273249]">
+                      <div className="pt-3 border-t border-[rgba(167,139,250,0.20)]">
                         <a
                           href={dev.html_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold bg-[#101725] hover:bg-[#1a273e] border border-[#273249] hover:border-[#6D95FF]/50 text-[#F4F6FC] hover:text-[#6D95FF] transition-all group/btn shadow-sm"
+                          className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold bg-[#100A24] hover:bg-[#8B5CF6]/20 border border-[rgba(167,139,250,0.25)] hover:border-[#8B5CF6]/50 text-[#F8F7FF] hover:text-[#C4B5FD] transition-all group/btn shadow-sm"
                         >
                           <Github className="h-3.5 w-3.5" />
                           <span>Connect on GitHub</span>
-                          <ExternalLink className="h-3 w-3 text-[#6D95FF] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform ml-auto" />
+                          <ExternalLink className="h-3 w-3 text-[#A855F7] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform ml-auto" />
                         </a>
                       </div>
                     </CardSpotlight>

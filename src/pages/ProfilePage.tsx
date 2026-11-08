@@ -263,34 +263,34 @@ export const ProfilePage: React.FC = () => {
       className="space-y-6 max-w-7xl mx-auto pb-12 font-sans"
     >
       {/* Editorial Hero Profile Banner Card */}
-      <div className="relative rounded-xl border border-[#273249] bg-[#101725] shadow-2xl overflow-hidden">
+      <div className="relative rounded-2xl border border-[rgba(167,139,250,0.25)] bg-[#160E30]/80 backdrop-blur-xl shadow-2xl overflow-hidden">
         {/* Cover Graphic with Mesh & Grid Pattern */}
-        <div className="h-44 sm:h-52 relative overflow-hidden bg-gradient-to-r from-[#151F30] via-[#090C13] to-[#1C2940] border-b border-[#273249]">
-          <GridPattern className="opacity-25" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#101725]" />
-          <div className="absolute -top-24 left-1/4 w-96 h-96 bg-[#6D95FF]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -top-24 right-1/4 w-96 h-96 bg-[#9D83FF]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="h-44 sm:h-52 relative overflow-hidden bg-gradient-to-r from-[#160E30] via-[#100A24] to-[#1E1442] border-b border-[rgba(167,139,250,0.20)]">
+          <GridPattern className="opacity-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#160E30]/90" />
+          <div className="absolute -top-24 left-1/4 w-96 h-96 bg-[#8B5CF6]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -top-24 right-1/4 w-96 h-96 bg-[#D946EF]/15 rounded-full blur-3xl pointer-events-none" />
 
           {/* Editorial Label & Quick Share button */}
-          <div className="absolute top-4 left-6 hidden sm:flex items-center gap-2 text-[10px] font-mono tracking-widest text-[#929DB2] uppercase">
-            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold">
-              ENGINEER PROFILE
+          <div className="absolute top-4 left-6 hidden sm:flex items-center gap-2 text-[10px] font-mono tracking-widest text-[#B8ACD9] uppercase">
+            <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#A855F7]" /> ENGINEER PROFILE
             </span>
           </div>
 
           <div className="absolute top-4 right-4">
             <button
               onClick={handleCopyProfile}
-              className="px-3 py-1.5 rounded-lg bg-[#151F30]/90 hover:bg-[#1C2940] text-[#F4F6FC] border border-[#273249] backdrop-blur-md text-xs font-mono flex items-center gap-1.5 transition-all shadow-md active:scale-95"
+              className="px-3 py-1.5 rounded-xl bg-[#100A24]/90 hover:bg-[#8B5CF6]/20 text-[#F8F7FF] border border-[rgba(167,139,250,0.25)] backdrop-blur-md text-xs font-mono flex items-center gap-1.5 transition-all shadow-md active:scale-95"
             >
               {copiedLink ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-[#35C98A]" />
-                  <span className="text-[#35C98A]">Copied</span>
+                  <Check className="w-3.5 h-3.5 text-[#34D399]" />
+                  <span className="text-[#34D399]">Copied</span>
                 </>
               ) : (
                 <>
-                  <Share2 className="w-3.5 h-3.5 text-[#929DB2]" />
+                  <Share2 className="w-3.5 h-3.5 text-[#B8ACD9]" />
                   <span>Share Dossier</span>
                 </>
               )}
@@ -308,23 +308,23 @@ export const ProfilePage: React.FC = () => {
                   name={profile.full_name}
                   size="xl"
                   status={profile.availability_status}
-                  className="ring-4 ring-[#101725] shadow-2xl w-24 h-24 sm:w-28 sm:h-28 text-2xl rounded-2xl"
+                  className="ring-4 ring-[#100A24] shadow-2xl w-24 h-24 sm:w-28 sm:h-28 text-2xl rounded-2xl"
                 />
               </div>
               <div className="mb-1">
                 <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[#F4F6FC] tracking-tight">
+                  <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[#F8F7FF] tracking-tight">
                     {profile.full_name}
                   </h1>
-                  <span className="px-2.5 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-[#151F30] text-[#6D95FF] border border-[#273249]">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-[#8B5CF6]/15 text-[#C4B5FD] border border-[rgba(167,139,250,0.25)]">
                     {profile.experience_level}
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-mono bg-[#35C98A]/10 text-[#35C98A] border border-[#35C98A]/20">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#35C98A] animate-pulse" />
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20 shadow-[0_0_8px_rgba(52,211,153,0.15)]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse" />
                     {profile.availability_status?.replace(/_/g, ' ') || 'Available'}
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-[#6D95FF] font-mono mt-0.5">
+                <p className="text-xs sm:text-sm text-[#A855F7] font-mono mt-0.5">
                   @{profile.username}
                 </p>
               </div>
@@ -334,7 +334,7 @@ export const ProfilePage: React.FC = () => {
             <div className="flex items-center gap-2.5 w-full sm:w-auto self-end">
               {isOwner ? (
                 <Link to="/profile/edit" className="w-full sm:w-auto">
-                  <Button variant="primary" size="sm" className="w-full sm:w-auto text-xs font-semibold shadow-md shadow-[#6D95FF]/20">
+                  <Button variant="primary" size="sm" className="w-full sm:w-auto text-xs font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-white shadow-md shadow-[#8B5CF6]/25">
                     <Edit className="h-3.5 w-3.5 mr-1.5" /> Edit Profile
                   </Button>
                 </Link>
@@ -345,14 +345,18 @@ export const ProfilePage: React.FC = () => {
                     size="sm"
                     isLoading={actionLoading}
                     onClick={handleConnect}
-                    className="flex-1 sm:flex-none text-xs font-semibold"
+                    className={`flex-1 sm:flex-none text-xs font-semibold ${
+                      connectionStatus !== 'accepted' && connectionStatus !== 'pending'
+                        ? 'bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-white shadow-md shadow-[#8B5CF6]/25'
+                        : 'border-[rgba(167,139,250,0.25)] text-[#F8F7FF]'
+                    }`}
                   >
                     {connectionStatus === 'accepted' ? (
-                      <span className="flex items-center gap-1.5 text-[#35C98A]">
+                      <span className="flex items-center gap-1.5 text-[#34D399]">
                         <UserCheck className="h-3.5 w-3.5" /> Connected
                       </span>
                     ) : connectionStatus === 'pending' ? (
-                      <span className="flex items-center gap-1.5 text-[#9D83FF]">
+                      <span className="flex items-center gap-1.5 text-[#C4B5FD]">
                         <Clock className="h-3.5 w-3.5" /> Request Sent
                       </span>
                     ) : (
@@ -366,9 +370,9 @@ export const ProfilePage: React.FC = () => {
                     variant="secondary"
                     size="sm"
                     onClick={handleStartMessage}
-                    className="flex-1 sm:flex-none text-xs font-semibold border-[#273249] bg-[#151F30] text-[#F4F6FC]"
+                    className="flex-1 sm:flex-none text-xs font-semibold border-[rgba(167,139,250,0.25)] bg-[#100A24] hover:bg-[#8B5CF6]/20 text-[#F8F7FF] transition-all"
                   >
-                    <MessageSquare className="h-3.5 w-3.5 mr-1.5 text-[#6D95FF]" /> Message
+                    <MessageSquare className="h-3.5 w-3.5 mr-1.5 text-[#A855F7]" /> Message
                   </Button>
                 </>
               )}

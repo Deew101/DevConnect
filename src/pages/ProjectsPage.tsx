@@ -151,16 +151,16 @@ export const ProjectsPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#273249]/60 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(167,139,250,0.20)] pb-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold">
-              PROJECT WORKSPACES
+            <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#A855F7]" /> PROJECT WORKSPACES
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#6D95FF] animate-pulse" />
-            <span className="text-xs font-mono text-[#929DB2]">{projects.length} Active Hubs</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse shadow-[0_0_8px_#8B5CF6]" />
+            <span className="text-xs font-mono text-[#B8ACD9]">{projects.length} Active Hubs</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-display font-extrabold text-[#F8F7FF] tracking-tight">
             {activeTab === 'my-projects'
               ? 'My Created Projects'
               : activeTab === 'my-teams'
@@ -169,20 +169,20 @@ export const ProjectsPage: React.FC = () => {
               ? 'Saved Projects'
               : 'Engineering Workspaces'}
           </h1>
-          <p className="text-sm text-[#929DB2] mt-1 font-sans max-w-2xl leading-relaxed">
+          <p className="text-sm text-[#B8ACD9] mt-1 font-sans max-w-2xl leading-relaxed">
             Discover active engineering builds, recruit teammates via AI matchmaking, and coordinate on live Kanban boards.
           </p>
         </div>
 
         <Link to="/projects/new">
-          <Button variant="primary" size="md" className="font-semibold text-xs sm:text-sm shadow-lg shadow-[#6D95FF]/10">
+          <Button variant="primary" size="md" className="font-semibold text-xs sm:text-sm bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:from-[#7C3AED] hover:to-[#9333EA] text-[#F8F7FF] shadow-lg shadow-[#8B5CF6]/25">
             <Plus className="h-4 w-4 mr-1.5" /> Start Project
           </Button>
         </Link>
       </div>
 
       {/* Tabs Row */}
-      <div className="flex items-center gap-2 border-b border-[#273249] pb-3">
+      <div className="flex items-center gap-2 border-b border-[rgba(167,139,250,0.20)] pb-3">
         {[
           { id: 'all', label: 'All Projects', icon: Compass },
           { id: 'my-projects', label: 'My Projects', icon: FolderGit2 },
@@ -201,13 +201,13 @@ export const ProjectsPage: React.FC = () => {
                   setSearchParams({ filter: tab.id });
                 }
               }}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold font-mono transition-all duration-200 ${
                 isActive
-                  ? 'bg-[#151F30] text-[#6D95FF] border border-[#273249] shadow-sm'
-                  : 'text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30]/40'
+                  ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_12px_rgba(139,92,246,0.25)]'
+                  : 'text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30]'
               }`}
             >
-              <tab.icon className="w-3.5 h-3.5" />
+              <tab.icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#C4B5FD]' : 'text-[#B8ACD9]'}`} />
               <span>{tab.label}</span>
             </button>
           );
@@ -215,24 +215,24 @@ export const ProjectsPage: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-2xl border border-[#273249] bg-[#101725] shadow-xl space-y-3.5">
+      <div className="p-4 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-3.5">
         <form onSubmit={handleSearchSubmit} className="flex gap-2">
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search projects by title, stack keywords, or technologies (e.g. Supabase, Next.js, Rust)..."
-            icon={<Search className="h-4 w-4" />}
-            className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+            icon={<Search className="h-4 w-4 text-[#B8ACD9]" />}
+            className="h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF] placeholder-[#B8ACD9] focus:border-[#8B5CF6]"
           />
-          <Button type="submit" variant="primary" className="h-10 px-5 font-semibold text-xs">
+          <Button type="submit" variant="primary" className="h-10 px-5 font-semibold text-xs bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF] shadow-sm shadow-[#8B5CF6]/25">
             Search
           </Button>
         </form>
 
         {/* Category Pill Filters */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar pt-1 border-t border-[#273249]/60">
-          <span className="text-xs font-mono text-[#929DB2] mr-1 flex items-center gap-1">
-            <Filter className="w-3 h-3" /> Stack:
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar pt-1 border-t border-[rgba(167,139,250,0.15)]">
+          <span className="text-xs font-mono text-[#B8ACD9] mr-1 flex items-center gap-1">
+            <Filter className="w-3 h-3 text-[#A855F7]" /> Stack:
           </span>
           {categories.map((cat) => {
             const isSelected =
@@ -243,10 +243,10 @@ export const ProjectsPage: React.FC = () => {
                 key={cat}
                 type="button"
                 onClick={() => setSelectedCategory(cat === 'All Categories' ? 'all' : cat)}
-                className={`px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                className={`px-3 py-1 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 ${
                   isSelected
-                    ? 'bg-[#6D95FF]/20 text-[#6D95FF] border border-[#6D95FF]/40 shadow-sm'
-                    : 'bg-[#151F30] text-[#929DB2] hover:text-[#F4F6FC] border border-[#273249]'
+                    ? 'bg-[#8B5CF6] text-[#080514] font-bold shadow-[0_0_12px_rgba(139,92,246,0.35)]'
+                    : 'bg-[#100A24] text-[#B8ACD9] hover:text-[#F8F7FF] border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/40'
                 }`}
               >
                 {cat}
@@ -262,15 +262,15 @@ export const ProjectsPage: React.FC = () => {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className="h-64 rounded-2xl border border-[#273249] bg-[#101725] animate-pulse"
+              className="h-64 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/50 animate-pulse"
             />
           ))}
         </div>
       ) : projects.length === 0 ? (
-        <div className="p-12 text-center border border-dashed border-[#273249] rounded-2xl bg-[#101725]">
-          <FolderGit2 className="h-12 w-12 text-[#929DB2]/40 mx-auto mb-3" />
-          <h3 className="text-lg font-bold font-display text-[#F4F6FC] mb-1">No Projects Found</h3>
-          <p className="text-xs text-[#929DB2] max-w-sm mx-auto mb-5 leading-relaxed">
+        <div className="p-12 text-center border border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl bg-[#100A24]/60 backdrop-blur-md">
+          <FolderGit2 className="h-12 w-12 text-[#B8ACD9]/40 mx-auto mb-3" />
+          <h3 className="text-lg font-bold font-display text-[#F8F7FF] mb-1">No Projects Found</h3>
+          <p className="text-xs text-[#B8ACD9] max-w-sm mx-auto mb-5 leading-relaxed">
             {activeTab === 'my-projects'
               ? "You haven't published any projects yet. Launch your vision today!"
               : activeTab === 'my-teams'
@@ -312,11 +312,11 @@ export const ProjectsPage: React.FC = () => {
                   show: { opacity: 1, y: 0 },
                 }}
               >
-                <CardSpotlight className="h-full flex flex-col justify-between overflow-hidden group bg-[#151F30] border-[#273249]">
+                <CardSpotlight className="h-full flex flex-col justify-between overflow-hidden group bg-[#160E30]/75 backdrop-blur-xl border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300">
                   <div className="space-y-4">
                     {/* Top: Category & Status */}
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#101725] border border-[#273249] text-[#F4F6FC]">
+                      <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#8B5CF6]/15 border border-[rgba(167,139,250,0.25)] text-[#C4B5FD]">
                         {proj.category}
                       </span>
                       {getStatusBadge(proj.status)}
@@ -324,10 +324,10 @@ export const ProjectsPage: React.FC = () => {
 
                     {/* Title & Tagline */}
                     <div>
-                      <h3 className="text-base font-bold font-display text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors line-clamp-1">
+                      <h3 className="text-base font-bold font-display text-[#F8F7FF] group-hover:text-[#C4B5FD] transition-colors line-clamp-1">
                         {proj.title}
                       </h3>
-                      <p className="text-xs text-[#929DB2] mt-1 line-clamp-2 leading-relaxed">
+                      <p className="text-xs text-[#B8ACD9] mt-1 line-clamp-2 leading-relaxed">
                         {proj.tagline || proj.description}
                       </p>
                     </div>
@@ -337,29 +337,29 @@ export const ProjectsPage: React.FC = () => {
                       {(proj.required_skills || []).slice(0, 3).map((sk) => (
                         <span
                           key={sk}
-                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#101725] border border-[#273249] text-[#6D95FF]"
+                          className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#100A24] border border-[rgba(167,139,250,0.20)] text-[#C4B5FD]"
                         >
                           {sk}
                         </span>
                       ))}
                       {(proj.required_skills || []).length > 3 && (
-                        <span className="text-[10px] text-[#929DB2] font-mono px-1">
+                        <span className="text-[10px] text-[#B8ACD9] font-mono px-1">
                           +{proj.required_skills.length - 3} more
                         </span>
                       )}
                     </div>
 
                     {/* Team progress capacity bar */}
-                    <div className="space-y-1.5 pt-2 border-t border-[#273249]/60">
-                      <div className="flex items-center justify-between text-[11px] font-mono text-[#929DB2]">
+                    <div className="space-y-1.5 pt-2 border-t border-[rgba(167,139,250,0.15)]">
+                      <div className="flex items-center justify-between text-[11px] font-mono text-[#B8ACD9]">
                         <span className="flex items-center gap-1.5">
-                          <Users className="h-3.5 w-3.5 text-[#6D95FF]" /> Team: {currentMembersCount} / {targetMembersCount}
+                          <Users className="h-3.5 w-3.5 text-[#A855F7]" /> Team: {currentMembersCount} / {targetMembersCount}
                         </span>
                         <span>{teamFillPercent}% Full</span>
                       </div>
-                      <div className="h-1.5 w-full bg-[#101725] rounded-full overflow-hidden border border-[#273249]">
+                      <div className="h-1.5 w-full bg-[#100A24] rounded-full overflow-hidden border border-[rgba(167,139,250,0.20)]">
                         <div
-                          className="h-full bg-gradient-to-r from-[#6D95FF] to-[#9D83FF] rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] rounded-full transition-all duration-500"
                           style={{ width: `${teamFillPercent}%` }}
                         />
                       </div>
@@ -367,7 +367,7 @@ export const ProjectsPage: React.FC = () => {
                   </div>
 
                   {/* Footer Action */}
-                  <div className="pt-4 mt-4 border-t border-[#273249]/60 flex items-center justify-between">
+                  <div className="pt-4 mt-4 border-t border-[rgba(167,139,250,0.15)] flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Avatar
                         src={proj.owner?.avatar_url}
@@ -375,15 +375,15 @@ export const ProjectsPage: React.FC = () => {
                         size="sm"
                         className="w-6 h-6 text-[10px]"
                       />
-                      <span className="text-xs text-[#929DB2] font-mono truncate max-w-[100px]">
+                      <span className="text-xs text-[#B8ACD9] font-mono truncate max-w-[100px]">
                         {proj.owner?.full_name || 'Lead'}
                       </span>
                     </div>
 
                     <Link to={`/projects/${proj.id}`}>
-                      <Button variant="secondary" size="xs" className="h-7 text-xs font-semibold border-[#273249] bg-[#101725] hover:bg-[#151F30]">
+                      <Button variant="secondary" size="xs" className="h-7 text-xs font-semibold border-[rgba(167,139,250,0.25)] bg-[#100A24] hover:bg-[#8B5CF6]/20 text-[#F8F7FF] transition-all">
                         {isMember || isOwner ? 'Workspace' : 'Details'}{' '}
-                        <ArrowRight className="h-3 w-3 ml-1" />
+                        <ArrowRight className="h-3 w-3 ml-1 text-[#A855F7]" />
                       </Button>
                     </Link>
                   </div>
