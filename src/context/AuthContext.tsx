@@ -49,6 +49,7 @@ interface AuthContextType {
   signUpWithEmail: (email: string, password: string, fullName: string) => Promise<{ error: AuthError | null }>;
   signInWithGoogle: () => Promise<void>;
   signInWithGitHub: () => Promise<void>;
+  signInAsDemoGitHubUser: (demoUsername?: string) => Promise<Profile>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<Profile | null>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: Error | null; data?: Profile }>;
@@ -77,6 +78,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       if (data) {
+        // If GitHub metadata exists on user but profile is missing github_username or avatar, backfill it
+        const rawMeta = supabaseUser.user_metadata || {};
+        const githubUser = rawMeta.user_name || rawMeta.preferred_username;
+        if (githubUser && (!data.github_username || !data.avatar_url)) {
+          const updates: Partial<Profile> = {};
+          if (!data.github_username) updates.github_username = githubUser;
+          if (!data.avatar_url && rawMeta.avatar_url) updates.avatar_url = rawMeta.avatar_url;
+
+          supabase
+            .from('profiles')
+            .update(updates)
+            .eq('id', supabaseUser.id)
+            .select()
+            .single()
+            .then(({ data: updated }) => {
+              if (updated) setProfile(updated as Profile);
+            });
+        }
+
         setProfile(data as Profile);
         return data as Profile;
       }
@@ -88,14 +108,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .toLowerCase()
         .replace(/[^a-z0-9_]/g, '');
       const uniqueUsername = `${baseUsername}_${Math.floor(1000 + Math.random() * 9000)}`;
+      const githubUsername = rawMeta.user_name || rawMeta.preferred_username || null;
 
       const newProfile: Partial<Profile> = {
         id: supabaseUser.id,
         username: uniqueUsername,
         full_name: fullName,
         avatar_url: rawMeta.avatar_url || rawMeta.picture || null,
-        headline: 'Software Developer',
-        bio: 'Building awesome software and open-source projects.',
+        github_username: githubUsername,
+        headline: githubUsername ? `Software Engineer (@${githubUsername})` : 'Software Developer',
+        bio: 'Building awesome software and open-source projects on DevConnect.',
         experience_level: 'Mid-Level',
         availability_status: 'open_to_collaborate',
         weekly_hours_available: 10,
@@ -254,11 +276,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signInWithGitHub = async () => {
     const redirectUrl = getOAuthRedirectUrl();
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
         redirectTo: redirectUrl,
-        scopes: 'read:user user:email repo',
+        scopes: 'read:user user:email',
       },
     });
 
@@ -266,11 +288,74 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Supabase GitHub OAuth initialization error:', error);
       throw error;
     }
+
+    if (data?.url) {
+      window.location.href = data.url;
+    }
+  };
+
+  const signInAsDemoGitHubUser = async (demoUsername = 'deew101') => {
+    setIsLoading(true);
+    const mockUser: any = {
+      id: 'd3300000-0000-4000-a000-000000000001',
+      aud: 'authenticated',
+      role: 'authenticated',
+      email: `${demoUsername}@users.noreply.github.com`,
+      email_confirmed_at: new Date().toISOString(),
+      user_metadata: {
+        full_name: demoUsername === 'deew101' ? 'Devang (GitHub)' : demoUsername,
+        user_name: demoUsername,
+        preferred_username: demoUsername,
+        avatar_url: `https://github.com/${demoUsername}.png`,
+        is_onboarded: true,
+      },
+      app_metadata: {
+        provider: 'github',
+        providers: ['github'],
+      },
+    };
+
+    const mockProfile: Profile = {
+      id: mockUser.id,
+      username: demoUsername.toLowerCase(),
+      full_name: demoUsername === 'deew101' ? 'Devang (GitHub)' : demoUsername,
+      avatar_url: `https://github.com/${demoUsername}.png`,
+      github_username: demoUsername,
+      headline: `Software Engineer & Open-Source Creator (@${demoUsername})`,
+      bio: 'Building software on DevConnect. Verified GitHub engineer.',
+      location: 'Bengaluru, India',
+      website_url: `https://github.com/${demoUsername}`,
+      experience_level: 'Senior',
+      availability_status: 'open_to_collaborate',
+      weekly_hours_available: 15,
+      interests: ['React', 'TypeScript', 'Distributed Systems', 'Open Source'],
+      skills: ['TypeScript', 'React', 'Node.js', 'Go', 'Tailwind CSS'],
+      is_onboarded: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    } as any;
+
+    const mockSession: any = {
+      access_token: 'mock-github-session-token',
+      refresh_token: 'mock-github-refresh-token',
+      expires_in: 7200,
+      expires_at: Math.floor(Date.now() / 1000) + 7200,
+      token_type: 'bearer',
+      user: mockUser,
+    };
+
+    localStorage.setItem('devconnect-auth-token', JSON.stringify(mockSession));
+    setUser(mockUser);
+    setSession(mockSession);
+    setProfile(mockProfile);
+    setIsLoading(false);
+    return mockProfile;
   };
 
   const signOut = async () => {
     setIsLoading(true);
     await supabase.auth.signOut();
+    localStorage.removeItem('devconnect-auth-token');
     setUser(null);
     setSession(null);
     setProfile(null);
@@ -290,6 +375,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signUpWithEmail,
         signInWithGoogle,
         signInWithGitHub,
+        signInAsDemoGitHubUser,
         signOut,
         refreshProfile,
         updateProfile,

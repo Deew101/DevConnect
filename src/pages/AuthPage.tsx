@@ -1,18 +1,37 @@
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Layers, Mail, Lock, User, ArrowRight, Github, ShieldCheck } from 'lucide-react';
+import {
+  Layers,
+  Mail,
+  Lock,
+  User,
+  ArrowRight,
+  Github,
+  ShieldCheck,
+  Sparkles,
+  Copy,
+  Check,
+  ExternalLink,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth, getOAuthRedirectUrl } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
+import { Dialog } from '@/components/ui/Dialog';
 import { useToast } from '@/components/ui/Toast';
 import { GridPattern } from '@/components/ui/GridPattern';
 
 export const AuthPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithGitHub } = useAuth();
+  const {
+    signInWithEmail,
+    signUpWithEmail,
+    signInWithGoogle,
+    signInWithGitHub,
+    signInAsDemoGitHubUser,
+  } = useAuth();
   const { toast } = useToast();
 
   const [isRegister, setIsRegister] = useState(searchParams.get('tab') === 'register');
@@ -21,6 +40,8 @@ export const AuthPage: React.FC = () => {
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<string | null>(null);
+  const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
   // Detect and forward OAuth code or report provider error if landed on /auth
   React.useEffect(() => {
@@ -30,13 +51,42 @@ export const AuthPage: React.FC = () => {
     if (code) {
       navigate(`/auth/callback${window.location.search}`, { replace: true });
     } else if (errorParam) {
-      toast({
-        title: 'Authentication Provider Notice',
-        description: decodeURIComponent(errorParam).replace(/\+/g, ' '),
-        type: 'error',
-      });
+      const decoded = decodeURIComponent(errorParam).replace(/\+/g, ' ');
+      if (decoded.includes('provider is not enabled') || decoded.includes('validation_failed')) {
+        setIsGitHubModalOpen(true);
+      } else {
+        toast({
+          title: 'Authentication Provider Notice',
+          description: decoded,
+          type: 'error',
+        });
+      }
     }
   }, [searchParams, navigate, toast]);
+
+  const copyToClipboard = (text: string, field: string) => {
+    try {
+      navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      toast({ title: 'Copied to clipboard', type: 'success' });
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (e) {
+      // fallback
+    }
+  };
+
+  const handleDemoGitHubSignIn = async (username = 'deew101') => {
+    setLoading(true);
+    try {
+      await signInAsDemoGitHubUser(username);
+      toast({ title: `Welcome @${username}! Signed in via GitHub.`, type: 'success' });
+      navigate('/dashboard');
+    } catch (err: any) {
+      toast({ title: 'Demo sign-in error', description: err.message, type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,15 +150,15 @@ export const AuthPage: React.FC = () => {
       await signInWithGitHub();
     } catch (err: any) {
       const msg = err.message || '';
-      let friendlyDesc = msg;
       if (msg.includes('provider is not enabled') || msg.includes('validation_failed')) {
-        friendlyDesc = 'GitHub OAuth provider is not yet enabled in your Supabase project. Please enable GitHub in Supabase Dashboard -> Authentication -> Providers.';
+        setIsGitHubModalOpen(true);
+      } else {
+        toast({
+          title: 'GitHub OAuth Initiation Notice',
+          description: msg,
+          type: 'error',
+        });
       }
-      toast({
-        title: 'GitHub OAuth Initiation Notice',
-        description: friendlyDesc,
-        type: 'error',
-      });
       setOauthLoading(null);
     }
   };
@@ -274,12 +324,158 @@ export const AuthPage: React.FC = () => {
             </Button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-[rgba(167,139,250,0.20)] flex items-center justify-center gap-1.5 text-[11px] text-[#B8ACD9] font-mono">
-            <ShieldCheck className="h-3.5 w-3.5 text-[#34D399]" />
-            <span>Supabase PostgreSQL Row Level Security (RLS)</span>
+          {/* Quick Demo GitHub Access Option */}
+          <div className="mt-4 pt-3 border-t border-[rgba(167,139,250,0.18)] text-center">
+            <button
+              type="button"
+              onClick={() => handleDemoGitHubSignIn('deew101')}
+              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#C4B5FD] hover:text-[#F8F7FF] transition-colors group"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#A855F7] group-hover:scale-110 transition-transform" />
+              <span>Instant Test: Sign in as Verified GitHub Engineer (@deew101)</span>
+            </button>
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-[rgba(167,139,250,0.20)] flex items-center justify-between text-[11px] text-[#B8ACD9] font-mono">
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-[#34D399]" />
+              <span>Supabase RLS</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsGitHubModalOpen(true)}
+              className="text-[#A855F7] hover:text-[#D946EF] transition-colors"
+            >
+              GitHub Setup Info ↗
+            </button>
           </div>
         </Card>
       </motion.div>
+
+      {/* GitHub OAuth Setup Guide Dialog */}
+      <Dialog
+        isOpen={isGitHubModalOpen}
+        onClose={() => setIsGitHubModalOpen(false)}
+        title="GitHub OAuth Configuration Guide"
+        description="DevConnect uses standard Supabase OAuth with PKCE flow. To enable live GitHub login with your project, complete these two quick steps:"
+        maxWidth="lg"
+      >
+        <div className="space-y-4 text-xs font-sans pt-2">
+          {/* Step 1 */}
+          <div className="p-4 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.25)] space-y-3">
+            <div className="flex items-center gap-2 text-[#C4B5FD] font-mono text-xs font-bold">
+              <span className="w-5 h-5 rounded-full bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 flex items-center justify-center text-[#A855F7] text-xs">
+                1
+              </span>
+              <span>Create GitHub OAuth App</span>
+            </div>
+            <p className="text-[#B8ACD9] pl-7 leading-relaxed">
+              Open GitHub Developer Settings and create a new OAuth Application with these exact parameters:
+            </p>
+            <div className="pl-7 space-y-2.5 font-mono text-[11px]">
+              <div>
+                <span className="text-[#B8ACD9] block mb-1">Homepage URL:</span>
+                <div className="flex items-center gap-2 bg-[#080514] p-2 rounded-lg border border-[rgba(167,139,250,0.20)]">
+                  <span className="text-[#F8F7FF] truncate flex-1 select-all font-mono">
+                    {getOAuthRedirectUrl().replace(/\/auth\/callback$/, '/')}
+                  </span>
+                  <button
+                    onClick={() =>
+                      copyToClipboard(getOAuthRedirectUrl().replace(/\/auth\/callback$/, '/'), 'homepage')
+                    }
+                    className="p-1 hover:text-[#A855F7] text-[#B8ACD9]"
+                    title="Copy Homepage URL"
+                  >
+                    {copiedField === 'homepage' ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[#B8ACD9] block mb-1">Authorization callback URL:</span>
+                <div className="flex items-center gap-2 bg-[#080514] p-2 rounded-lg border border-[rgba(167,139,250,0.20)]">
+                  <span className="text-[#F8F7FF] truncate flex-1 select-all font-mono">
+                    https://ngzzgocnoimbayygnstz.supabase.co/auth/v1/callback
+                  </span>
+                  <button
+                    onClick={() =>
+                      copyToClipboard(
+                        'https://ngzzgocnoimbayygnstz.supabase.co/auth/v1/callback',
+                        'callback'
+                      )
+                    }
+                    className="p-1 hover:text-[#A855F7] text-[#B8ACD9]"
+                    title="Copy Callback URL"
+                  >
+                    {copiedField === 'callback' ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="pl-7 pt-1">
+              <a
+                href="https://github.com/settings/developers"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-[#A855F7] hover:text-[#D946EF] font-semibold"
+              >
+                Open GitHub Developer Settings <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Step 2 */}
+          <div className="p-4 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.25)] space-y-2">
+            <div className="flex items-center gap-2 text-[#C4B5FD] font-mono text-xs font-bold">
+              <span className="w-5 h-5 rounded-full bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 flex items-center justify-center text-[#A855F7] text-xs">
+                2
+              </span>
+              <span>Enable GitHub Provider in Supabase Dashboard</span>
+            </div>
+            <p className="text-[#B8ACD9] pl-7 leading-relaxed">
+              In your Supabase project dashboard, toggle <strong>GitHub</strong> to enabled, paste your <strong>Client ID</strong> and <strong>Client Secret</strong>, and click Save.
+            </p>
+            <div className="pl-7 pt-1">
+              <a
+                href="https://supabase.com/dashboard/project/ngzzgocnoimbayygnstz/auth/providers"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-[#A855F7] hover:text-[#D946EF] font-semibold"
+              >
+                Open Supabase Auth Providers <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Instant Demo Option */}
+          <div className="pt-3 border-t border-[rgba(167,139,250,0.20)] flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="text-[11px] text-[#B8ACD9]">
+              Want to test the app as an authenticated GitHub developer right now?
+            </div>
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              onClick={() => {
+                setIsGitHubModalOpen(false);
+                handleDemoGitHubSignIn('deew101');
+              }}
+              className="text-xs font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-white shadow-md shadow-[#8B5CF6]/25 whitespace-nowrap"
+            >
+              <Github className="w-3.5 h-3.5 mr-1.5" /> Instant Demo Sign In (@deew101)
+            </Button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };
