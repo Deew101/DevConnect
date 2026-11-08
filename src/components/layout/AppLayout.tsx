@@ -31,17 +31,12 @@ export const AppLayout: React.FC = () => {
           <main className="flex-1 min-w-0 min-h-[calc(100vh-3.5rem)] px-4 sm:px-6 lg:px-8 py-6 relative">
             <div className="max-w-7xl mx-auto w-full">
               <ErrorBoundary>
-                <AnimatePresence mode="wait" initial={false}>
+                <AnimatePresence initial={false}>
                   <motion.div
                     key={location.pathname}
-                    initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+                    initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={
-                      shouldReduceMotion
-                        ? undefined
-                        : { opacity: 0, y: -8, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }
-                    }
-                    transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                     className="w-full"
                   >
                     <Outlet />

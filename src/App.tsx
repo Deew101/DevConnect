@@ -99,7 +99,7 @@ export function App() {
                       </ProtectedRoute>
                     }
                   >
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/" element={<DashboardPage />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/developers" element={<DiscoveryPage />} />
                     <Route path="/github-developers" element={<GitHubDevelopersPage />} />
