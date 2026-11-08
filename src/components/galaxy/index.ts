@@ -1,7 +1,9 @@
-export * from './GalaxyBackground';
-export * from './NebulaLayer';
-export * from './StarParticleLayer';
-export * from './CosmicWaveLayer';
-export * from './AmbientGlowLayer';
-export * from './BorderBeam';
-export * from './NebulaBadge';
+export { GalaxyBackground } from './GalaxyBackground';
+export { NebulaLayer } from './NebulaLayer';
+export { StarParticleLayer } from './StarParticleLayer';
+export { CosmicWaveLayer } from './CosmicWaveLayer';
+export { AmbientGlowLayer } from './AmbientGlowLayer';
+export { BorderBeam } from './BorderBeam';
+export { NebulaBadge } from './NebulaBadge';
+export { CelestialPlanet } from './CelestialPlanet';
+export { SidebarLightBeam } from './SidebarLightBeam';

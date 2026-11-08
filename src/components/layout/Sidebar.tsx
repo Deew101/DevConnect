@@ -22,6 +22,7 @@ import { useNotifications } from '@/context/NotificationContext';
 import { Avatar } from '@/components/ui/Avatar';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { SidebarLightBeam } from '@/components/galaxy';
 
 export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
   isOpen = false,
@@ -151,7 +152,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
             data-lenis-prevent="true"
             data-lenis-prevent-wheel="true"
             data-lenis-prevent-touch="true"
-            className="sidebar-navigation sidebar-scroll px-2.5 py-3 space-y-4 focus:outline-none"
+            className="sidebar-navigation sidebar-scroll px-2.5 py-2 space-y-2.5 focus:outline-none"
             tabIndex={0}
             onWheel={(e) => {
               // Ensure two-finger touchpad scrolling bubbles smoothly inside container
@@ -159,16 +160,16 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
             }}
           >
             {navigationSections.map((section, idx) => (
-              <div key={section.id} className="space-y-1">
-                {idx > 0 && <div className="h-px bg-[rgba(167,139,250,0.14)] my-2.5 mx-1" />}
+              <div key={section.id} className="space-y-0.5">
+                {idx > 0 && <div className="h-px bg-[rgba(167,139,250,0.14)] my-2 mx-1" />}
                 {!collapsed && (
-                  <div className="px-2 pt-1 pb-1">
+                  <div className="px-2 pt-0.5 pb-0.5">
                     <span className="text-[10px] font-mono font-semibold tracking-wider text-[#C4B5FD]/90 uppercase">
                       {section.title}
                     </span>
                   </div>
                 )}
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   {section.items.map((item) => {
                     const isActive = isItemActive(item.path);
 
@@ -184,7 +185,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
                         onClick={onClose}
                         className={cn(
                           // Identical dimensions & box-sizing for all navigation rows (both active and inactive)
-                          'relative flex items-center h-10 w-full rounded-xl text-xs font-medium box-border transition-colors duration-200 group outline-none flex-shrink-0',
+                          'relative flex items-center h-9 w-full rounded-xl text-xs font-medium box-border transition-colors duration-200 group outline-none flex-shrink-0',
                           'focus-visible:ring-2 focus-visible:ring-[#8B5CF6]/70 focus-visible:ring-offset-1 focus-visible:ring-offset-[#080514]',
                           collapsed ? 'justify-center px-0' : 'justify-between px-3',
                           isActive
@@ -278,41 +279,36 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
           </div>
         </LayoutGroup>
 
-        {/* 3. Fixed Footer User Profile Mini-Card (never overlaps navigation content) */}
-        {user && (
-          <div className="flex-shrink-0 relative z-10 p-2.5 border-t border-[rgba(167,139,250,0.20)] bg-[#080514]/95 backdrop-blur-md">
-            <Link
-              to={`/profile/${profile?.username || 'me'}`}
-              onClick={onClose}
-              className={cn(
-                'flex items-center gap-2.5 rounded-xl p-2 transition-colors duration-150 bg-[#160E30]/70 hover:bg-[#1E1442] border border-[rgba(167,139,250,0.18)] hover:border-[#8B5CF6]/50 group shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8B5CF6]',
-                collapsed && 'justify-center p-1.5'
-              )}
-            >
-              <Avatar
-                src={profile?.avatar_url}
-                name={profile?.full_name || user.email}
-                size="sm"
-                status={profile?.availability_status}
-              />
+        {/* 3. Fixed Footer User Profile Mini-Card (matches reference design) */}
+        <div className="flex-shrink-0 relative z-10 p-2.5 border-t border-[rgba(167,139,250,0.20)] bg-[#080514]/95 backdrop-blur-md">
+          <Link
+            to={user ? `/profile/${profile?.username || 'me'}` : '/dashboard'}
+            onClick={onClose}
+            className={cn(
+              'flex items-center gap-2.5 rounded-xl p-2 transition-colors duration-150 bg-[#160E30]/70 hover:bg-[#1E1442] border border-[rgba(167,139,250,0.18)] hover:border-[#8B5CF6]/50 group shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8B5CF6]',
+              collapsed && 'justify-center p-1.5'
+            )}
+          >
+            <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#8B5CF6] via-[#A855F7] to-[#D946EF] flex items-center justify-center text-xs font-bold text-white shadow-[0_0_10px_rgba(168,85,247,0.4)] flex-shrink-0">
+              {profile?.full_name ? profile.full_name.substring(0, 2).toUpperCase() : 'DE'}
+            </div>
 
-              {!collapsed && (
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-semibold text-[#F8F7FF] group-hover:text-[#A855F7] transition-colors">
-                    {profile?.full_name || 'Developer'}
-                  </p>
-                  <p className="truncate text-[10px] text-[#B8ACD9] font-mono">
-                    @{profile?.username || 'anonymous'}
-                  </p>
-                </div>
-              )}
+            {!collapsed && (
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs font-semibold text-[#F8F7FF] group-hover:text-[#A855F7] transition-colors">
+                  {profile?.full_name || 'Devang'}
+                </p>
+                <p className="truncate text-[10px] text-[#B8ACD9] font-mono">
+                  {profile?.headline || 'Developer profile'}
+                </p>
+              </div>
+            )}
 
-              {!collapsed && (
-                <ChevronRight className="h-3.5 w-3.5 text-[#B8ACD9] group-hover:text-[#A855F7] transition-colors flex-shrink-0" />
-              )}
-            </Link>
-          </div>
-        )}
+            {!collapsed && (
+              <ChevronRight className="h-3.5 w-3.5 text-[#B8ACD9] group-hover:text-[#A855F7] transition-colors flex-shrink-0" />
+            )}
+          </Link>
+        </div>
       </div>
     );
   };
@@ -325,11 +321,12 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
         data-lenis-prevent-wheel="true"
         data-lenis-prevent-touch="true"
         className={cn(
-          'hidden md:flex flex-col h-[calc(100dvh-3.5rem)] sticky top-14 border-r border-[rgba(167,139,250,0.20)] bg-[#080514]/90 backdrop-blur-xl text-[#B8ACD9] transition-all duration-300 z-30 overflow-hidden flex-shrink-0',
+          'hidden md:flex flex-col h-[calc(100dvh-3.5rem)] sticky top-14 border-r border-[rgba(167,139,250,0.20)] bg-[#080514]/90 backdrop-blur-xl text-[#B8ACD9] transition-all duration-300 z-30 overflow-visible flex-shrink-0 relative',
           isCollapsed ? 'w-[68px]' : 'w-64'
         )}
       >
         {renderNavigationContent(false)}
+        <SidebarLightBeam className="hidden md:block" />
       </aside>
 
       {/* Mobile Drawer */}

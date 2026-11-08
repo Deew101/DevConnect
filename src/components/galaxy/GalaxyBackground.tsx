@@ -3,6 +3,7 @@ import { NebulaLayer } from './NebulaLayer';
 import { StarParticleLayer } from './StarParticleLayer';
 import { CosmicWaveLayer } from './CosmicWaveLayer';
 import { AmbientGlowLayer } from './AmbientGlowLayer';
+import { CelestialPlanet } from './CelestialPlanet';
 
 export interface GalaxyBackgroundProps {
   children?: React.ReactNode;
@@ -12,10 +13,11 @@ export interface GalaxyBackgroundProps {
 /**
  * GalaxyBackground — Master Galaxy Flow visual environment
  * Modular structure:
- * - AmbientGlowLayer (atmospheric depth & contrast vignettes)
  * - NebulaLayer (rich purple, violet, magenta atmospheric gas clouds)
  * - CosmicWaveLayer (flowing purple & violet energy ribbons)
  * - StarParticleLayer (twinkling celestial stars)
+ * - CelestialPlanet (glowing celestial moon & companion satellite)
+ * - AmbientGlowLayer (atmospheric depth & contrast vignettes)
  */
 export const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children, className = '' }) => {
   return (
@@ -25,6 +27,7 @@ export const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children, cl
         <NebulaLayer />
         <CosmicWaveLayer />
         <StarParticleLayer />
+        <CelestialPlanet />
         <AmbientGlowLayer />
       </div>
 
@@ -34,4 +37,4 @@ export const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children, cl
   );
 };
 
-export { NebulaLayer, StarParticleLayer, CosmicWaveLayer, AmbientGlowLayer };
+export { NebulaLayer, StarParticleLayer, CosmicWaveLayer, AmbientGlowLayer, CelestialPlanet };
