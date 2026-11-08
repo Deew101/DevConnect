@@ -271,7 +271,8 @@ async function runBrowserTests() {
           if (link) link.click();
         })()`);
 
-        await sleep(300);
+        // Wait 500ms for the smooth spring layout animation to glide and settle
+        await sleep(500);
 
         const checkResult = await evaluate(`(() => {
           const links = Array.from(document.querySelectorAll('.sidebar-navigation a'));
