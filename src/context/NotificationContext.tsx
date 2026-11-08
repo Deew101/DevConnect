@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { Notification } from '@/types/database.types';
 
@@ -101,41 +101,58 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   useEffect(() => {
     fetchNotifications();
 
-    if (!user) return;
+    if (!user || !isSupabaseConfigured) return;
 
     // Realtime subscription for incoming user notifications
-    const channel = supabase
-      .channel(`user-notifications-${user.id}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${user.id}`,
-        },
-        async (payload) => {
-          // Fetch sender details for new notification
-          const newNotif = payload.new as Notification;
-          if (newNotif.sender_id) {
-            const { data: senderData } = await supabase
-              .from('profiles')
-              .select('id, username, full_name, avatar_url')
-              .eq('id', newNotif.sender_id)
-              .maybeSingle();
+    let channel: any = null;
+    try {
+      const channelTopic = `user-notifications-${user.id}-${Math.random().toString(36).slice(2, 9)}`;
+      channel = supabase
+        .channel(channelTopic)
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'notifications',
+            filter: `user_id=eq.${user.id}`,
+          },
+          async (payload) => {
+            try {
+              // Fetch sender details for new notification
+              const newNotif = payload.new as Notification;
+              if (newNotif.sender_id) {
+                const { data: senderData } = await supabase
+                  .from('profiles')
+                  .select('id, username, full_name, avatar_url')
+                  .eq('id', newNotif.sender_id)
+                  .maybeSingle();
 
-            if (senderData) {
-              newNotif.sender = senderData as any;
+                if (senderData) {
+                  newNotif.sender = senderData as any;
+                }
+              }
+
+              setNotifications((prev) => [newNotif, ...prev]);
+            } catch (err) {
+              console.warn('Realtime notification processing error:', err);
             }
           }
+        );
 
-          setNotifications((prev) => [newNotif, ...prev]);
-        }
-      )
-      .subscribe();
+      channel.subscribe();
+    } catch (err) {
+      console.warn('Realtime notifications subscription error:', err);
+    }
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channel) {
+        try {
+          supabase.removeChannel(channel);
+        } catch (e) {
+          // ignore
+        }
+      }
     };
   }, [user, fetchNotifications]);
 

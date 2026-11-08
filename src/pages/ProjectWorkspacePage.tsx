@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Project, Task, Milestone, ProjectMember, Conversation } from '@/types/database.types';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { KanbanBoard } from '@/components/kanban/KanbanBoard';
 import { AIMatchModal } from '@/components/matching/AIMatchModal';
@@ -297,27 +297,42 @@ export const ProjectWorkspacePage: React.FC = () => {
   useEffect(() => {
     loadProjectData();
 
-    if (!id) return;
+    if (!id || !isSupabaseConfigured) return;
+    const isDemo = id.startsWith('d3300000');
+    if (isDemo) return;
 
     // Realtime subscription for tasks updates
-    const taskChannel = supabase
-      .channel(`project-tasks-${id}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'tasks',
-          filter: `project_id=eq.${id}`,
-        },
-        () => {
-          loadProjectData();
-        }
-      )
-      .subscribe();
+    let taskChannel: any = null;
+    try {
+      const channelTopic = `project-tasks-${id}-${Math.random().toString(36).slice(2, 9)}`;
+      taskChannel = supabase
+        .channel(channelTopic)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'tasks',
+            filter: `project_id=eq.${id}`,
+          },
+          () => {
+            loadProjectData();
+          }
+        );
+
+      taskChannel.subscribe();
+    } catch (err) {
+      console.warn('Realtime tasks subscription error:', err);
+    }
 
     return () => {
-      supabase.removeChannel(taskChannel);
+      if (taskChannel) {
+        try {
+          supabase.removeChannel(taskChannel);
+        } catch (e) {
+          // ignore
+        }
+      }
     };
   }, [id, loadProjectData]);
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Paperclip, Hash, Code, Smile, PanelRightOpen, PanelRightClose, Sparkles } from 'lucide-react';
 import { Conversation, Message } from '@/types/database.types';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { formatTimeAgo } from '@/lib/utils';
@@ -75,38 +75,69 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     loadMessages();
 
     // 2. Realtime subscription for incoming messages
-    const channel = supabase
-      .channel(`chat-room-${conversation.id}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `conversation_id=eq.${conversation.id}`,
-        },
-        async (payload) => {
-          const newMsg = payload.new as Message;
-          const { data: senderData } = await supabase
-            .from('profiles')
-            .select('id, username, full_name, avatar_url')
-            .eq('id', newMsg.sender_id)
-            .maybeSingle();
+    const isDemo = conversation.id.startsWith('d3300000') || (conversation as any).is_demo;
+    if (isDemo || !isSupabaseConfigured) {
+      return () => {
+        isMounted = false;
+      };
+    }
 
-          if (senderData) {
-            newMsg.sender = senderData as any;
+    let channel: any = null;
+    try {
+      // Use unique channel topic to prevent Supabase Realtime channel collisions on remounts
+      const channelTopic = `chat-room-${conversation.id}-${Math.random().toString(36).slice(2, 9)}`;
+
+      channel = supabase
+        .channel(channelTopic)
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'messages',
+            filter: `conversation_id=eq.${conversation.id}`,
+          },
+          async (payload) => {
+            try {
+              const newMsg = payload.new as Message;
+              const { data: senderData } = await supabase
+                .from('profiles')
+                .select('id, username, full_name, avatar_url')
+                .eq('id', newMsg.sender_id)
+                .maybeSingle();
+
+              if (senderData && isMounted) {
+                newMsg.sender = senderData as any;
+              }
+
+              if (isMounted) {
+                setMessages((prev) => {
+                  if (prev.some((m) => m.id === newMsg.id)) return prev;
+                  return [...prev, newMsg];
+                });
+                setIsTyping(false);
+                setTimeout(scrollToBottom, 50);
+              }
+            } catch (err) {
+              console.warn('Realtime message processing error:', err);
+            }
           }
+        );
 
-          setMessages((prev) => [...prev, newMsg]);
-          setIsTyping(false);
-          setTimeout(scrollToBottom, 50);
-        }
-      )
-      .subscribe();
+      channel.subscribe();
+    } catch (err) {
+      console.warn('Failed to subscribe to chat realtime channel:', err);
+    }
 
     return () => {
       isMounted = false;
-      supabase.removeChannel(channel);
+      if (channel) {
+        try {
+          supabase.removeChannel(channel);
+        } catch (e) {
+          // ignore
+        }
+      }
     };
   }, [conversation.id]);
 
