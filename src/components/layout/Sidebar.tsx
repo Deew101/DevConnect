@@ -16,7 +16,6 @@ import {
   GitBranch,
   Github,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useNotifications } from '@/context/NotificationContext';
 import { Avatar } from '@/components/ui/Avatar';
@@ -86,27 +85,34 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
     return currentPath === targetPath;
   };
 
-  // Automatically scroll active item into view when navigating
+  // Only scroll into view if the active route is actually outside the visible area
   useEffect(() => {
-    if (desktopActiveItemRef.current) {
-      desktopActiveItemRef.current.scrollIntoView({
-        block: 'nearest',
-        inline: 'nearest',
-        behavior: 'smooth',
-      });
-    }
-    if (mobileActiveItemRef.current) {
-      mobileActiveItemRef.current.scrollIntoView({
-        block: 'nearest',
-        inline: 'nearest',
-        behavior: 'smooth',
-      });
-    }
+    const checkAndScroll = (
+      activeEl: HTMLAnchorElement | null,
+      container: HTMLDivElement | null
+    ) => {
+      if (!activeEl || !container) return;
+      const containerRect = container.getBoundingClientRect();
+      const elRect = activeEl.getBoundingClientRect();
+
+      const isAbove = elRect.top < containerRect.top;
+      const isBelow = elRect.bottom > containerRect.bottom;
+
+      if (isAbove || isBelow) {
+        activeEl.scrollIntoView({
+          block: 'nearest',
+          inline: 'nearest',
+          behavior: 'smooth',
+        });
+      }
+    };
+
+    checkAndScroll(desktopActiveItemRef.current, desktopNavContainerRef.current);
+    checkAndScroll(mobileActiveItemRef.current, mobileNavContainerRef.current);
   }, [location.pathname]);
 
   const renderNavigationContent = (isMobile = false) => {
     const collapsed = isMobile ? false : isCollapsed;
-    const layoutIdPrefix = isMobile ? 'mobile-' : 'desktop-';
 
     return (
       <div
@@ -137,8 +143,16 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
         {/* 2. Independently Scrollable Navigation Body */}
         <div
           ref={isMobile ? mobileNavContainerRef : desktopNavContainerRef}
-          className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain px-2.5 py-3 space-y-4 sidebar-scroll focus:outline-none"
-          tabIndex={-1}
+          data-lenis-prevent="true"
+          data-lenis-prevent-wheel="true"
+          data-lenis-prevent-touch="true"
+          className="sidebar-navigation sidebar-scroll px-2.5 py-3 space-y-4 focus:outline-none"
+          tabIndex={0}
+          onWheel={(e) => {
+            // Ensure two-finger touchpad scrolling bubbles smoothly inside container
+            // and prevent any window-level smooth scroller from canceling it
+            e.stopPropagation();
+          }}
         >
           {navigationSections.map((section, idx) => (
             <div key={section.id} className="space-y-1">
@@ -165,8 +179,8 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
                       to={item.path}
                       onClick={onClose}
                       className={cn(
-                        // Identical dimensions & box-sizing for all navigation rows
-                        'relative flex items-center h-10 w-full rounded-xl text-xs font-medium box-border transition-colors duration-150 group outline-none',
+                        // Identical dimensions & box-sizing for all navigation rows (both active and inactive)
+                        'relative flex items-center h-10 w-full rounded-xl text-xs font-medium box-border transition-colors duration-150 group outline-none flex-shrink-0',
                         'focus-visible:ring-2 focus-visible:ring-[#8B5CF6]/70 focus-visible:ring-offset-1 focus-visible:ring-offset-[#080514]',
                         collapsed ? 'justify-center px-0' : 'justify-between px-3',
                         isActive
@@ -174,21 +188,30 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
                           : 'text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30]/70'
                       )}
                     >
-                      {/* Active decorative background pill (animated via layoutId) */}
+                      {/* Active decorative background (stable CSS absolute inset-0) */}
                       {isActive && (
-                        <motion.div
-                          layoutId={`${layoutIdPrefix}activeSidebarHighlight`}
-                          transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                          className="absolute inset-0 rounded-xl bg-[#8B5CF6]/15 border border-[#8B5CF6]/40 shadow-[0_0_15px_rgba(139,92,246,0.22)] pointer-events-none"
+                        <div
+                          className="absolute inset-0 rounded-xl bg-[#8B5CF6]/15 border border-[#8B5CF6]/40 shadow-[0_0_15px_rgba(139,92,246,0.22)] pointer-events-none transition-all duration-150"
+                          style={{
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            boxSizing: 'border-box',
+                          }}
                         />
                       )}
 
-                      {/* Active left indicator pill (vertically centered and aligned to left edge) */}
+                      {/* Active left indicator (stable CSS absolute left-0 vertically centered) */}
                       {isActive && (
-                        <motion.div
-                          layoutId={`${layoutIdPrefix}activeSidebarIndicator`}
-                          transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-gradient-to-b from-[#8B5CF6] via-[#A855F7] to-[#D946EF] shadow-[0_0_10px_#A855F7] pointer-events-none z-10"
+                        <div
+                          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-gradient-to-b from-[#8B5CF6] via-[#A855F7] to-[#D946EF] shadow-[0_0_10px_#A855F7] pointer-events-none z-10 transition-all duration-150"
+                          style={{
+                            position: 'absolute',
+                            left: 0,
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                          }}
                         />
                       )}
 
@@ -273,10 +296,13 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
 
   return (
     <>
-      {/* Desktop Sidebar: docked vertically below fixed header (top-14) with independent inner scroll */}
+      {/* Desktop Sidebar: docked vertically below fixed header (top-14) with independent native scroll */}
       <aside
+        data-lenis-prevent="true"
+        data-lenis-prevent-wheel="true"
+        data-lenis-prevent-touch="true"
         className={cn(
-          'hidden md:block h-[calc(100dvh-3.5rem)] sticky top-14 border-r border-[rgba(167,139,250,0.20)] bg-[#080514]/90 backdrop-blur-xl text-[#B8ACD9] transition-all duration-300 z-30 overflow-hidden flex-shrink-0',
+          'hidden md:flex flex-col h-[calc(100dvh-3.5rem)] sticky top-14 border-r border-[rgba(167,139,250,0.20)] bg-[#080514]/90 backdrop-blur-xl text-[#B8ACD9] transition-all duration-300 z-30 overflow-hidden flex-shrink-0',
           isCollapsed ? 'w-[68px]' : 'w-64'
         )}
       >
@@ -291,7 +317,12 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
             onClick={onClose}
             aria-hidden="true"
           />
-          <div className="relative flex w-full max-w-xs flex-1 flex-col bg-[#080514] border-r border-[rgba(167,139,250,0.20)] h-full overflow-hidden shadow-2xl">
+          <div
+            data-lenis-prevent="true"
+            data-lenis-prevent-wheel="true"
+            data-lenis-prevent-touch="true"
+            className="relative flex w-full max-w-xs flex-1 flex-col bg-[#080514] border-r border-[rgba(167,139,250,0.20)] h-full overflow-hidden shadow-2xl"
+          >
             {renderNavigationContent(true)}
           </div>
         </div>

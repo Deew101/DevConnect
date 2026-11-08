@@ -16,6 +16,16 @@ export function useSmoothScroll() {
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1,
+      allowNestedScroll: true,
+      prevent: (node) => {
+        return (
+          node.hasAttribute?.('data-lenis-prevent') ||
+          !!node.closest?.('[data-lenis-prevent]') ||
+          !!node.closest?.('aside') ||
+          !!node.closest?.('.sidebar-navigation') ||
+          !!node.closest?.('.sidebar-scroll')
+        );
+      },
     });
 
     let animationFrameId: number;
