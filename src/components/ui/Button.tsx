@@ -5,25 +5,25 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export const buttonVariants = cva(
-  'inline-flex shrink-0 items-center justify-center font-medium transition-all duration-150 outline-none select-none focus-visible:ring-2 focus-visible:ring-[#648BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090C13] disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] rounded-xl text-xs sm:text-sm',
+  'inline-flex shrink-0 items-center justify-center font-medium transition-all duration-150 outline-none select-none focus-visible:ring-2 focus-visible:ring-[#8B5CF6] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080514] disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] rounded-xl text-xs sm:text-sm',
   {
     variants: {
       variant: {
         default:
-          'bg-[#648BFF] hover:bg-[#5277E6] text-white font-semibold shadow-md shadow-[#648BFF]/25 border border-[#648BFF]/40',
+          'bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:from-[#7C3AED] hover:to-[#9333EA] text-[#F8F7FF] font-semibold shadow-md shadow-[#8B5CF6]/25 border border-[#8B5CF6]/40',
         primary:
-          'bg-[#648BFF] hover:bg-[#5277E6] text-white font-semibold shadow-md shadow-[#648BFF]/25 border border-[#648BFF]/40',
+          'bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:from-[#7C3AED] hover:to-[#9333EA] text-[#F8F7FF] font-semibold shadow-md shadow-[#8B5CF6]/25 border border-[#8B5CF6]/40',
         secondary:
-          'bg-[#141C2B] hover:bg-[#192338] text-[#F1F5FC] border border-[#273249] shadow-sm',
+          'bg-[#100A24] hover:bg-[#160E30] text-[#F8F7FF] border border-[rgba(167,139,250,0.20)] shadow-sm',
         outline:
-          'border border-[#273249] bg-transparent hover:bg-[#141C2B] text-[#F1F5FC] hover:border-[#648BFF]/40',
+          'border border-[rgba(167,139,250,0.20)] bg-transparent hover:bg-[#160E30] text-[#F8F7FF] hover:border-[#8B5CF6]/40',
         ghost:
-          'bg-transparent hover:bg-[#141C2B] text-[#929DB2] hover:text-[#F1F5FC]',
+          'bg-transparent hover:bg-[#160E30] text-[#B8ACD9] hover:text-[#F8F7FF]',
         destructive:
           'bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30',
         glow:
-          'bg-gradient-to-r from-[#648BFF] via-[#7B82FF] to-[#9B7BFF] hover:opacity-95 text-white font-semibold shadow-lg shadow-[#648BFF]/25 border border-[#648BFF]/30',
-        link: 'text-[#648BFF] underline-offset-4 hover:underline',
+          'bg-gradient-to-r from-[#8B5CF6] via-[#A855F7] to-[#D946EF] hover:opacity-95 text-[#F8F7FF] font-semibold shadow-lg shadow-[#8B5CF6]/25 border border-[#8B5CF6]/30',
+        link: 'text-[#A855F7] underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-8 px-3.5',
@@ -51,18 +51,19 @@ export interface ButtonProps
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size = 'default', isLoading = false, children, disabled, ...props }, ref) => {
+  ({ className, variant, size, isLoading, children, disabled, ...props }, ref) => {
     return (
-      <ButtonPrimitive
+      <button
+        className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         disabled={disabled || isLoading}
-        className={cn(buttonVariants({ variant, size, className }))}
         {...props}
       >
-        {isLoading && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin text-current" />}
+        {isLoading && <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />}
         {children}
-      </ButtonPrimitive>
+      </button>
     );
   }
 );
+
 Button.displayName = 'Button';

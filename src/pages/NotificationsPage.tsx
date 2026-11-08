@@ -100,16 +100,16 @@ export const NotificationsPage: React.FC = () => {
     switch (type) {
       case 'connection_request':
       case 'connection_accepted':
-        return <UserPlus className="h-4 w-4 text-[#648BFF]" />;
+        return <UserPlus className="h-4 w-4 text-[#8B5CF6]" />;
       case 'project_invite':
       case 'project_update':
-        return <FolderGit2 className="h-4 w-4 text-[#9B7BFF]" />;
+        return <FolderGit2 className="h-4 w-4 text-[#A855F7]" />;
       case 'task_assigned':
-        return <CheckSquare className="h-4 w-4 text-[#35C98A]" />;
+        return <CheckSquare className="h-4 w-4 text-[#34D399]" />;
       case 'new_message':
-        return <MessageSquare className="h-4 w-4 text-[#648BFF]" />;
+        return <MessageSquare className="h-4 w-4 text-[#8B5CF6]" />;
       default:
-        return <Bell className="h-4 w-4 text-[#929DB2]" />;
+        return <Bell className="h-4 w-4 text-[#B8ACD9]" />;
     }
   };
 
@@ -118,27 +118,27 @@ export const NotificationsPage: React.FC = () => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="max-w-4xl mx-auto space-y-6 pb-12"
+      className="max-w-4xl mx-auto space-y-6 pb-12 font-sans"
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[11px] font-mono tracking-wider text-[#648BFF] uppercase font-semibold">
+            <span className="text-[11px] font-mono tracking-wider text-[#A855F7] uppercase font-semibold">
               DevConnect Stream
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#648BFF]" />
-            <span className="text-xs font-mono text-[#929DB2]">Activity Center</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse" />
+            <span className="text-xs font-mono text-[#B8ACD9]">Activity Center</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#F1F5FC] tracking-tight flex items-center gap-2.5">
+          <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F8F7FF] tracking-tight flex items-center gap-2.5">
             Notifications
             {unreadCount > 0 && (
-              <Badge variant="cyan" className="font-mono text-xs">
+              <Badge variant="glow" className="font-mono text-xs">
                 {unreadCount} Unread
               </Badge>
             )}
           </h1>
-          <p className="text-xs sm:text-sm text-[#929DB2] mt-0.5">
+          <p className="text-xs sm:text-sm text-[#B8ACD9] mt-0.5">
             Real-time collaboration alerts, team invitations, and network updates.
           </p>
         </div>

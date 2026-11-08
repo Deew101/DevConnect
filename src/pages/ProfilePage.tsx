@@ -240,16 +240,18 @@ export const ProfilePage: React.FC = () => {
 
   if (!profile) {
     return (
-      <div className="p-16 text-center border border-dashed border-[#273249] rounded-xl max-w-lg mx-auto mt-16 bg-[#101725]">
-        <div className="w-12 h-12 rounded-lg bg-[#151F30] border border-[#273249] flex items-center justify-center mx-auto mb-4 text-[#929DB2]">
+      <div className="p-16 text-center border border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl max-w-lg mx-auto mt-16 bg-[#100A24]/60 backdrop-blur-md font-sans">
+        <div className="w-12 h-12 rounded-2xl bg-[#160E30] border border-[rgba(167,139,250,0.20)] flex items-center justify-center mx-auto mb-4 text-[#A855F7]">
           <Code2 className="w-6 h-6" />
         </div>
-        <h3 className="font-display text-xl font-bold text-[#F4F6FC] mb-2">Record Not Found</h3>
-        <p className="text-xs text-[#929DB2] mb-6 leading-relaxed">
+        <h3 className="font-display text-xl font-bold text-[#F8F7FF] mb-2">Record Not Found</h3>
+        <p className="text-xs text-[#B8ACD9] mb-6 leading-relaxed">
           The requested developer profile does not exist or has been removed from the directory.
         </p>
         <Link to="/developers">
-          <Button variant="primary">Return to Directory</Button>
+          <Button variant="primary" className="bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]">
+            Return to Directory
+          </Button>
         </Link>
       </div>
     );
@@ -389,10 +391,10 @@ export const ProfilePage: React.FC = () => {
             </p>
 
             {/* Meta Tags Row */}
-            <div className="flex flex-wrap items-center gap-y-2 gap-x-5 text-xs text-[#929DB2] pt-3 border-t border-[#273249] font-mono">
+            <div className="flex flex-wrap items-center gap-y-2 gap-x-5 text-xs text-[#B8ACD9] pt-3 border-t border-[rgba(167,139,250,0.20)] font-mono">
               {profile.location && (
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-[#929DB2]" /> {profile.location}
+                  <MapPin className="h-3.5 w-3.5 text-[#B8ACD9]" /> {profile.location}
                 </span>
               )}
               {profile.website_url && (
@@ -400,7 +402,7 @@ export const ProfilePage: React.FC = () => {
                   href={profile.website_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-[#6D95FF] hover:underline"
+                  className="flex items-center gap-1.5 text-[#A855F7] hover:underline"
                 >
                   <Globe className="h-3.5 w-3.5" /> Portfolio <ArrowUpRight className="w-3 h-3" />
                 </a>
@@ -410,15 +412,15 @@ export const ProfilePage: React.FC = () => {
                   href={`https://github.com/${profile.github_username}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-[#F4F6FC] hover:text-[#6D95FF] transition-colors"
+                  className="flex items-center gap-1.5 text-[#F8F7FF] hover:text-[#A855F7] transition-colors"
                 >
                   <Github className="h-3.5 w-3.5" /> {profile.github_username}
                 </a>
               )}
-              <span className="flex items-center gap-1.5 text-[#35C98A]">
-                <Clock className="h-3.5 w-3.5 text-[#35C98A]" /> {profile.weekly_hours_available || 15} hrs/wk available
+              <span className="flex items-center gap-1.5 text-[#34D399]">
+                <Clock className="h-3.5 w-3.5 text-[#34D399]" /> {profile.weekly_hours_available || 15} hrs/wk available
               </span>
-              <span className="flex items-center gap-1.5 text-[#929DB2]">
+              <span className="flex items-center gap-1.5 text-[#B8ACD9]">
                 <Calendar className="h-3.5 w-3.5" /> Joined {formatDate(profile.created_at)}
               </span>
             </div>
@@ -431,13 +433,13 @@ export const ProfilePage: React.FC = () => {
         {/* Left Column: Technical Skills, Languages, Focus Areas */}
         <div className="space-y-6">
           {/* Technical Skills Card */}
-          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl relative overflow-hidden">
-            <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between border-b border-[#273249]">
-              <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center gap-2">
-                <Code2 className="h-4 w-4 text-[#6D95FF]" /> Technical Competencies
+          <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl relative overflow-hidden rounded-2xl">
+            <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between border-b border-[rgba(167,139,250,0.15)]">
+              <CardTitle className="font-display text-sm font-bold text-[#F8F7FF] flex items-center gap-2">
+                <Code2 className="h-4 w-4 text-[#A855F7]" /> Technical Competencies
               </CardTitle>
               {isOwner && (
-                <Link to="/profile/edit" className="text-xs text-[#6D95FF] hover:underline font-mono">
+                <Link to="/profile/edit" className="text-xs text-[#A855F7] hover:underline font-mono">
                   Manage
                 </Link>
               )}
@@ -445,20 +447,20 @@ export const ProfilePage: React.FC = () => {
 
             <CardContent className="p-0 pt-4 space-y-2.5">
               {skills.length === 0 ? (
-                <p className="text-xs text-[#929DB2] italic py-2">No technical competencies indexed yet.</p>
+                <p className="text-xs text-[#B8ACD9] italic py-2">No technical competencies indexed yet.</p>
               ) : (
                 skills.map((us) => (
                   <div
                     key={us.id}
-                    className="p-2.5 rounded-lg bg-[#151F30] border border-[#273249] flex items-center justify-between text-xs hover:border-[#6D95FF]/40 transition-colors"
+                    className="p-2.5 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)] flex items-center justify-between text-xs hover:border-[#8B5CF6]/50 transition-colors"
                   >
                     <div>
-                      <span className="font-semibold text-[#F4F6FC]">{us.skill?.name}</span>
-                      <span className="text-[10px] text-[#929DB2] font-mono ml-2">
+                      <span className="font-semibold text-[#F8F7FF]">{us.skill?.name}</span>
+                      <span className="text-[10px] text-[#B8ACD9] font-mono ml-2">
                         {us.years_of_experience} yrs
                       </span>
                     </div>
-                    <Badge variant="cyan" className="text-[10px] py-0 px-2 font-mono bg-[#6D95FF]/15 text-[#6D95FF] border-[#6D95FF]/30">
+                    <Badge variant="cyan" className="text-[10px] py-0 px-2 font-mono bg-[#8B5CF6]/15 text-[#C4B5FD] border-[#8B5CF6]/30">
                       {us.proficiency_level}
                     </Badge>
                   </div>
@@ -468,41 +470,41 @@ export const ProfilePage: React.FC = () => {
           </Card>
 
           {/* Collaboration Focus & Interests */}
-          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl">
-            <CardHeader className="p-0 pb-4 border-b border-[#273249]">
-              <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-[#9D83FF]" /> Collaboration Cadence
+          <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl rounded-2xl">
+            <CardHeader className="p-0 pb-4 border-b border-[rgba(167,139,250,0.15)]">
+              <CardTitle className="font-display text-sm font-bold text-[#F8F7FF] flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-[#D946EF]" /> Collaboration Cadence
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 pt-4 space-y-4 text-xs">
               <div>
-                <span className="text-[#929DB2] font-medium block mb-2 font-mono text-[10px] uppercase tracking-wider">
+                <span className="text-[#B8ACD9] font-medium block mb-2 font-mono text-[10px] uppercase tracking-wider">
                   AREAS OF SPECIALIZATION
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {(profile.interests || []).map((interest) => (
                     <span
                       key={interest}
-                      className="px-2.5 py-1 rounded bg-[#151F30] border border-[#273249] text-xs font-mono text-[#F4F6FC]"
+                      className="px-2.5 py-1 rounded-lg bg-[#100A24] border border-[rgba(167,139,250,0.20)] text-xs font-mono text-[#F8F7FF]"
                     >
                       {interest}
                     </span>
                   ))}
                   {(!profile.interests || profile.interests.length === 0) && (
-                    <span className="text-[#929DB2] italic">No specializations specified</span>
+                    <span className="text-[#B8ACD9] italic">No specializations specified</span>
                   )}
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-[#273249]">
-                <span className="text-[#929DB2] font-medium block mb-1.5 font-mono text-[10px] uppercase tracking-wider">
+              <div className="pt-3 border-t border-[rgba(167,139,250,0.15)]">
+                <span className="text-[#B8ACD9] font-medium block mb-1.5 font-mono text-[10px] uppercase tracking-wider">
                   PROJECT COMMITMENT
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded text-xs font-mono capitalize bg-[#151F30] text-[#6D95FF] border border-[#273249]">
+                  <span className="px-2.5 py-0.5 rounded-lg text-xs font-mono capitalize bg-[#100A24] text-[#A855F7] border border-[rgba(167,139,250,0.20)]">
                     {profile.availability_status?.replace(/_/g, ' ') || 'Available'}
                   </span>
-                  <span className="text-[#929DB2] font-mono text-xs">
+                  <span className="text-[#B8ACD9] font-mono text-xs">
                     ({profile.weekly_hours_available || 15} hours/week)
                   </span>
                 </div>
@@ -514,11 +516,11 @@ export const ProfilePage: React.FC = () => {
         {/* Right Column: Professional Description, GitHub Repositories & Collaborative Projects */}
         <div className="lg:col-span-2 space-y-6">
           {/* Professional Profile & Collaboration Objectives */}
-          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl relative overflow-hidden">
-            <CardHeader className="p-0 pb-4 border-b border-[#273249]">
-              <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center justify-between">
+          <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl relative overflow-hidden rounded-2xl">
+            <CardHeader className="p-0 pb-4 border-b border-[rgba(167,139,250,0.15)]">
+              <CardTitle className="font-display text-sm font-bold text-[#F8F7FF] flex items-center justify-between">
                 <span className="flex items-center gap-2">
-                  <Terminal className="h-4 w-4 text-[#6D95FF]" /> Professional Dossier & Objectives
+                  <Terminal className="h-4 w-4 text-[#A855F7]" /> Professional Dossier & Objectives
                 </span>
                 {(profile as any).is_demo && (
                   <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400">
@@ -531,21 +533,21 @@ export const ProfilePage: React.FC = () => {
             <CardContent className="p-0 pt-4 space-y-4 text-xs">
               {/* Bio summary */}
               <div>
-                <span className="text-[10px] font-mono text-[#929DB2] uppercase tracking-wider block mb-1">
+                <span className="text-[10px] font-mono text-[#B8ACD9] uppercase tracking-wider block mb-1">
                   EXECUTIVE BIOGRAPHY
                 </span>
-                <p className="text-[#F4F6FC] leading-relaxed text-xs">
+                <p className="text-[#F8F7FF] leading-relaxed text-xs">
                   {(profile as any).professional_description?.bio || profile.bio || 'Building scalable applications and open-source software on DevConnect.'}
                 </p>
               </div>
 
               {/* Current Goals */}
               {(profile as any).professional_description?.current_goals && (
-                <div className="p-3 rounded-xl bg-[#151F30] border border-[#273249]">
-                  <span className="text-[10px] font-mono text-[#6D95FF] uppercase font-bold tracking-wider block mb-1">
+                <div className="p-3.5 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)]">
+                  <span className="text-[10px] font-mono text-[#A855F7] uppercase font-bold tracking-wider block mb-1">
                     CURRENT ENGINEERING GOALS
                   </span>
-                  <p className="text-[#F4F6FC] leading-relaxed text-xs">
+                  <p className="text-[#F8F7FF] leading-relaxed text-xs">
                     {(profile as any).professional_description.current_goals}
                   </p>
                 </div>
@@ -554,11 +556,11 @@ export const ProfilePage: React.FC = () => {
               {/* Collaboration Style & Target Projects */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 {(profile as any).professional_description?.collaboration_style && (
-                  <div className="p-3 rounded-xl bg-[#151F30] border border-[#273249]">
-                    <span className="text-[10px] font-mono text-[#9D83FF] uppercase font-bold tracking-wider block mb-1">
+                  <div className="p-3.5 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)]">
+                    <span className="text-[10px] font-mono text-[#D946EF] uppercase font-bold tracking-wider block mb-1">
                       COLLABORATION STYLE
                     </span>
-                    <p className="text-[#929DB2] leading-relaxed text-xs">
+                    <p className="text-[#B8ACD9] leading-relaxed text-xs">
                       {(profile as any).professional_description.collaboration_style}
                     </p>
                   </div>
@@ -566,15 +568,15 @@ export const ProfilePage: React.FC = () => {
 
                 {Array.isArray((profile as any).professional_description?.target_projects) &&
                   (profile as any).professional_description.target_projects.length > 0 && (
-                    <div className="p-3 rounded-xl bg-[#151F30] border border-[#273249]">
-                      <span className="text-[10px] font-mono text-[#35C98A] uppercase font-bold tracking-wider block mb-1">
+                    <div className="p-3.5 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)]">
+                      <span className="text-[10px] font-mono text-[#34D399] uppercase font-bold tracking-wider block mb-1">
                         TARGET PROJECT DOMAINS
                       </span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {(profile as any).professional_description.target_projects.map((tp: string) => (
                           <span
                             key={tp}
-                            className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#101725] border border-[#273249] text-[#F4F6FC]"
+                            className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#160E30] border border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
                           >
                             {tp}
                           </span>
@@ -594,14 +596,14 @@ export const ProfilePage: React.FC = () => {
           />
 
           {/* Linked Projects Showcase */}
-          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl">
-            <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between border-b border-[#273249]">
-              <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center gap-2">
-                <FolderGit2 className="h-4 w-4 text-[#6D95FF]" /> Project Portfolio
+          <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl rounded-2xl">
+            <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between border-b border-[rgba(167,139,250,0.15)]">
+              <CardTitle className="font-display text-sm font-bold text-[#F8F7FF] flex items-center gap-2">
+                <FolderGit2 className="h-4 w-4 text-[#A855F7]" /> Project Portfolio
               </CardTitle>
               {isOwner && (
                 <Link to="/projects/new">
-                  <Button variant="outline" size="sm" className="h-7 text-xs border-[#273249] text-[#F4F6FC] font-mono">
+                  <Button variant="outline" size="sm" className="h-7 text-xs border-[rgba(167,139,250,0.25)] text-[#F8F7FF] font-mono hover:bg-[#8B5CF6]/20">
                     + New Project
                   </Button>
                 </Link>
@@ -610,7 +612,7 @@ export const ProfilePage: React.FC = () => {
 
             <CardContent className="p-0 pt-4 space-y-3">
               {projects.length === 0 ? (
-                <div className="py-10 text-center text-xs text-[#929DB2] border border-dashed border-[#273249] rounded-xl bg-[#151F30]/40">
+                <div className="py-10 text-center text-xs text-[#B8ACD9] border border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl bg-[#100A24]/60">
                   No collaborative projects indexed by this engineer yet.
                 </div>
               ) : (
@@ -618,21 +620,21 @@ export const ProfilePage: React.FC = () => {
                   <Link
                     key={proj.id}
                     to={`/projects/${proj.id}`}
-                    className="p-4 rounded-xl border border-[#273249] bg-[#151F30] hover:bg-[#1C2940] hover:border-[#6D95FF]/40 transition-all flex items-center justify-between group block"
+                    className="p-4 rounded-xl border border-[rgba(167,139,250,0.20)] bg-[#100A24] hover:bg-[#160E30] hover:border-[#8B5CF6]/50 transition-all flex items-center justify-between group block"
                   >
                     <div className="space-y-1.5 pr-4">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h4 className="font-display font-semibold text-sm text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors">
+                        <h4 className="font-display font-semibold text-sm text-[#F8F7FF] group-hover:text-[#C4B5FD] transition-colors">
                           {proj.title}
                         </h4>
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#101725] text-[#6D95FF] border border-[#273249]">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#160E30] text-[#A855F7] border border-[rgba(167,139,250,0.20)]">
                           {proj.category}
                         </span>
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono capitalize border border-[#273249] text-[#929DB2]">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono capitalize border border-[rgba(167,139,250,0.20)] text-[#B8ACD9]">
                           {proj.status?.replace(/_/g, ' ')}
                         </span>
                       </div>
-                      <p className="text-xs text-[#929DB2] line-clamp-1 leading-relaxed">
+                      <p className="text-xs text-[#B8ACD9] line-clamp-1 leading-relaxed">
                         {proj.tagline || proj.description}
                       </p>
                       {proj.required_skills && proj.required_skills.length > 0 && (
@@ -640,7 +642,7 @@ export const ProfilePage: React.FC = () => {
                           {proj.required_skills.slice(0, 4).map((sk) => (
                             <span
                               key={sk}
-                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#101725] text-[#929DB2] border border-[#273249]"
+                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#160E30] text-[#B8ACD9] border border-[rgba(167,139,250,0.20)]"
                             >
                               {sk}
                             </span>
@@ -649,7 +651,7 @@ export const ProfilePage: React.FC = () => {
                       )}
                     </div>
 
-                    <ArrowUpRight className="h-4 w-4 text-[#929DB2] group-hover:text-[#6D95FF] transition-colors flex-shrink-0" />
+                    <ArrowUpRight className="h-4 w-4 text-[#B8ACD9] group-hover:text-[#A855F7] transition-colors flex-shrink-0" />
                   </Link>
                 ))
               )}

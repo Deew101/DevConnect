@@ -142,21 +142,21 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
   };
 
   return (
-    <div className="bg-[#101725] border border-[#273249] rounded-2xl shadow-2xl p-5 sm:p-6 max-w-xl w-full text-[#F4F6FC] font-sans">
+    <div className="bg-[#100A24] border border-[rgba(167,139,250,0.20)] rounded-2xl shadow-2xl p-5 sm:p-6 max-w-xl w-full text-[#F8F7FF] font-sans">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#273249]/60 pb-4 mb-5">
+      <div className="flex items-center justify-between border-b border-[rgba(167,139,250,0.20)] pb-4 mb-5">
         <div>
-          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold">
+          <div className="text-[10px] font-mono tracking-widest text-[#A855F7] uppercase font-semibold">
             AVATAR SELECTION
           </div>
-          <h2 className="text-xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
+          <h2 className="text-xl font-display font-extrabold text-[#F8F7FF] tracking-tight">
             Select Profile Avatar
           </h2>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30] transition-colors"
+            className="p-1.5 rounded-lg text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30] transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -164,14 +164,14 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
       </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-3 rounded-xl bg-[#151F30] border border-[#273249] p-1 mb-5 text-xs font-semibold font-mono">
+      <div className="grid grid-cols-3 rounded-xl bg-[#160E30] border border-[rgba(167,139,250,0.20)] p-1 mb-5 text-xs font-semibold font-mono">
         <button
           type="button"
           onClick={() => setActiveTab('presets')}
           className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
             activeTab === 'presets'
-              ? 'bg-[#101725] text-[#6D95FF] border border-[#273249] shadow-sm'
-              : 'text-[#929DB2] hover:text-[#F4F6FC]'
+              ? 'bg-[#100A24] text-[#C4B5FD] border border-[rgba(167,139,250,0.30)] shadow-sm'
+              : 'text-[#B8ACD9] hover:text-[#F8F7FF]'
           }`}
         >
           <Sparkles className="h-3.5 w-3.5" />
@@ -183,8 +183,8 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
           onClick={() => setActiveTab('upload')}
           className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
             activeTab === 'upload'
-              ? 'bg-[#101725] text-[#6D95FF] border border-[#273249] shadow-sm'
-              : 'text-[#929DB2] hover:text-[#F4F6FC]'
+              ? 'bg-[#100A24] text-[#C4B5FD] border border-[rgba(167,139,250,0.30)] shadow-sm'
+              : 'text-[#B8ACD9] hover:text-[#F8F7FF]'
           }`}
         >
           <Upload className="h-3.5 w-3.5" />
@@ -196,8 +196,8 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
           onClick={() => setActiveTab('initials')}
           className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
             activeTab === 'initials'
-              ? 'bg-[#101725] text-[#6D95FF] border border-[#273249] shadow-sm'
-              : 'text-[#929DB2] hover:text-[#F4F6FC]'
+              ? 'bg-[#100A24] text-[#C4B5FD] border border-[rgba(167,139,250,0.30)] shadow-sm'
+              : 'text-[#B8ACD9] hover:text-[#F8F7FF]'
           }`}
         >
           <Layers className="h-3.5 w-3.5" />
@@ -217,8 +217,8 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
                 onClick={() => setPresetCategory(cat)}
                 className={`px-3 py-1 rounded-lg text-xs font-mono capitalize transition-all whitespace-nowrap ${
                   presetCategory === cat
-                    ? 'bg-[#6D95FF]/20 text-[#6D95FF] border border-[#6D95FF]/40'
-                    : 'bg-[#151F30] text-[#929DB2] hover:text-[#F4F6FC] border border-[#273249]'
+                    ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/50 shadow-[0_0_10px_rgba(139,92,246,0.2)]'
+                    : 'bg-[#160E30] text-[#B8ACD9] hover:text-[#F8F7FF] border border-[rgba(167,139,250,0.20)]'
                 }`}
               >
                 {cat}
@@ -237,8 +237,8 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
                   onClick={() => setSelectedPresetId(preset.id)}
                   className={`group relative flex flex-col items-center justify-center p-2 rounded-xl border transition-all ${
                     isSelected
-                      ? 'bg-[#6D95FF]/15 border-[#6D95FF] ring-2 ring-[#6D95FF]/30 scale-105'
-                      : 'bg-[#151F30] border-[#273249] hover:border-[#6D95FF]/40 hover:scale-102'
+                      ? 'bg-[#8B5CF6]/20 border-[#8B5CF6] ring-2 ring-[#8B5CF6]/40 scale-105 shadow-[0_0_12px_rgba(139,92,246,0.3)]'
+                      : 'bg-[#160E30] border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/50 hover:scale-102'
                   }`}
                   title={preset.name}
                 >
@@ -246,11 +246,11 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
                     className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center pointer-events-none"
                     dangerouslySetInnerHTML={{ __html: preset.svg }}
                   />
-                  <span className="text-[10px] text-[#929DB2] group-hover:text-[#F4F6FC] truncate w-full text-center mt-1.5 font-mono">
+                  <span className="text-[10px] text-[#B8ACD9] group-hover:text-[#F8F7FF] truncate w-full text-center mt-1.5 font-mono">
                     {preset.name}
                   </span>
                   {isSelected && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#6D95FF] text-[#090C13] flex items-center justify-center">
+                    <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#8B5CF6] text-[#080514] flex items-center justify-center shadow-md">
                       <Check className="h-2.5 w-2.5 stroke-[3]" />
                     </div>
                   )}
@@ -260,11 +260,11 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
           </div>
 
           {/* Footer apply */}
-          <div className="flex items-center justify-between pt-4 border-t border-[#273249]/60">
+          <div className="flex items-center justify-between pt-4 border-t border-[rgba(167,139,250,0.20)]">
             <div className="flex items-center gap-2.5">
-              <span className="text-xs text-[#929DB2] font-mono">Selected:</span>
+              <span className="text-xs text-[#B8ACD9] font-mono">Selected:</span>
               <Avatar src={selectedPresetId} size="sm" />
-              <span className="text-xs font-semibold text-[#F4F6FC]">
+              <span className="text-xs font-semibold text-[#F8F7FF]">
                 {PRESET_AVATARS.find(p => p.id === selectedPresetId)?.name || 'Preset'}
               </span>
             </div>
@@ -273,7 +273,7 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
               variant="primary"
               size="sm"
               onClick={handleApplyPreset}
-              className="text-xs font-semibold"
+              className="text-xs font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]"
             >
               Use Selected Avatar
             </Button>
@@ -284,10 +284,10 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
       {/* TAB 2: UPLOAD PHOTO */}
       {activeTab === 'upload' && (
         <div className="space-y-4">
-          <div className="flex flex-col items-center justify-center border-2 border-dashed border-[#273249] rounded-2xl p-6 bg-[#151F30]/50 hover:bg-[#151F30] transition-colors relative">
+          <div className="flex flex-col items-center justify-center border-2 border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl p-6 bg-[#160E30]/50 hover:bg-[#160E30] transition-colors relative">
             {previewUrl ? (
               <div className="flex flex-col items-center space-y-4">
-                <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-[#6D95FF] shadow-xl bg-[#090C13]">
+                <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-[#8B5CF6] shadow-xl bg-[#080514]">
                   <img
                     src={previewUrl}
                     alt="Preview"
@@ -297,11 +297,11 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
                 </div>
 
                 {/* Zoom & Reposition Controls */}
-                <div className="flex items-center gap-3 bg-[#101725] px-4 py-1.5 rounded-xl border border-[#273249]">
+                <div className="flex items-center gap-3 bg-[#100A24] px-4 py-1.5 rounded-xl border border-[rgba(167,139,250,0.20)]">
                   <button
                     type="button"
                     onClick={() => setZoomLevel(Math.max(0.8, zoomLevel - 0.1))}
-                    className="text-[#929DB2] hover:text-[#F4F6FC] p-1"
+                    className="text-[#B8ACD9] hover:text-[#F8F7FF] p-1"
                     title="Zoom Out"
                   >
                     <ZoomOut className="h-4 w-4" />
@@ -313,12 +313,12 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
                     step="0.05"
                     value={zoomLevel}
                     onChange={(e) => setZoomLevel(parseFloat(e.target.value))}
-                    className="w-24 h-1.5 bg-[#151F30] rounded-lg appearance-none cursor-pointer accent-[#6D95FF]"
+                    className="w-24 h-1.5 bg-[#160E30] rounded-lg appearance-none cursor-pointer accent-[#8B5CF6]"
                   />
                   <button
                     type="button"
                     onClick={() => setZoomLevel(Math.min(2.5, zoomLevel + 0.1))}
-                    className="text-[#929DB2] hover:text-[#F4F6FC] p-1"
+                    className="text-[#B8ACD9] hover:text-[#F8F7FF] p-1"
                     title="Zoom In"
                   >
                     <ZoomIn className="h-4 w-4" />
@@ -326,7 +326,7 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
                   <button
                     type="button"
                     onClick={() => setZoomLevel(1)}
-                    className="text-[#929DB2] hover:text-[#F4F6FC] p-1 ml-1"
+                    className="text-[#B8ACD9] hover:text-[#F8F7FF] p-1 ml-1"
                     title="Reset Zoom"
                   >
                     <RotateCcw className="h-3.5 w-3.5" />
@@ -335,20 +335,20 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
               </div>
             ) : (
               <div className="text-center py-4">
-                <div className="w-12 h-12 rounded-full bg-[#101725] border border-[#273249] flex items-center justify-center mx-auto mb-3 text-[#6D95FF]">
+                <div className="w-12 h-12 rounded-full bg-[#100A24] border border-[rgba(167,139,250,0.20)] flex items-center justify-center mx-auto mb-3 text-[#A855F7]">
                   <Camera className="h-6 w-6" />
                 </div>
-                <p className="text-sm font-semibold text-[#F4F6FC] mb-1">
+                <p className="text-sm font-semibold text-[#F8F7FF] mb-1">
                   Choose a photograph to upload
                 </p>
-                <p className="text-xs text-[#929DB2] font-mono">
+                <p className="text-xs text-[#B8ACD9] font-mono">
                   Supports JPG, PNG or WebP (max 5MB)
                 </p>
               </div>
             )}
 
-            <label className="mt-4 cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#101725] hover:bg-[#151F30] border border-[#273249] text-xs font-semibold text-[#F4F6FC] transition-colors shadow-sm">
-              <Upload className="h-3.5 w-3.5 text-[#6D95FF]" />
+            <label className="mt-4 cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#100A24] hover:bg-[#160E30] border border-[rgba(167,139,250,0.20)] text-xs font-semibold text-[#F8F7FF] transition-colors shadow-sm">
+              <Upload className="h-3.5 w-3.5 text-[#A855F7]" />
               <span>{previewUrl ? 'Choose Different Photo' : 'Select Photo from Computer'}</span>
               <input
                 type="file"
@@ -375,7 +375,7 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
               disabled={!previewUrl || uploading}
               isLoading={uploading}
               onClick={handleUploadToSupabase}
-              className="text-xs font-semibold"
+              className="text-xs font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]"
             >
               Save Uploaded Photo
             </Button>
@@ -386,12 +386,12 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
       {/* TAB 3: INITIALS GRADIENT */}
       {activeTab === 'initials' && (
         <div className="space-y-4">
-          <div className="flex flex-col items-center justify-center p-8 bg-[#151F30]/50 border border-[#273249] rounded-2xl text-center">
+          <div className="flex flex-col items-center justify-center p-8 bg-[#160E30]/50 border border-[rgba(167,139,250,0.20)] rounded-2xl text-center">
             <Avatar name={userName} size="2xl" className="shadow-2xl mb-4" />
-            <h3 className="text-base font-bold font-display text-[#F4F6FC]">
+            <h3 className="text-base font-bold font-display text-[#F8F7FF]">
               Deterministic Initials Avatar
             </h3>
-            <p className="text-xs text-[#929DB2] max-w-sm mt-1 leading-relaxed">
+            <p className="text-xs text-[#B8ACD9] max-w-sm mt-1 leading-relaxed">
               Automatically generates a vibrant, permanent gradient derived uniquely from your developer handle ({userName}).
             </p>
           </div>
@@ -402,7 +402,7 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
               variant="primary"
               size="sm"
               onClick={handleApplyInitials}
-              className="text-xs font-semibold"
+              className="text-xs font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]"
             >
               Use Initials Avatar
             </Button>

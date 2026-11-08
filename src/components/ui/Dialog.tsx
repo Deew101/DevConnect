@@ -65,14 +65,14 @@ export const Dialog: React.FC<DialogProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              'relative w-full z-10 rounded-2xl border border-[#273249] bg-[#141C2B] p-6 shadow-2xl text-[#F1F5FC]',
+              'relative w-full z-10 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/95 backdrop-blur-xl p-6 shadow-2xl text-[#F8F7FF]',
               maxW[maxWidth],
               className
             )}
           >
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 rounded-lg p-1.5 text-[#929DB2] hover:text-[#F1F5FC] hover:bg-[#192338] transition-colors"
+              className="absolute right-4 top-4 rounded-lg p-1.5 text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#100A24] transition-colors"
             >
               <X className="h-5 w-5" />
             </button>

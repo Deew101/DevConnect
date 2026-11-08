@@ -142,21 +142,21 @@ export const OnboardingPage: React.FC = () => {
           <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
             Set Up Your DevConnect Profile
           </h1>
-          <p className="text-xs text-[#929DB2] mt-1 font-mono">
+          <p className="text-xs text-[#B8ACD9] mt-1 font-mono">
             Step {step} of {totalSteps} — Personalize your developer footprint
           </p>
 
           {/* Progress Bar */}
-          <div className="h-1.5 w-full bg-[#101725] rounded-full mt-4 overflow-hidden max-w-md mx-auto border border-[#273249]">
+          <div className="h-1.5 w-full bg-[#100A24] rounded-full mt-4 overflow-hidden max-w-md mx-auto border border-[rgba(167,139,250,0.20)]">
             <div
-              className="h-full bg-gradient-to-r from-[#6D95FF] to-[#9D83FF] transition-all duration-300"
+              className="h-full bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] transition-all duration-300"
               style={{ width: `${(step / totalSteps) * 100}%` }}
             />
           </div>
         </div>
 
         {/* Wizard Card */}
-        <Card className="border-[#273249] bg-[#101725]/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+        <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/90 p-6 sm:p-8 shadow-2xl backdrop-blur-xl rounded-2xl">
           <AnimatePresence mode="wait">
             {step === 1 && (
               <motion.div
@@ -167,23 +167,23 @@ export const OnboardingPage: React.FC = () => {
                 className="space-y-4"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <User className="h-5 w-5 text-[#6D95FF]" />
-                  <h3 className="font-bold font-display text-base text-[#F4F6FC]">Basic Information</h3>
+                  <User className="h-5 w-5 text-[#A855F7]" />
+                  <h3 className="font-bold font-display text-base text-[#F8F7FF]">Basic Information</h3>
                 </div>
 
                 {/* Avatar Picker in Onboarding */}
-                <div className="flex items-center gap-4 p-3 rounded-xl bg-[#151F30] border border-[#273249]">
-                  <Avatar src={avatarUrl} name={fullName || 'Dev'} size="lg" className="ring-2 ring-[#6D95FF]/30" />
+                <div className="flex items-center gap-4 p-3 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)]">
+                  <Avatar src={avatarUrl} name={fullName || 'Dev'} size="lg" className="ring-2 ring-[#8B5CF6]/40" />
                   <div className="flex-1">
-                    <span className="text-xs font-semibold text-[#F4F6FC] block">Choose Your Avatar</span>
-                    <span className="text-[11px] text-[#929DB2] block">Select from 24 vector presets or upload a photo</span>
+                    <span className="text-xs font-semibold text-[#F8F7FF] block">Choose Your Avatar</span>
+                    <span className="text-[11px] text-[#B8ACD9] block">Select from 24 vector presets or upload a photo</span>
                   </div>
                   <Button
                     type="button"
                     variant="primary"
                     size="xs"
                     onClick={() => setShowAvatarSelector(true)}
-                    className="h-8 text-xs font-semibold"
+                    className="h-8 text-xs font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]"
                   >
                     <Sparkles className="h-3 w-3 mr-1" /> Choose
                   </Button>
@@ -205,61 +205,61 @@ export const OnboardingPage: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-[#929DB2] mb-1 font-mono">
+                    <label className="block text-xs font-semibold text-[#B8ACD9] mb-1 font-mono">
                       Full Name *
                     </label>
                     <Input
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="Linus Torvalds"
-                      className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                      className="bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#929DB2] mb-1 font-mono">
+                    <label className="block text-xs font-semibold text-[#B8ACD9] mb-1 font-mono">
                       Username *
                     </label>
                     <Input
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder="ltorvalds"
-                      className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                      className="bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#929DB2] mb-1 font-mono">
+                  <label className="block text-xs font-semibold text-[#B8ACD9] mb-1 font-mono">
                     Headline
                   </label>
                   <Input
                     value={headline}
                     onChange={(e) => setHeadline(e.target.value)}
                     placeholder="e.g. Senior Frontend Engineer | TypeScript & Next.js"
-                    className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                    className="bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#929DB2] mb-1 font-mono">Bio</label>
+                  <label className="block text-xs font-semibold text-[#B8ACD9] mb-1 font-mono">Bio</label>
                   <Textarea
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     placeholder="Briefly describe what you love building and what technologies excite you..."
                     rows={3}
-                    className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                    className="bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF] rounded-xl"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#929DB2] mb-1 font-mono">Location</label>
+                  <label className="block text-xs font-semibold text-[#B8ACD9] mb-1 font-mono">Location</label>
                   <Input
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     placeholder="e.g. Berlin, Germany / Remote"
-                    className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                    className="bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
                   />
                 </div>
               </motion.div>
@@ -274,12 +274,12 @@ export const OnboardingPage: React.FC = () => {
                 className="space-y-4"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Code2 className="h-5 w-5 text-[#6D95FF]" />
-                  <h3 className="font-bold font-display text-base text-[#F4F6FC]">Technical Skills & Seniority</h3>
+                  <Code2 className="h-5 w-5 text-[#A855F7]" />
+                  <h3 className="font-bold font-display text-base text-[#F8F7FF]">Technical Skills & Seniority</h3>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#929DB2] mb-1 font-mono">
+                  <label className="block text-xs font-semibold text-[#B8ACD9] mb-1 font-mono">
                     Seniority Level
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
@@ -291,8 +291,8 @@ export const OnboardingPage: React.FC = () => {
                           onClick={() => setExperienceLevel(lvl)}
                           className={`p-2 rounded-xl text-xs font-semibold border transition-all ${
                             experienceLevel === lvl
-                              ? 'bg-[#6D95FF]/20 border-[#6D95FF] text-[#F4F6FC] shadow-sm'
-                              : 'bg-[#151F30] border-[#273249] text-[#929DB2] hover:text-[#F4F6FC]'
+                              ? 'bg-[#8B5CF6]/20 border-[#8B5CF6] text-[#F8F7FF] shadow-sm'
+                              : 'bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#B8ACD9] hover:text-[#F8F7FF]'
                           }`}
                         >
                           {lvl}
@@ -303,7 +303,7 @@ export const OnboardingPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#929DB2] mb-2 font-mono">
+                  <label className="block text-xs font-semibold text-[#B8ACD9] mb-2 font-mono">
                     Select Your Core Technologies (AI matchmaking uses this)
                   </label>
                   <div className="flex flex-wrap gap-2 max-h-56 overflow-y-auto p-1">
@@ -316,8 +316,8 @@ export const OnboardingPage: React.FC = () => {
                           onClick={() => handleToggleSkill(sk.name)}
                           className={`px-3 py-1.5 rounded-lg text-xs font-mono border transition-all ${
                             isSelected
-                              ? 'bg-[#6D95FF] border-[#6D95FF] text-[#090C13] font-bold shadow-sm'
-                              : 'bg-[#151F30] border-[#273249] text-[#929DB2] hover:border-[#6D95FF]/40 hover:text-[#F4F6FC]'
+                              ? 'bg-[#8B5CF6] border-[#8B5CF6] text-[#080514] font-bold shadow-sm'
+                              : 'bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#B8ACD9] hover:border-[#8B5CF6]/40 hover:text-[#F8F7FF]'
                           }`}
                         >
                           {isSelected && '✓ '}
@@ -339,12 +339,12 @@ export const OnboardingPage: React.FC = () => {
                 className="space-y-4"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Clock className="h-5 w-5 text-[#6D95FF]" />
-                  <h3 className="font-bold font-display text-base text-[#F4F6FC]">Collaboration Preferences</h3>
+                  <Clock className="h-5 w-5 text-[#A855F7]" />
+                  <h3 className="font-bold font-display text-base text-[#F8F7FF]">Collaboration Preferences</h3>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#929DB2] mb-1 font-mono">
+                  <label className="block text-xs font-semibold text-[#B8ACD9] mb-1 font-mono">
                     Available Hours per Week for Projects
                   </label>
                   <div className="flex items-center gap-4">
@@ -355,16 +355,16 @@ export const OnboardingPage: React.FC = () => {
                       step={2}
                       value={weeklyHours}
                       onChange={(e) => setWeeklyHours(Number(e.target.value))}
-                      className="w-full h-2 bg-[#151F30] rounded-lg appearance-none cursor-pointer accent-[#6D95FF]"
+                      className="w-full h-2 bg-[#100A24] rounded-lg appearance-none cursor-pointer accent-[#8B5CF6]"
                     />
-                    <span className="font-mono text-sm font-bold text-[#6D95FF] min-w-[70px]">
+                    <span className="font-mono text-sm font-bold text-[#A855F7] min-w-[70px]">
                       {weeklyHours} hrs/wk
                     </span>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#929DB2] mb-2 font-mono">
+                  <label className="block text-xs font-semibold text-[#B8ACD9] mb-2 font-mono">
                     Project Categories You Want to Build
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -387,8 +387,8 @@ export const OnboardingPage: React.FC = () => {
                           }}
                           className={`p-3 rounded-xl text-xs font-semibold border text-left transition-all ${
                             isSelected
-                              ? 'bg-[#6D95FF]/20 border-[#6D95FF] text-[#F4F6FC]'
-                              : 'bg-[#151F30] border-[#273249] text-[#929DB2] hover:text-[#F4F6FC]'
+                              ? 'bg-[#8B5CF6]/20 border-[#8B5CF6] text-[#F8F7FF]'
+                              : 'bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#B8ACD9] hover:text-[#F8F7FF]'
                           }`}
                         >
                           {isSelected ? '✓ ' : '+ '}
@@ -410,34 +410,34 @@ export const OnboardingPage: React.FC = () => {
                 className="space-y-4"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Github className="h-5 w-5 text-[#6D95FF]" />
-                  <h3 className="font-bold font-display text-base text-[#F4F6FC]">Connect GitHub & Portfolio</h3>
+                  <Github className="h-5 w-5 text-[#A855F7]" />
+                  <h3 className="font-bold font-display text-base text-[#F8F7FF]">Connect GitHub & Portfolio</h3>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#929DB2] mb-1 font-mono">
+                  <label className="block text-xs font-semibold text-[#B8ACD9] mb-1 font-mono">
                     GitHub Username
                   </label>
                   <Input
                     value={githubUsername}
                     onChange={(e) => setGithubUsername(e.target.value)}
                     placeholder="e.g. torvalds (without @)"
-                    className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                    className="bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
                   />
-                  <p className="text-[11px] text-[#929DB2] mt-1 font-mono">
+                  <p className="text-[11px] text-[#B8ACD9] mt-1 font-mono">
                     DevConnect will automatically showcase your public repos and star counts.
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#929DB2] mb-1 font-mono">
+                  <label className="block text-xs font-semibold text-[#B8ACD9] mb-1 font-mono">
                     Portfolio or Personal Website URL
                   </label>
                   <Input
                     value={websiteUrl}
                     onChange={(e) => setWebsiteUrl(e.target.value)}
                     placeholder="https://myportfolio.dev"
-                    className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                    className="bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
                   />
                 </div>
               </motion.div>
@@ -445,14 +445,14 @@ export const OnboardingPage: React.FC = () => {
           </AnimatePresence>
 
           {/* Navigation Controls */}
-          <div className="flex items-center justify-between pt-6 mt-6 border-t border-[#273249]">
+          <div className="flex items-center justify-between pt-6 mt-6 border-t border-[rgba(167,139,250,0.20)]">
             {step > 1 ? (
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setStep(step - 1)}
-                className="border-[#273249] text-[#F4F6FC] bg-[#101725] hover:bg-[#151F30]"
+                className="border-[rgba(167,139,250,0.20)] text-[#F8F7FF] bg-[#100A24] hover:bg-[#160E30]"
               >
                 <ArrowLeft className="h-4 w-4 mr-1.5" /> Back
               </Button>
@@ -466,7 +466,7 @@ export const OnboardingPage: React.FC = () => {
                 variant="primary"
                 size="sm"
                 onClick={() => setStep(step + 1)}
-                className="shadow-md shadow-[#6D95FF]/20"
+                className="shadow-md shadow-[#8B5CF6]/20 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]"
               >
                 Next Step <ArrowRight className="h-4 w-4 ml-1.5" />
               </Button>
@@ -477,7 +477,7 @@ export const OnboardingPage: React.FC = () => {
                 size="sm"
                 isLoading={saving}
                 onClick={handleFinishOnboarding}
-                className="shadow-md shadow-[#6D95FF]/20"
+                className="shadow-md shadow-[#8B5CF6]/20 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]"
               >
                 <Check className="h-4 w-4 mr-1.5" /> Complete Profile & Enter
               </Button>

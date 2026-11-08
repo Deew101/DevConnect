@@ -200,26 +200,26 @@ export const EditProfilePage: React.FC = () => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="max-w-4xl mx-auto space-y-6 pb-16"
+      className="max-w-4xl mx-auto space-y-6 pb-16 font-sans"
     >
-      <div className="flex items-center justify-between border-b border-[#273249]/60 pb-5">
+      <div className="flex items-center justify-between border-b border-[rgba(167,139,250,0.20)] pb-5">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate(-1)}
-            className="p-2 h-9 w-9 rounded-lg border border-[#273249] text-[#929DB2] hover:text-[#F4F6FC] hover:bg-[#151F30]"
+            className="p-2 h-9 w-9 rounded-xl border border-[rgba(167,139,250,0.20)] text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30]"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold mb-1">
+            <div className="text-[10px] font-mono tracking-widest text-[#A855F7] uppercase font-semibold mb-1">
               PROFILE SETTINGS
             </div>
-            <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F8F7FF] tracking-tight">
               Edit Developer Profile
             </h1>
-            <p className="text-xs text-[#929DB2] mt-0.5">
+            <p className="text-xs text-[#B8ACD9] mt-0.5">
               Customize your developer identity, skill endorsements, and collaboration availability.
             </p>
           </div>
@@ -228,16 +228,16 @@ export const EditProfilePage: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Details */}
-        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-5">
-          <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono">
-            // General Information
+        <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-5 rounded-2xl">
+          <CardTitle className="text-xs font-bold text-[#A855F7] uppercase tracking-wider font-mono">
+            General Information
           </CardTitle>
 
           {/* Avatar Identity Options */}
           <div className="flex items-center gap-5 pt-1">
-            <Avatar src={avatarUrl} name={fullName} size="xl" className="ring-2 ring-[#6D95FF]/30" />
+            <Avatar src={avatarUrl} name={fullName} size="xl" className="ring-2 ring-[#8B5CF6]/40 shadow-lg" />
             <div>
-              <label className="block text-xs font-semibold text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-semibold text-[#B8ACD9] mb-1.5 font-mono">
                 DEVELOPER AVATAR IDENTITY
               </label>
               <div className="flex items-center gap-2">
@@ -246,7 +246,7 @@ export const EditProfilePage: React.FC = () => {
                   variant="primary"
                   size="sm"
                   onClick={() => setShowAvatarSelector(true)}
-                  className="text-xs font-semibold h-8"
+                  className="text-xs font-semibold h-8 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]"
                 >
                   <Sparkles className="h-3.5 w-3.5 mr-1.5" /> Change Avatar / Photo
                 </Button>
@@ -256,13 +256,13 @@ export const EditProfilePage: React.FC = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => setAvatarUrl('')}
-                    className="text-xs text-rose-400 h-8"
+                    className="text-xs text-rose-400 h-8 hover:bg-rose-500/10"
                   >
                     Reset to Initials
                   </Button>
                 )}
               </div>
-              <p className="text-[11px] text-[#929DB2] mt-1 font-mono">
+              <p className="text-[11px] text-[#B8ACD9] mt-1 font-mono">
                 Choose from 24 curated vector presets, upload personal photos, or use custom initials.
               </p>
             </div>
@@ -285,47 +285,47 @@ export const EditProfilePage: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
                 Full Name *
               </label>
               <Input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                className="h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
                 Username *
               </label>
               <Input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                className="h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+            <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
               Professional Headline
             </label>
             <Input
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
               placeholder="e.g. Senior Full-Stack Engineer | Distributed Systems & Rust"
-              className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+              className="h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-medium text-[#929DB2] font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] font-mono">
                 Engineering Biography *
               </label>
-              <span className="text-[10px] font-mono text-[#929DB2]">
+              <span className="text-[10px] font-mono text-[#B8ACD9]">
                 {bio.length} / 500
               </span>
             </div>
@@ -335,29 +335,29 @@ export const EditProfilePage: React.FC = () => {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Describe your tech background, current builds, and open source interests..."
               rows={4}
-              className="text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+              className="text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF] rounded-xl"
             />
           </div>
         </Card>
 
         {/* Dedicated Professional Description Card */}
-        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
+        <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-4 rounded-2xl">
           <div className="flex items-center gap-2">
-            <Compass className="h-4 w-4 text-[#6D95FF]" />
-            <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono">
-              // Professional Description & Collaboration Profile
+            <Compass className="h-4 w-4 text-[#A855F7]" />
+            <CardTitle className="text-xs font-bold text-[#A855F7] uppercase tracking-wider font-mono">
+              Professional Description & Collaboration Profile
             </CardTitle>
           </div>
-          <p className="text-xs text-[#929DB2]">
+          <p className="text-xs text-[#B8ACD9]">
             Detailed collaboration preferences featured on your developer dossier card to match with ideal project partners.
           </p>
 
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-medium text-[#929DB2] font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] font-mono">
                 Current Engineering Goals
               </label>
-              <span className="text-[10px] font-mono text-[#929DB2]">
+              <span className="text-[10px] font-mono text-[#B8ACD9]">
                 {currentGoals.length} / 300
               </span>
             </div>
@@ -366,52 +366,52 @@ export const EditProfilePage: React.FC = () => {
               maxLength={300}
               onChange={(e) => setCurrentGoals(e.target.value)}
               placeholder="e.g. Architecting fault-tolerant task orchestrators and mentoring early-career engineers in distributed systems."
-              className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+              className="h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
                 Preferred Collaboration Style
               </label>
               <Input
                 value={collaborationStyle}
                 onChange={(e) => setCollaborationStyle(e.target.value)}
                 placeholder="e.g. Async-first, documented PRs, weekly Discord sync"
-                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                className="h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
                 Target Project Domains (comma-separated)
               </label>
               <Input
                 value={targetProjects}
                 onChange={(e) => setTargetProjects(e.target.value)}
                 placeholder="e.g. Developer tools, WebRTC mesh, Edge computing"
-                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                className="h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
               />
             </div>
           </div>
         </Card>
 
         {/* Experience & Professional Links */}
-        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-5">
-          <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono">
-            // Experience & Professional Links
+        <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-5 rounded-2xl">
+          <CardTitle className="text-xs font-bold text-[#A855F7] uppercase tracking-wider font-mono">
+            Experience & Professional Links
           </CardTitle>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
                 Experience Level
               </label>
               <select
                 value={experienceLevel}
                 onChange={(e) => setExperienceLevel(e.target.value as ExperienceLevel)}
-                className="w-full h-10 rounded-lg border border-[#273249] bg-[#151F30] px-3 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF] font-mono cursor-pointer"
+                className="w-full h-10 rounded-xl border border-[rgba(167,139,250,0.20)] bg-[#100A24] px-3 text-xs text-[#F8F7FF] focus:outline-none focus:border-[#8B5CF6] font-mono cursor-pointer"
               >
                 <option value="Junior">Junior</option>
                 <option value="Mid-Level">Mid-Level</option>
@@ -422,13 +422,13 @@ export const EditProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
                 Availability
               </label>
               <select
                 value={availabilityStatus}
                 onChange={(e) => setAvailabilityStatus(e.target.value as AvailabilityStatus)}
-                className="w-full h-10 rounded-lg border border-[#273249] bg-[#151F30] px-3 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF] font-mono cursor-pointer"
+                className="w-full h-10 rounded-xl border border-[rgba(167,139,250,0.20)] bg-[#100A24] px-3 text-xs text-[#F8F7FF] focus:outline-none focus:border-[#8B5CF6] font-mono cursor-pointer"
               >
                 <option value="open_to_collaborate">Open to Collaborate</option>
                 <option value="available">Available</option>
@@ -438,7 +438,7 @@ export const EditProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
                 Weekly Available Hours
               </label>
               <Input
@@ -447,54 +447,54 @@ export const EditProfilePage: React.FC = () => {
                 max={60}
                 value={weeklyHours}
                 onChange={(e) => setWeeklyHours(Number(e.target.value))}
-                className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                className="h-10 text-xs font-mono bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
                 Location
               </label>
               <Input
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="San Francisco, CA / Remote"
-                className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                className="h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
                 GitHub Handle
               </label>
               <Input
                 value={githubUsername}
                 onChange={(e) => setGithubUsername(e.target.value)}
                 placeholder="torvalds"
-                className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                className="h-10 text-xs font-mono bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#929DB2] mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-[#B8ACD9] mb-1.5 font-mono">
                 Portfolio URL
               </label>
               <Input
                 value={websiteUrl}
                 onChange={(e) => setWebsiteUrl(e.target.value)}
                 placeholder="https://yourportfolio.dev"
-                className="h-10 text-xs font-mono bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                className="h-10 text-xs font-mono bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
               />
             </div>
           </div>
         </Card>
 
         {/* Technical Skills Catalog Management */}
-        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
-          <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono flex items-center gap-2">
-            <Code2 className="h-4 w-4 text-[#6D95FF]" /> Technical Skills Catalog
+        <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-4 rounded-2xl">
+          <CardTitle className="text-xs font-bold text-[#A855F7] uppercase tracking-wider font-mono flex items-center gap-2">
+            <Code2 className="h-4 w-4 text-[#A855F7]" /> Technical Skills Catalog
           </CardTitle>
-          <p className="text-xs text-[#929DB2]">
+          <p className="text-xs text-[#B8ACD9]">
             Select technologies from the canonical dictionary to showcase on your profile and boost your AI matching score.
           </p>
 
@@ -502,7 +502,7 @@ export const EditProfilePage: React.FC = () => {
             <select
               value={selectedSkillToAdd}
               onChange={(e) => setSelectedSkillToAdd(e.target.value)}
-              className="flex-1 h-10 rounded-lg border border-[#273249] bg-[#151F30] px-3 text-xs text-[#F4F6FC] focus:outline-none focus:border-[#6D95FF] font-mono cursor-pointer"
+              className="flex-1 h-10 rounded-xl border border-[rgba(167,139,250,0.20)] bg-[#100A24] px-3 text-xs text-[#F8F7FF] focus:outline-none focus:border-[#8B5CF6] font-mono cursor-pointer"
             >
               <option value="">Select a skill to add...</option>
               {availableSkills
@@ -518,9 +518,9 @@ export const EditProfilePage: React.FC = () => {
               variant="secondary"
               onClick={handleAddSkill}
               disabled={!selectedSkillToAdd}
-              className="text-xs font-semibold h-10 px-4 bg-[#151F30] border-[#273249] text-[#F4F6FC] hover:bg-[#1f2d45]"
+              className="text-xs font-semibold h-10 px-4 bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF] hover:bg-[#160E30]"
             >
-              <Plus className="h-4 w-4 mr-1 text-[#6D95FF]" /> Add Skill
+              <Plus className="h-4 w-4 mr-1 text-[#A855F7]" /> Add Skill
             </Button>
           </div>
 
@@ -530,13 +530,13 @@ export const EditProfilePage: React.FC = () => {
               return (
                 <div
                   key={skillId}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#151F30] border border-[#273249] text-xs font-mono text-[#6D95FF]"
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)] text-xs font-mono text-[#C4B5FD]"
                 >
                   <span>{skillObj?.name || 'Skill'}</span>
                   <button
                     type="button"
                     onClick={() => handleRemoveSkill(skillId)}
-                    className="text-[#929DB2] hover:text-rose-400 ml-1 transition-colors"
+                    className="text-[#B8ACD9] hover:text-rose-400 ml-1 transition-colors"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -547,9 +547,9 @@ export const EditProfilePage: React.FC = () => {
         </Card>
 
         {/* Interests */}
-        <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
-          <CardTitle className="text-xs font-bold text-[#9D83FF] uppercase tracking-wider font-mono flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-[#9D83FF]" /> Focus Areas & Topics
+        <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-4 rounded-2xl">
+          <CardTitle className="text-xs font-bold text-[#A855F7] uppercase tracking-wider font-mono flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-[#A855F7]" /> Focus Areas & Topics
           </CardTitle>
           <div>
             <Input
@@ -557,7 +557,7 @@ export const EditProfilePage: React.FC = () => {
               onChange={(e) => setInterestInput(e.target.value)}
               onKeyDown={handleAddInterest}
               placeholder="Type a topic (e.g. AI Agents, Distributed Systems, Rust, WebGPU) and press Enter"
-              className="h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+              className="h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
             />
           </div>
 
@@ -565,13 +565,13 @@ export const EditProfilePage: React.FC = () => {
             {interests.map((item) => (
               <span
                 key={item}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#151F30] border border-[#273249] text-xs text-[#F4F6FC]"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)] text-xs text-[#F8F7FF] font-mono"
               >
                 {item}
                 <button
                   type="button"
                   onClick={() => handleRemoveInterest(item)}
-                  className="text-[#929DB2] hover:text-rose-400 transition-colors"
+                  className="text-[#B8ACD9] hover:text-rose-400 transition-colors"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -582,14 +582,19 @@ export const EditProfilePage: React.FC = () => {
 
         {/* Form Action */}
         <div className="flex items-center justify-end gap-3 pt-2">
-          <Button type="button" variant="outline" onClick={() => navigate(-1)} className="h-10 text-xs border-[#273249] text-[#F4F6FC] bg-[#101725] hover:bg-[#151F30]">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate(-1)}
+            className="h-10 text-xs border-[rgba(167,139,250,0.25)] text-[#F8F7FF] bg-[#100A24] hover:bg-[#160E30]"
+          >
             Cancel
           </Button>
           <Button
             type="submit"
             variant="primary"
             isLoading={saving}
-            className="px-6 font-semibold h-10 text-xs shadow-md shadow-[#6D95FF]/20"
+            className="px-6 font-semibold h-10 text-xs bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF] shadow-md shadow-[#8B5CF6]/25"
           >
             <Save className="h-4 w-4 mr-1.5" /> Save Profile
           </Button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
@@ -37,7 +37,15 @@ import { githubService } from '@/services/githubService';
 export const DiscoveryPage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+
+  // If navigated with ?tab=github, route to dedicated /github-developers page
+  useEffect(() => {
+    if (searchParams.get('tab') === 'github') {
+      navigate('/github-developers', { replace: true });
+    }
+  }, [searchParams, navigate]);
 
   // Active Tab: 'devconnect' | 'github'
   const initialTab = searchParams.get('tab') === 'github' ? 'github' : 'devconnect';
@@ -307,12 +315,10 @@ export const DiscoveryPage: React.FC = () => {
             </span>
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-[#F8F7FF] tracking-tight flex items-center gap-3">
-            {activeTab === 'devconnect' ? 'Engineering Directory' : 'External GitHub Developers'}
+            Engineering Directory
           </h1>
           <p className="text-xs sm:text-sm text-[#B8ACD9] mt-1 max-w-3xl">
-            {activeTab === 'devconnect'
-              ? 'Discover verified systems architects, full-stack builders, and prospective collaborators inside DevConnect.'
-              : 'Real public GitHub profiles and influential open-source leaders retrieved via official GitHub REST API. External attribution preserved.'}
+            Discover verified systems architects, full-stack builders, and prospective collaborators inside DevConnect.
           </p>
         </div>
 
@@ -330,37 +336,27 @@ export const DiscoveryPage: React.FC = () => {
 
       {/* Directory Tab Switcher */}
       <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#100A24]/90 border border-[rgba(167,139,250,0.20)] w-fit backdrop-blur-xl">
-        <button
-          type="button"
-          onClick={() => handleTabChange('devconnect')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all duration-200 ${
-            activeTab === 'devconnect'
-              ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_15px_rgba(139,92,246,0.25)]'
-              : 'text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30]'
-          }`}
+        <Link
+          to="/developers"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold font-mono bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_15px_rgba(139,92,246,0.25)]"
         >
-          <Users className={`w-3.5 h-3.5 ${activeTab === 'devconnect' ? 'text-[#C4B5FD]' : 'text-[#B8ACD9]'}`} />
+          <Users className="w-3.5 h-3.5 text-[#C4B5FD]" />
           <span>DevConnect Engineers</span>
           <span className="px-1.5 py-0.2 rounded text-[10px] bg-[#100A24] border border-[rgba(167,139,250,0.20)] text-[#B8ACD9]">
             {developers.length}
           </span>
-        </button>
+        </Link>
 
-        <button
-          type="button"
-          onClick={() => handleTabChange('github')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all duration-200 ${
-            activeTab === 'github'
-              ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_15px_rgba(139,92,246,0.25)]'
-              : 'text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30]'
-          }`}
+        <Link
+          to="/github-developers"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold font-mono text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30] transition-colors"
         >
-          <Github className={`w-3.5 h-3.5 ${activeTab === 'github' ? 'text-[#C4B5FD]' : 'text-emerald-400'}`} />
-          <span>External GitHub Developers</span>
+          <Github className="w-3.5 h-3.5 text-emerald-400" />
+          <span>GitHub Developers</span>
           <span className="px-1.5 py-0.2 rounded text-[10px] bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
             {externalDevs.length} Public Stars
           </span>
-        </button>
+        </Link>
       </div>
 
       {/* ========================================================================= */}

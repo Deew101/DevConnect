@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('animate-pulse rounded-md bg-slate-800/80', className)}
+      className={cn('animate-pulse rounded-xl bg-[#160E30]/80 border border-[rgba(167,139,250,0.10)]', className)}
       {...props}
     />
   );
@@ -12,7 +12,7 @@ export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivEl
 
 export function SkeletonCard() {
   return (
-    <div className="rounded-xl border border-slate-800 bg-[#0d1527]/60 p-6 space-y-4">
+    <div className="rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 space-y-4">
       <div className="flex items-center space-x-4">
         <Skeleton className="h-12 w-12 rounded-full" />
         <div className="space-y-2 flex-1">

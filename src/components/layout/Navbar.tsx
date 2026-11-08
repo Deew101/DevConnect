@@ -219,7 +219,7 @@ export const Navbar: React.FC<{ onToggleSidebar?: () => void }> = ({ onToggleSid
               {/* User Dropdown with Radix UI */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2 p-0.5 rounded-full hover:ring-2 hover:ring-[#6D95FF]/40 transition-all outline-none">
+                  <button className="flex items-center gap-2 p-0.5 rounded-full hover:ring-2 hover:ring-[#8B5CF6]/40 transition-all outline-none">
                     <Avatar
                       src={profile?.avatar_url}
                       name={profile?.full_name || user?.email}
@@ -228,24 +228,24 @@ export const Navbar: React.FC<{ onToggleSidebar?: () => void }> = ({ onToggleSid
                     />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 p-1.5 bg-[#151F30] border-[#273249]">
+                <DropdownMenuContent align="end" className="w-56 p-1.5 bg-[#160E30] border-[rgba(167,139,250,0.20)] shadow-2xl rounded-2xl">
                   <DropdownMenuLabel className="p-2">
-                    <p className="text-xs font-bold text-[#F4F6FC] truncate">
+                    <p className="text-xs font-bold text-[#F8F7FF] truncate">
                       {profile?.full_name || 'Developer'}
                     </p>
-                    <p className="text-[11px] text-[#6D95FF] font-mono truncate">
+                    <p className="text-[11px] text-[#A855F7] font-mono truncate">
                       @{profile?.username || 'user'}
                     </p>
-                    <p className="text-[10px] text-[#929DB2] truncate mt-0.5">{user.email}</p>
+                    <p className="text-[10px] text-[#B8ACD9] truncate mt-0.5">{user.email}</p>
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-[#273249]" />
+                  <DropdownMenuSeparator className="bg-[rgba(167,139,250,0.15)]" />
                   <DropdownMenuItem onClick={() => navigate(`/profile/${profile?.username || 'me'}`)}>
-                    <User className="h-3.5 w-3.5 text-[#6D95FF]" /> Public Profile
+                    <User className="h-3.5 w-3.5 text-[#A855F7]" /> Public Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/profile/edit')}>
-                    <Settings className="h-3.5 w-3.5 text-[#929DB2]" /> Settings & Skills
+                    <Settings className="h-3.5 w-3.5 text-[#B8ACD9]" /> Settings & Skills
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-[#273249]" />
+                  <DropdownMenuSeparator className="bg-[rgba(167,139,250,0.15)]" />
                   <DropdownMenuItem
                     onClick={handleLogout}
                     className="text-rose-400 focus:bg-rose-500/10 focus:text-rose-300"

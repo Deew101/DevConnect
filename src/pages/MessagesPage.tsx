@@ -375,19 +375,19 @@ export const MessagesPage: React.FC = () => {
             value={searchDevQuery}
             onChange={(e) => handleSearchDevelopers(e.target.value)}
             placeholder="Search by developer name or @username..."
-            icon={<Search className="h-4 w-4 text-[#929DB2]" />}
+            icon={<Search className="h-4 w-4 text-[#B8ACD9]" />}
             autoFocus
-            className="bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+            className="bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
           />
 
-          <div className="max-h-60 overflow-y-auto space-y-1.5 divide-y divide-[#273249]/40">
+          <div className="max-h-60 overflow-y-auto space-y-1.5 divide-y divide-[rgba(167,139,250,0.15)]">
             {searchingDevs ? (
-              <div className="py-4 text-center text-xs text-[#929DB2] font-mono">Querying directory...</div>
+              <div className="py-4 text-center text-xs text-[#B8ACD9] font-mono">Querying directory...</div>
             ) : searchDevResults.length === 0 ? (
               searchDevQuery.trim() ? (
-                <div className="py-4 text-center text-xs text-[#929DB2] font-mono">No engineers found.</div>
+                <div className="py-4 text-center text-xs text-[#B8ACD9] font-mono">No engineers found.</div>
               ) : (
-                <div className="py-4 text-center text-xs text-[#929DB2] font-mono">
+                <div className="py-4 text-center text-xs text-[#B8ACD9] font-mono">
                   Enter name or handle to search
                 </div>
               )
@@ -396,7 +396,7 @@ export const MessagesPage: React.FC = () => {
                 <div
                   key={dev.id}
                   onClick={() => handleStartDirectChat(dev)}
-                  className="p-2.5 rounded-lg hover:bg-[#151F30] cursor-pointer flex items-center justify-between transition-colors pt-2"
+                  className="p-2.5 rounded-xl hover:bg-[#160E30] cursor-pointer flex items-center justify-between transition-colors pt-2"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <Avatar
@@ -407,11 +407,11 @@ export const MessagesPage: React.FC = () => {
                       className="rounded-lg"
                     />
                     <div className="min-w-0 text-xs">
-                      <p className="font-semibold text-[#F4F6FC] truncate">{dev.full_name}</p>
-                      <p className="text-[#6D95FF] font-mono text-[11px]">@{dev.username}</p>
+                      <p className="font-semibold text-[#F8F7FF] truncate">{dev.full_name}</p>
+                      <p className="text-[#A855F7] font-mono text-[11px]">@{dev.username}</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="h-7 text-xs border-[#273249] text-[#F4F6FC] font-mono">
+                  <Button variant="outline" size="sm" className="h-7 text-xs border-[rgba(167,139,250,0.25)] text-[#F8F7FF] font-mono hover:bg-[#8B5CF6]/20">
                     Initiate
                   </Button>
                 </div>

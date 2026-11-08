@@ -328,19 +328,19 @@ export const CommunityRepositoriesPage: React.FC = () => {
 
       {/* Repositories Grid */}
       {filteredRepos.length === 0 ? (
-        <div className="p-12 text-center border border-dashed border-[#273249] rounded-2xl bg-[#101725]">
-          <GitBranch className="h-12 w-12 text-[#929DB2]/40 mx-auto mb-3" />
-          <h3 className="text-lg font-bold font-display text-[#F4F6FC] mb-1">
+        <div className="p-16 text-center border border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl bg-[#100A24]/60 backdrop-blur-md">
+          <GitBranch className="h-12 w-12 text-[#B8ACD9]/40 mx-auto mb-3" />
+          <h3 className="text-lg font-bold font-display text-[#F8F7FF] mb-1">
             No Repositories Match Your Filter
           </h3>
-          <p className="text-xs text-[#929DB2] max-w-sm mx-auto mb-4">
+          <p className="text-xs text-[#B8ACD9] max-w-sm mx-auto mb-4">
             Try adjusting your search keywords or switching back to "All Languages".
           </p>
           <Button
             variant="outline"
             size="sm"
             onClick={handleResetCatalog}
-            className="border-[#273249] text-[#F4F6FC]"
+            className="border-[rgba(167,139,250,0.25)] text-[#F8F7FF] hover:bg-[#160E30]"
           >
             Reset Catalog
           </Button>

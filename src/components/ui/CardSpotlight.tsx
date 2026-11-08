@@ -9,7 +9,7 @@ interface CardSpotlightProps extends React.HTMLAttributes<HTMLDivElement> {
 export const CardSpotlight: React.FC<CardSpotlightProps> = ({
   children,
   className,
-  spotlightColor = 'rgba(109, 149, 255, 0.12)',
+  spotlightColor = 'rgba(139, 92, 246, 0.16)',
   glow = false,
   ...props
 }) => {
@@ -33,8 +33,8 @@ export const CardSpotlight: React.FC<CardSpotlightProps> = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        'relative rounded-xl border border-[#273249] bg-[#151F30] p-6 overflow-hidden transition-all duration-300 hover:border-[#6D95FF]/45',
-        glow && 'hover:shadow-lg hover:shadow-[#6D95FF]/10',
+        'relative rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 overflow-hidden transition-all duration-300 hover:border-[#8B5CF6]/50 hover:-translate-y-1',
+        glow && 'hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)]',
         className
       )}
       {...props}
@@ -48,7 +48,7 @@ export const CardSpotlight: React.FC<CardSpotlightProps> = ({
         }}
       />
       {/* Top subtle highlight reflection line */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#6D95FF]/25 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#A855F7]/30 to-transparent" />
       <div className="relative z-10">{children}</div>
     </div>
   );

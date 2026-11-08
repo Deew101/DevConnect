@@ -13,6 +13,7 @@ import { AuthCallbackPage } from '@/pages/AuthCallbackPage';
 import { OnboardingPage } from '@/pages/OnboardingPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { DiscoveryPage } from '@/pages/DiscoveryPage';
+import { GitHubDevelopersPage } from '@/pages/GitHubDevelopersPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 import { EditProfilePage } from '@/pages/EditProfilePage';
 import { ProjectsPage } from '@/pages/ProjectsPage';
@@ -101,10 +102,13 @@ export function App() {
                     <Route path="/" element={<Navigate to="/dashboard" replace />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/developers" element={<DiscoveryPage />} />
+                    <Route path="/github-developers" element={<GitHubDevelopersPage />} />
                     <Route path="/profile/me" element={<ProfilePage />} />
                     <Route path="/profile/edit" element={<EditProfilePage />} />
                     <Route path="/profile/:username" element={<ProfilePage />} />
                     <Route path="/projects" element={<ProjectsPage />} />
+                    <Route path="/my-projects" element={<ProjectsPage defaultFilter="my-projects" />} />
+                    <Route path="/saved-projects" element={<ProjectsPage defaultFilter="saved" />} />
                     <Route path="/projects/new" element={<CreateProjectPage />} />
                     <Route path="/projects/:id" element={<ProjectWorkspacePage />} />
                     <Route path="/repositories" element={<CommunityRepositoriesPage />} />

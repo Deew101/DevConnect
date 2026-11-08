@@ -391,13 +391,15 @@ export const ProjectWorkspacePage: React.FC = () => {
 
   if (!project) {
     return (
-      <div className="p-16 text-center border border-dashed border-[#273249] rounded-xl max-w-lg mx-auto mt-16 bg-[#101725]">
-        <h3 className="font-display text-xl font-bold text-[#F4F6FC] mb-2">Workspace Not Found</h3>
-        <p className="text-xs text-[#929DB2] mb-6 leading-relaxed">
+      <div className="p-16 text-center border border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl max-w-lg mx-auto mt-16 bg-[#100A24]/60 backdrop-blur-md">
+        <h3 className="font-display text-xl font-bold text-[#F8F7FF] mb-2">Workspace Not Found</h3>
+        <p className="text-xs text-[#B8ACD9] mb-6 leading-relaxed">
           The requested project does not exist or you do not have permission to view it.
         </p>
         <Link to="/projects">
-          <Button variant="primary">Browse Workspaces</Button>
+          <Button variant="primary" className="bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]">
+            Browse Workspaces
+          </Button>
         </Link>
       </div>
     );
@@ -549,13 +551,13 @@ export const ProjectWorkspacePage: React.FC = () => {
 
         {/* Tab 2: Project Milestones */}
         <TabsContent value="milestones" className="mt-4">
-          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-6">
+          <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-6 rounded-2xl">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center gap-2">
-                  <MilestoneIcon className="w-4 h-4 text-[#6D95FF]" /> Sprint Deliverables & Milestones
+                <CardTitle className="font-display text-sm font-bold text-[#F8F7FF] flex items-center gap-2">
+                  <MilestoneIcon className="w-4 h-4 text-[#A855F7]" /> Sprint Deliverables & Milestones
                 </CardTitle>
-                <p className="text-xs text-[#929DB2] mt-1">
+                <p className="text-xs text-[#B8ACD9] mt-1">
                   Track sprint checkpoints, roadmap release dates, and critical features.
                 </p>
               </div>
@@ -567,21 +569,21 @@ export const ProjectWorkspacePage: React.FC = () => {
                 value={newMilestoneTitle}
                 onChange={(e) => setNewMilestoneTitle(e.target.value)}
                 placeholder="New milestone title (e.g. Supabase Realtime Channels & Schema Migration)"
-                className="flex-1 h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                className="flex-1 h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
                 required
               />
               <Input
                 type="date"
                 value={newMilestoneDate}
                 onChange={(e) => setNewMilestoneDate(e.target.value)}
-                className="w-full sm:w-44 h-10 text-xs bg-[#151F30] border-[#273249] text-[#F4F6FC]"
+                className="w-full sm:w-44 h-10 text-xs bg-[#100A24] border-[rgba(167,139,250,0.20)] text-[#F8F7FF]"
               />
               <Button
                 type="submit"
                 variant="primary"
                 size="md"
                 isLoading={addingMilestone}
-                className="h-10 text-xs font-semibold px-4"
+                className="h-10 text-xs font-semibold px-4 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]"
               >
                 <Plus className="h-4 w-4 mr-1" /> Add Milestone
               </Button>
@@ -590,17 +592,17 @@ export const ProjectWorkspacePage: React.FC = () => {
             {/* Milestones Checklist */}
             <div className="space-y-2.5">
               {milestones.length === 0 ? (
-                <div className="py-10 text-center text-xs text-[#929DB2] border border-dashed border-[#273249] rounded-xl bg-[#151F30]/40">
+                <div className="py-10 text-center text-xs text-[#B8ACD9] border border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl bg-[#100A24]/60">
                   No sprint milestones configured yet. Add key milestones above to align the team.
                 </div>
               ) : (
                 milestones.map((ms) => (
                   <div
                     key={ms.id}
-                    className={`p-3.5 rounded-lg border transition-all flex items-center justify-between gap-3 ${
+                    className={`p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 ${
                       ms.is_completed
-                        ? 'border-[#35C98A]/30 bg-[#35C98A]/10'
-                        : 'border-[#273249] bg-[#151F30] hover:bg-[#1C2940]'
+                        ? 'border-[#34D399]/30 bg-[#34D399]/10'
+                        : 'border-[rgba(167,139,250,0.20)] bg-[#100A24] hover:bg-[#160E30]'
                     }`}
                   >
                     <button
@@ -609,13 +611,13 @@ export const ProjectWorkspacePage: React.FC = () => {
                       className="flex items-center gap-3 text-left flex-1 min-w-0"
                     >
                       {ms.is_completed ? (
-                        <CheckCircle2 className="h-5 w-5 text-[#35C98A] flex-shrink-0" />
+                        <CheckCircle2 className="h-5 w-5 text-[#34D399] flex-shrink-0" />
                       ) : (
-                        <Circle className="h-5 w-5 text-[#929DB2] hover:text-[#6D95FF] flex-shrink-0 transition-colors" />
+                        <Circle className="h-5 w-5 text-[#B8ACD9] hover:text-[#A855F7] flex-shrink-0 transition-colors" />
                       )}
                       <span
                         className={`text-xs font-medium truncate ${
-                          ms.is_completed ? 'line-through text-[#929DB2]' : 'text-[#F4F6FC]'
+                          ms.is_completed ? 'line-through text-[#B8ACD9]' : 'text-[#F8F7FF]'
                         }`}
                       >
                         {ms.title}
@@ -623,8 +625,8 @@ export const ProjectWorkspacePage: React.FC = () => {
                     </button>
 
                     {ms.due_date && (
-                      <span className="text-[11px] font-mono text-[#929DB2] flex items-center gap-1 flex-shrink-0">
-                        <Calendar className="h-3 w-3 text-[#929DB2]" />
+                      <span className="text-[11px] font-mono text-[#B8ACD9] flex items-center gap-1 flex-shrink-0">
+                        <Calendar className="h-3 w-3 text-[#A855F7]" />
                         {formatDate(ms.due_date)}
                       </span>
                     )}
@@ -637,13 +639,13 @@ export const ProjectWorkspacePage: React.FC = () => {
 
         {/* Tab 3: Team Members */}
         <TabsContent value="team" className="mt-4">
-          <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-6">
+          <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl p-6 shadow-xl space-y-6 rounded-2xl">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="font-display text-sm font-bold text-[#F4F6FC] flex items-center gap-2">
-                  <Users className="w-4 h-4 text-[#6D95FF]" /> Active Engineering Contributors
+                <CardTitle className="font-display text-sm font-bold text-[#F8F7FF] flex items-center gap-2">
+                  <Users className="w-4 h-4 text-[#A855F7]" /> Active Engineering Contributors
                 </CardTitle>
-                <p className="text-xs text-[#929DB2] mt-1">
+                <p className="text-xs text-[#B8ACD9] mt-1">
                   Engineers currently building and committing to this workspace.
                 </p>
               </div>
@@ -661,7 +663,7 @@ export const ProjectWorkspacePage: React.FC = () => {
               {members.map((mem) => (
                 <div
                   key={mem.id}
-                  className="p-4 rounded-xl border border-[#273249] bg-[#151F30] flex items-center justify-between hover:border-[#6D95FF]/40 transition-colors"
+                  className="p-4 rounded-xl border border-[rgba(167,139,250,0.20)] bg-[#100A24] flex items-center justify-between hover:border-[#8B5CF6]/50 transition-colors"
                 >
                   <Link
                     to={`/profile/${mem.profile?.username}`}
@@ -674,10 +676,10 @@ export const ProjectWorkspacePage: React.FC = () => {
                       status={mem.profile?.availability_status}
                     />
                     <div className="min-w-0">
-                      <h5 className="font-display font-semibold text-xs text-[#F4F6FC] group-hover:text-[#6D95FF] transition-colors truncate">
+                      <h5 className="font-display font-semibold text-xs text-[#F8F7FF] group-hover:text-[#C4B5FD] transition-colors truncate">
                         {mem.profile?.full_name}
                       </h5>
-                      <span className="text-[10px] text-[#6D95FF] font-mono">
+                      <span className="text-[10px] text-[#A855F7] font-mono">
                         @{mem.profile?.username}
                       </span>
                     </div>
@@ -697,11 +699,11 @@ export const ProjectWorkspacePage: React.FC = () => {
 
         {/* Tab 4: Team Chat */}
         <TabsContent value="chat" className="mt-4">
-          <div className="h-[650px] rounded-xl border border-[#273249] overflow-hidden shadow-2xl bg-[#101725]">
+          <div className="h-[650px] rounded-2xl border border-[rgba(167,139,250,0.20)] overflow-hidden shadow-2xl bg-[#100A24]">
             {conversation && user ? (
               <ChatWindow conversation={conversation} currentUserId={user.id} />
             ) : (
-              <div className="h-full flex items-center justify-center text-xs text-[#929DB2] font-mono">
+              <div className="h-full flex items-center justify-center text-xs text-[#B8ACD9] font-mono">
                 Initializing team channel...
               </div>
             )}

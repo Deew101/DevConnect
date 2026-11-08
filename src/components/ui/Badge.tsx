@@ -8,27 +8,27 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Badge({ className, variant = 'default', dot = false, children, ...props }: BadgeProps) {
   const variants = {
-    default: 'bg-slate-900 text-slate-200 border-white/[0.08]',
-    secondary: 'bg-slate-900/60 text-slate-400 border-white/[0.06]',
-    outline: 'border-white/[0.1] text-slate-300 bg-transparent',
-    success: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20',
-    warning: 'bg-amber-500/10 text-amber-300 border-amber-500/20',
-    destructive: 'bg-rose-500/10 text-rose-300 border-rose-500/20',
-    cyan: 'bg-sky-500/10 text-sky-300 border-sky-500/20',
-    purple: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20',
-    glow: 'bg-gradient-to-r from-sky-500/20 to-indigo-500/20 text-sky-200 border-sky-500/30 shadow-sm shadow-sky-500/10',
+    default: 'bg-[#160E30] text-[#F8F7FF] border-[rgba(167,139,250,0.20)]',
+    secondary: 'bg-[#100A24] text-[#B8ACD9] border-[rgba(167,139,250,0.15)]',
+    outline: 'border-[rgba(167,139,250,0.25)] text-[#C4B5FD] bg-transparent',
+    success: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
+    warning: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
+    destructive: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
+    cyan: 'bg-[#8B5CF6]/15 text-[#C4B5FD] border-[#8B5CF6]/30',
+    purple: 'bg-[#A855F7]/15 text-[#F8F7FF] border-[#A855F7]/30',
+    glow: 'bg-gradient-to-r from-[#8B5CF6]/25 to-[#D946EF]/25 text-[#F8F7FF] border-[#A855F7]/40 shadow-sm shadow-[#8B5CF6]/20',
   };
 
   const dotColors = {
-    default: 'bg-slate-400',
-    secondary: 'bg-slate-500',
-    outline: 'bg-slate-400',
+    default: 'bg-[#C4B5FD]',
+    secondary: 'bg-[#B8ACD9]',
+    outline: 'bg-[#A855F7]',
     success: 'bg-emerald-400',
     warning: 'bg-amber-400',
     destructive: 'bg-rose-400',
-    cyan: 'bg-sky-400',
-    purple: 'bg-indigo-400',
-    glow: 'bg-sky-400 animate-pulse',
+    cyan: 'bg-[#8B5CF6]',
+    purple: 'bg-[#A855F7]',
+    glow: 'bg-[#D946EF] animate-pulse',
   };
 
   return (

@@ -164,58 +164,58 @@ export const AuthCallbackPage: React.FC = () => {
       >
         {/* Brand Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-[#6D95FF] to-[#9D83FF] items-center justify-center shadow-lg shadow-[#6D95FF]/20 mb-3 border border-white/10">
-            <Layers className="h-6 w-6 text-white" />
+          <div className="inline-flex h-12 w-12 rounded-2xl bg-gradient-to-tr from-[#8B5CF6] to-[#D946EF] items-center justify-center shadow-lg shadow-[#8B5CF6]/25 mb-3 border border-[rgba(167,139,250,0.30)]">
+            <Layers className="h-6 w-6 text-[#F8F7FF]" />
           </div>
-          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold mb-1">
+          <div className="text-[10px] font-mono tracking-widest text-[#A855F7] uppercase font-semibold mb-1">
             AUTHENTICATION EXCHANGE
           </div>
-          <h1 className="text-2xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
+          <h1 className="text-2xl font-display font-extrabold text-[#F8F7FF] tracking-tight">
             DevConnect Session Gateway
           </h1>
         </div>
 
-        <Card className="border-[#273249] bg-[#101725]/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+        <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/90 p-6 sm:p-8 shadow-2xl backdrop-blur-xl rounded-2xl">
           {status === 'exchanging' && (
             <div className="space-y-6 text-center">
               <div className="relative mx-auto w-14 h-14 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full border-2 border-[#273249]" />
-                <div className="absolute inset-0 rounded-full border-2 border-[#6D95FF] border-t-transparent animate-spin" />
-                <Lock className="w-5 h-5 text-[#6D95FF]" />
+                <div className="absolute inset-0 rounded-full border-2 border-[rgba(167,139,250,0.20)]" />
+                <div className="absolute inset-0 rounded-full border-2 border-[#8B5CF6] border-t-transparent animate-spin" />
+                <Lock className="w-5 h-5 text-[#A855F7]" />
               </div>
 
               <div>
-                <h2 className="text-lg font-bold font-display text-[#F4F6FC]">
+                <h2 className="text-lg font-bold font-display text-[#F8F7FF]">
                   Authorizing OAuth Identity
                 </h2>
-                <p className="text-xs text-[#929DB2] mt-1 leading-relaxed">
+                <p className="text-xs text-[#B8ACD9] mt-1 leading-relaxed">
                   Exchanging authorization credentials with Supabase PKCE service...
                 </p>
               </div>
 
               {/* Progress Steps */}
-              <div className="space-y-2 text-left bg-[#151F30] p-3.5 rounded-xl border border-[#273249] font-mono text-xs">
+              <div className="space-y-2 text-left bg-[#100A24] p-3.5 rounded-xl border border-[rgba(167,139,250,0.20)] font-mono text-xs">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  <span className="text-[#F4F6FC]">1. OAuth Provider Callback Captured</span>
+                  <span className="text-[#F8F7FF]">1. OAuth Provider Callback Captured</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span
                     className={`w-2 h-2 rounded-full ${
-                      currentStep >= 2 ? 'bg-[#6D95FF] animate-pulse' : 'bg-[#929DB2]/40'
+                      currentStep >= 2 ? 'bg-[#8B5CF6] animate-pulse' : 'bg-[#B8ACD9]/40'
                     }`}
                   />
-                  <span className={currentStep >= 2 ? 'text-[#6D95FF]' : 'text-[#929DB2]'}>
+                  <span className={currentStep >= 2 ? 'text-[#C4B5FD]' : 'text-[#B8ACD9]'}>
                     2. Cryptographic Token Exchange
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span
                     className={`w-2 h-2 rounded-full ${
-                      currentStep >= 3 ? 'bg-emerald-400' : 'bg-[#929DB2]/40'
+                      currentStep >= 3 ? 'bg-emerald-400' : 'bg-[#B8ACD9]/40'
                     }`}
                   />
-                  <span className={currentStep >= 3 ? 'text-[#F4F6FC]' : 'text-[#929DB2]'}>
+                  <span className={currentStep >= 3 ? 'text-[#F8F7FF]' : 'text-[#B8ACD9]'}>
                     3. Launching Developer Dashboard
                   </span>
                 </div>
@@ -230,10 +230,10 @@ export const AuthCallbackPage: React.FC = () => {
               </div>
 
               <div>
-                <h2 className="text-lg font-bold font-display text-[#F4F6FC]">
+                <h2 className="text-lg font-bold font-display text-[#F8F7FF]">
                   Authentication Successful
                 </h2>
-                <p className="text-xs text-[#929DB2] mt-1">
+                <p className="text-xs text-[#B8ACD9] mt-1">
                   Session established. Redirecting to your developer workspace...
                 </p>
               </div>
@@ -241,7 +241,7 @@ export const AuthCallbackPage: React.FC = () => {
               <div className="pt-2">
                 <Button
                   variant="primary"
-                  className="w-full h-10 text-xs font-semibold"
+                  className="w-full h-10 text-xs font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]"
                   onClick={() => navigate('/dashboard')}
                 >
                   Enter DevConnect Workspace <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -257,22 +257,22 @@ export const AuthCallbackPage: React.FC = () => {
               </div>
 
               <div>
-                <h2 className="text-lg font-bold font-display text-[#F4F6FC]">
+                <h2 className="text-lg font-bold font-display text-[#F8F7FF]">
                   Authentication Failed
                 </h2>
-                <div className="mt-2 p-3 rounded-lg bg-[#151F30] border border-rose-500/30 text-xs text-rose-300 font-mono text-left break-words">
+                <div className="mt-2 p-3 rounded-xl bg-[#100A24] border border-rose-500/30 text-xs text-rose-300 font-mono text-left break-words">
                   {errorMessage || 'An error occurred during authentication exchange.'}
                 </div>
               </div>
 
-              <div className="p-3 bg-[#151F30] rounded-xl border border-[#273249] text-left text-[11px] text-[#929DB2] space-y-1">
-                <div className="font-mono text-[#6D95FF] font-bold text-[10px] uppercase">
-                  // SUPABASE CONFIGURATION AUDIT
+              <div className="p-3.5 bg-[#100A24] rounded-xl border border-[rgba(167,139,250,0.20)] text-left text-[11px] text-[#B8ACD9] space-y-1">
+                <div className="font-mono text-[#A855F7] font-bold text-[10px] uppercase">
+                  SUPABASE CONFIGURATION AUDIT
                 </div>
                 <div>• Verify Google OAuth provider is toggled <strong>Enabled</strong> in Supabase.</div>
                 <div>• Verify Authorized Redirect URI in Google Cloud Console matches Supabase:</div>
-                <div className="font-mono text-[10px] text-[#F4F6FC] bg-[#101725] p-1.5 rounded border border-[#273249] select-all break-all">
-                  https://ngzzgocnoimbayygnstz.supabase.co/auth/v1/callback
+                <div className="font-mono text-[10px] text-[#F8F7FF] bg-[#160E30] p-2 rounded-lg border border-[rgba(167,139,250,0.20)] select-all break-all">
+                  https://ngzzgocnoimbayynstz.supabase.co/auth/v1/callback
                 </div>
               </div>
 
@@ -280,7 +280,7 @@ export const AuthCallbackPage: React.FC = () => {
                 <Link to="/auth" className="flex-1">
                   <Button
                     variant="primary"
-                    className="w-full h-10 text-xs font-semibold"
+                    className="w-full h-10 text-xs font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF]"
                   >
                     Return to Sign In
                   </Button>
@@ -288,7 +288,7 @@ export const AuthCallbackPage: React.FC = () => {
                 <Button
                   variant="outline"
                   onClick={() => window.location.reload()}
-                  className="h-10 text-xs font-semibold border-[#273249] text-[#F4F6FC]"
+                  className="h-10 text-xs font-semibold border-[rgba(167,139,250,0.20)] text-[#F8F7FF] hover:bg-[#160E30]"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
                 </Button>

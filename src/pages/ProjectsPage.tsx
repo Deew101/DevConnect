@@ -28,10 +28,14 @@ import { formatDate } from '@/lib/utils';
 import { CardSpotlight } from '@/components/ui/CardSpotlight';
 import { DEMO_PROJECTS, DEMO_PROFILES } from '@/data/demoCommunityData';
 
-export const ProjectsPage: React.FC = () => {
+export interface ProjectsPageProps {
+  defaultFilter?: 'all' | 'my-projects' | 'my-teams' | 'saved';
+}
+
+export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => {
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = searchParams.get('filter') || 'all';
+  const activeTab = searchParams.get('filter') || defaultFilter || 'all';
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -104,6 +108,9 @@ export const ProjectsPage: React.FC = () => {
           list = list.filter((p: any) => p.owner_id === user.id);
         } else if (activeTab === 'my-teams') {
           list = list.filter((p: any) => p.members?.some((m: any) => m.user_id === user.id));
+        } else if (activeTab === 'saved') {
+          // If saved, show demo/starred subset
+          list = list.slice(0, 3);
         }
       }
 
@@ -119,7 +126,7 @@ export const ProjectsPage: React.FC = () => {
 
       setProjects(list as any);
     } catch (err: any) {
-      console.error('Error fetching projects:', err);
+      console.error('Error loading projects:', err);
     } finally {
       setLoading(false);
     }
@@ -127,7 +134,7 @@ export const ProjectsPage: React.FC = () => {
 
   useEffect(() => {
     loadProjects();
-  }, [selectedCategory, selectedStatus, activeTab, user]);
+  }, [user, activeTab, selectedCategory, selectedStatus]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,25 +144,28 @@ export const ProjectsPage: React.FC = () => {
   const getStatusBadge = (status: ProjectStatus) => {
     switch (status) {
       case 'active':
-      case 'in_progress':
-        return <Badge variant="success" className="text-[10px] font-mono">Active Sprint</Badge>;
+        return <Badge variant="glow" dot>Active</Badge>;
       case 'planning':
-        return <Badge variant="cyan" className="text-[10px] font-mono">Planning</Badge>;
+        return <Badge variant="purple" dot>Planning</Badge>;
+      case 'in_progress':
+        return <Badge variant="cyan" dot>In Progress</Badge>;
       case 'completed':
-        return <Badge variant="purple" className="text-[10px] font-mono">Completed</Badge>;
+        return <Badge variant="success" dot>Completed</Badge>;
+      case 'paused':
+        return <Badge variant="secondary">Paused</Badge>;
       default:
-        return <Badge variant="secondary" className="text-[10px] font-mono">{status}</Badge>;
+        return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(167,139,250,0.20)] pb-6">
+    <div className="space-y-6 font-sans pb-12">
+      {/* Editorial Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(167,139,250,0.20)] pb-5">
         <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#A855F7]" /> PROJECT WORKSPACES
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[11px] font-mono tracking-wider text-[#A855F7] uppercase font-semibold">
+              Workspaces & Repositories
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse shadow-[0_0_8px_#8B5CF6]" />
             <span className="text-xs font-mono text-[#B8ACD9]">{projects.length} Active Hubs</span>
@@ -241,11 +251,10 @@ export const ProjectsPage: React.FC = () => {
             return (
               <button
                 key={cat}
-                type="button"
                 onClick={() => setSelectedCategory(cat === 'All Categories' ? 'all' : cat)}
-                className={`px-3 py-1 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 ${
+                className={`whitespace-nowrap px-3 py-1 rounded-lg text-xs font-mono transition-all duration-200 ${
                   isSelected
-                    ? 'bg-[#8B5CF6] text-[#080514] font-bold shadow-[0_0_12px_rgba(139,92,246,0.35)]'
+                    ? 'bg-[#8B5CF6] text-[#080514] font-bold shadow-[0_0_12px_rgba(139,92,246,0.4)]'
                     : 'bg-[#100A24] text-[#B8ACD9] hover:text-[#F8F7FF] border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/40'
                 }`}
               >
@@ -260,139 +269,103 @@ export const ProjectsPage: React.FC = () => {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div
-              key={i}
-              className="h-64 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/50 animate-pulse"
-            />
+            <div key={i} className="h-64 rounded-2xl border border-[rgba(167,139,250,0.15)] bg-[#160E30]/60 animate-pulse p-6 space-y-4" />
           ))}
         </div>
       ) : projects.length === 0 ? (
-        <div className="p-12 text-center border border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl bg-[#100A24]/60 backdrop-blur-md">
-          <FolderGit2 className="h-12 w-12 text-[#B8ACD9]/40 mx-auto mb-3" />
-          <h3 className="text-lg font-bold font-display text-[#F8F7FF] mb-1">No Projects Found</h3>
+        <div className="p-16 text-center border border-dashed border-[rgba(167,139,250,0.25)] rounded-2xl bg-[#100A24]/60 backdrop-blur-md">
+          <Sparkles className="h-10 w-10 text-[#B8ACD9] mx-auto mb-3 opacity-60" />
+          <h3 className="font-display text-base font-bold text-[#F8F7FF] mb-1">No Projects Found</h3>
           <p className="text-xs text-[#B8ACD9] max-w-sm mx-auto mb-5 leading-relaxed">
             {activeTab === 'my-projects'
-              ? "You haven't published any projects yet. Launch your vision today!"
-              : activeTab === 'my-teams'
-              ? "You haven't joined any team workspaces yet."
-              : 'No projects matched your filter criteria. Try resetting filters or launch your own collaborative initiative.'}
+              ? "You haven't initiated any workspaces yet. Launch your vision into orbit."
+              : 'No workspaces matched your stack query. Adjust filters or launch a new initiative.'}
           </p>
           <Link to="/projects/new">
-            <Button variant="primary">Create Project</Button>
+            <Button variant="primary" size="sm" className="font-semibold text-xs bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-[#F8F7FF] shadow-sm">
+              <Plus className="h-3.5 w-3.5 mr-1.5" /> Start New Project
+            </Button>
           </Link>
         </div>
       ) : (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={{
-            hidden: { opacity: 0 },
-            show: {
-              opacity: 1,
-              transition: { staggerChildren: 0.05 },
-            },
-          }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
-          {projects.map((proj) => {
-            const isOwner = user && proj.owner_id === user.id;
-            const isMember = user && proj.members?.some((m) => m.user_id === user.id);
-            const currentMembersCount = proj.members?.length || 1;
-            const targetMembersCount = proj.team_size_needed || 4;
-            const teamFillPercent = Math.min(
-              100,
-              Math.round((currentMembersCount / targetMembersCount) * 100)
-            );
-
-            return (
-              <motion.div
-                key={proj.id}
-                variants={{
-                  hidden: { opacity: 0, y: 12 },
-                  show: { opacity: 1, y: 0 },
-                }}
-              >
-                <CardSpotlight className="h-full flex flex-col justify-between overflow-hidden group bg-[#160E30]/75 backdrop-blur-xl border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300">
-                  <div className="space-y-4">
-                    {/* Top: Category & Status */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#8B5CF6]/15 border border-[rgba(167,139,250,0.25)] text-[#C4B5FD]">
-                        {proj.category}
-                      </span>
-                      {getStatusBadge(proj.status)}
-                    </div>
-
-                    {/* Title & Tagline */}
-                    <div>
-                      <h3 className="text-base font-bold font-display text-[#F8F7FF] group-hover:text-[#C4B5FD] transition-colors line-clamp-1">
-                        {proj.title}
-                      </h3>
-                      <p className="text-xs text-[#B8ACD9] mt-1 line-clamp-2 leading-relaxed">
-                        {proj.tagline || proj.description}
-                      </p>
-                    </div>
-
-                    {/* Skills Required */}
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {(proj.required_skills || []).slice(0, 3).map((sk) => (
-                        <span
-                          key={sk}
-                          className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#100A24] border border-[rgba(167,139,250,0.20)] text-[#C4B5FD]"
-                        >
-                          {sk}
-                        </span>
-                      ))}
-                      {(proj.required_skills || []).length > 3 && (
-                        <span className="text-[10px] text-[#B8ACD9] font-mono px-1">
-                          +{proj.required_skills.length - 3} more
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Team progress capacity bar */}
-                    <div className="space-y-1.5 pt-2 border-t border-[rgba(167,139,250,0.15)]">
-                      <div className="flex items-center justify-between text-[11px] font-mono text-[#B8ACD9]">
-                        <span className="flex items-center gap-1.5">
-                          <Users className="h-3.5 w-3.5 text-[#A855F7]" /> Team: {currentMembersCount} / {targetMembersCount}
-                        </span>
-                        <span>{teamFillPercent}% Full</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-[#100A24] rounded-full overflow-hidden border border-[rgba(167,139,250,0.20)]">
-                        <div
-                          className="h-full bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] rounded-full transition-all duration-500"
-                          style={{ width: `${teamFillPercent}%` }}
-                        />
-                      </div>
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {projects.map((project) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300 group">
+                <div>
+                  {/* Top Status & Category */}
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#8B5CF6]/15 border border-[#8B5CF6]/30 text-[#C4B5FD]">
+                      {project.category}
+                    </span>
+                    {getStatusBadge(project.status)}
                   </div>
 
-                  {/* Footer Action */}
-                  <div className="pt-4 mt-4 border-t border-[rgba(167,139,250,0.15)] flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Avatar
-                        src={proj.owner?.avatar_url}
-                        name={proj.owner?.full_name}
-                        size="sm"
-                        className="w-6 h-6 text-[10px]"
-                      />
+                  {/* Title & Description */}
+                  <Link to={`/projects/${project.id}`} className="block group/link">
+                    <h3 className="font-display font-bold text-base text-[#F8F7FF] group-hover/link:text-[#C4B5FD] transition-colors leading-snug">
+                      {project.title}
+                    </h3>
+                  </Link>
+                  <p className="text-xs text-[#B8ACD9] mt-2 line-clamp-2 leading-relaxed">
+                    {project.description}
+                  </p>
+
+                  {/* Required Tech Stack Tags */}
+                  <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-[rgba(167,139,250,0.15)]">
+                    {project.required_skills?.slice(0, 4).map((tech) => (
+                      <span
+                        key={tech}
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-[#100A24] border border-[rgba(167,139,250,0.20)] text-[#B8ACD9] font-mono"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {(project.required_skills?.length || 0) > 4 && (
+                      <span className="text-[10px] text-[#B8ACD9] font-mono px-1">
+                        +{(project.required_skills?.length || 0) - 4}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Footer: Owner, Team count, Enter button */}
+                <div className="flex items-center justify-between pt-3 border-t border-[rgba(167,139,250,0.20)]">
+                  <div className="flex items-center gap-2">
+                    <Avatar
+                      src={project.owner?.avatar_url}
+                      name={project.owner?.full_name || project.owner?.username}
+                      size="xs"
+                    />
+                    <div className="flex flex-col">
                       <span className="text-xs text-[#B8ACD9] font-mono truncate max-w-[100px]">
-                        {proj.owner?.full_name || 'Lead'}
+                        @{project.owner?.username || 'engineer'}
                       </span>
                     </div>
-
-                    <Link to={`/projects/${proj.id}`}>
-                      <Button variant="secondary" size="xs" className="h-7 text-xs font-semibold border-[rgba(167,139,250,0.25)] bg-[#100A24] hover:bg-[#8B5CF6]/20 text-[#F8F7FF] transition-all">
-                        {isMember || isOwner ? 'Workspace' : 'Details'}{' '}
-                        <ArrowRight className="h-3 w-3 ml-1 text-[#A855F7]" />
-                      </Button>
-                    </Link>
                   </div>
-                </CardSpotlight>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+
+                  <Link to={`/projects/${project.id}`}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs font-semibold h-8 border-[rgba(167,139,250,0.25)] text-[#F8F7FF] hover:bg-[#8B5CF6]/20 hover:border-[#8B5CF6]/50 group-hover:bg-gradient-to-r group-hover:from-[#8B5CF6] group-hover:to-[#A855F7] group-hover:text-[#F8F7FF] transition-all"
+                    >
+                      Enter Workspace <ArrowRight className="h-3 w-3 ml-1 group-hover:translate-x-0.5 transition-transform" />
+                    </Button>
+                  </Link>
+                </div>
+              </CardSpotlight>
+            </motion.div>
+          ))}
+        </div>
       )}
     </div>
   );
 };
+
+export default ProjectsPage;
