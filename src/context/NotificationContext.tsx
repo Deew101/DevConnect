@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured, safeCreateChannel } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { Notification } from '@/types/database.types';
 
@@ -107,8 +107,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     let channel: any = null;
     try {
       const channelTopic = `user-notifications-${user.id}-${Math.random().toString(36).slice(2, 9)}`;
-      channel = supabase
-        .channel(channelTopic)
+      channel = safeCreateChannel(channelTopic)
         .on(
           'postgres_changes',
           {

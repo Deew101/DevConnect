@@ -30,7 +30,7 @@ export const AppLayout: React.FC = () => {
 
           <main className="flex-1 min-w-0 min-h-[calc(100vh-3.5rem)] px-4 sm:px-6 lg:px-8 py-6 relative">
             <div className="max-w-7xl mx-auto w-full">
-              <ErrorBoundary>
+              <ErrorBoundary key={location.pathname} resetKey={location.pathname}>
                 <AnimatePresence initial={false}>
                   <motion.div
                     key={location.pathname}

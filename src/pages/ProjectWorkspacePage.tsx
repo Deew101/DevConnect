@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Project, Task, Milestone, ProjectMember, Conversation } from '@/types/database.types';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured, safeCreateChannel } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { KanbanBoard } from '@/components/kanban/KanbanBoard';
 import { AIMatchModal } from '@/components/matching/AIMatchModal';
@@ -305,8 +305,7 @@ export const ProjectWorkspacePage: React.FC = () => {
     let taskChannel: any = null;
     try {
       const channelTopic = `project-tasks-${id}-${Math.random().toString(36).slice(2, 9)}`;
-      taskChannel = supabase
-        .channel(channelTopic)
+      taskChannel = safeCreateChannel(channelTopic)
         .on(
           'postgres_changes',
           {

@@ -103,14 +103,14 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => 
       let list = [...rawList, ...demoToAdd];
 
       // Filter by tab
-      if (user) {
+      if (activeTab === 'saved') {
+        // If saved, show demo/starred subset
+        list = list.slice(0, 3);
+      } else if (user) {
         if (activeTab === 'my-projects') {
           list = list.filter((p: any) => p.owner_id === user.id);
         } else if (activeTab === 'my-teams') {
           list = list.filter((p: any) => p.members?.some((m: any) => m.user_id === user.id));
-        } else if (activeTab === 'saved') {
-          // If saved, show demo/starred subset
-          list = list.slice(0, 3);
         }
       }
 

@@ -34,3 +34,22 @@ export const supabase = createClient(
     },
   }
 );
+
+/**
+ * Safely creates or retrieves a Supabase Realtime channel by removing any pre-existing
+ * channel with the same topic first, completely preventing:
+ * "cannot add 'postgres_changes' callbacks for realtime:... after 'subscribe()'"
+ */
+export function safeCreateChannel(topic: string) {
+  try {
+    const existing = supabase.getChannels().find(
+      (c) => c.topic === `realtime:${topic}` || c.topic === topic
+    );
+    if (existing) {
+      supabase.removeChannel(existing);
+    }
+  } catch (err) {
+    console.warn('Error clearing existing realtime channel:', err);
+  }
+  return supabase.channel(topic);
+}

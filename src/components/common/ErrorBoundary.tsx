@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button';
 
 interface Props {
   children?: ReactNode;
+  resetKey?: string;
 }
 
 interface State {
@@ -24,6 +25,12 @@ export class ErrorBoundary extends Component<Props, State> {
     console.error('Uncaught error caught by DevConnect ErrorBoundary:', error, errorInfo);
   }
 
+  public componentDidUpdate(prevProps: Props) {
+    if (this.props.resetKey !== prevProps.resetKey && this.state.hasError) {
+      this.setState({ hasError: false, error: undefined });
+    }
+  }
+
   public render() {
     if (this.state.hasError) {
       return (
@@ -35,15 +42,25 @@ export class ErrorBoundary extends Component<Props, State> {
           <p className="text-slate-400 max-w-md mb-6 text-sm">
             {this.state.error?.message || 'An unexpected error occurred while rendering this component.'}
           </p>
-          <Button
-            variant="outline"
-            onClick={() => {
-              this.setState({ hasError: false });
-              window.location.reload();
-            }}
-          >
-            <RefreshCw className="mr-2 h-4 w-4" /> Reload Page
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={() => {
+                this.setState({ hasError: false, error: undefined });
+              }}
+            >
+              Try Again
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                this.setState({ hasError: false });
+                window.location.reload();
+              }}
+            >
+              <RefreshCw className="mr-2 h-4 w-4" /> Reload Page
+            </Button>
+          </div>
         </div>
       );
     }

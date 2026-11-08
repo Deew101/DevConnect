@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Paperclip, Hash, Code, Smile, PanelRightOpen, PanelRightClose, Sparkles } from 'lucide-react';
 import { Conversation, Message } from '@/types/database.types';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured, safeCreateChannel } from '@/lib/supabase';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { formatTimeAgo } from '@/lib/utils';
@@ -87,8 +87,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       // Use unique channel topic to prevent Supabase Realtime channel collisions on remounts
       const channelTopic = `chat-room-${conversation.id}-${Math.random().toString(36).slice(2, 9)}`;
 
-      channel = supabase
-        .channel(channelTopic)
+      channel = safeCreateChannel(channelTopic)
         .on(
           'postgres_changes',
           {
