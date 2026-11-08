@@ -222,7 +222,7 @@ export const Navbar: React.FC<{ onToggleSidebar?: () => void }> = ({ onToggleSid
                 <p className="text-[10px] text-[#B8ACD9] truncate mt-0.5">{user?.email || 'devang@devconnect.io'}</p>
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-[rgba(167,139,250,0.15)]" />
-              <DropdownMenuItem onClick={() => navigate(user ? `/profile/${profile?.username || 'me'}` : '/dashboard')}>
+              <DropdownMenuItem onClick={() => navigate(`/profile/${profile?.username || 'me'}`)}>
                 <User className="h-3.5 w-3.5 text-[#A855F7]" /> Public Profile
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate('/profile/edit')}>

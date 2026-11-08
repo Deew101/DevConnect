@@ -56,7 +56,39 @@ export interface DemoConversation {
   last_message?: DemoMessage;
 }
 
+export const FLAGSHIP_DEVANG_PROFILE: Profile & { skillsList: string[]; professional_description?: any } = {
+  id: "d3300000-0000-4000-a000-000000000000",
+  username: "deew101",
+  full_name: "Devang",
+  avatar_url: "https://github.com/Deew101.png",
+  bio: "Creator of DevConnect. Passionate about developer tooling, high-performance distributed systems, real-time collaboration, and open-source infrastructure.",
+  headline: "Senior Full-Stack Architect | Creator of DevConnect",
+  location: "Bengaluru, India",
+  website_url: "https://deew101.github.io/DevConnect/",
+  github_username: "Deew101",
+  experience_level: "Senior",
+  availability_status: "open_to_collaborate",
+  weekly_hours_available: 20,
+  interests: ["React", "TypeScript", "Node.js", "Distributed Systems", "Go", "Tailwind CSS", "Supabase"],
+  skillsList: ["React", "TypeScript", "Node.js", "Tailwind CSS", "Go", "PostgreSQL", "Supabase"],
+  collaboration_preferences: {
+    remoteOnly: true,
+    preferredTeamSize: "3-6 engineers",
+    lookingFor: ["Full-Stack Architect", "Distributed Systems"]
+  },
+  professional_description: {
+    bio: "Creator of DevConnect. Passionate about developer tooling, high-performance distributed systems, real-time collaboration, and open-source infrastructure.",
+    current_goals: "Scaling DevConnect into a premier open collaboration hub for software engineers worldwide.",
+    collaboration_style: "Async-first, architectural rigor, and clean design patterns.",
+    target_projects: ["Developer Tooling", "Distributed Systems", "Open-Source Infrastructure"]
+  },
+  is_onboarded: true,
+  created_at: "2026-01-15T00:00:00.000Z",
+  updated_at: new Date().toISOString()
+};
+
 export const DEMO_PROFILES: (Profile & { skillsList: string[]; professional_description?: any })[] = [
+  FLAGSHIP_DEVANG_PROFILE,
   {
     "id": "d3300000-0000-4000-a000-000000000001",
     "username": "arjun.codes",

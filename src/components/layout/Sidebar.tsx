@@ -282,7 +282,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
         {/* 3. Fixed Footer User Profile Mini-Card (matches reference design) */}
         <div className="flex-shrink-0 relative z-10 p-2.5 border-t border-[rgba(167,139,250,0.20)] bg-[#080514]/95 backdrop-blur-md">
           <Link
-            to={user ? `/profile/${profile?.username || 'me'}` : '/dashboard'}
+            to={`/profile/${profile?.username || 'me'}`}
             onClick={onClose}
             className={cn(
               'flex items-center gap-2.5 rounded-xl p-2 transition-colors duration-150 bg-[#160E30]/70 hover:bg-[#1E1442] border border-[rgba(167,139,250,0.18)] hover:border-[#8B5CF6]/50 group shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8B5CF6]',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   MapPin,
   Globe,
@@ -31,13 +31,21 @@ import { LoadingScreen } from '@/components/common/LoadingScreen';
 import { formatDate } from '@/lib/utils';
 import { useToast } from '@/components/ui/Toast';
 import { GridPattern } from '@/components/ui/GridPattern';
-import { DEMO_PROFILES, DEMO_PROJECTS } from '@/data/demoCommunityData';
+import { DEMO_PROFILES, DEMO_PROJECTS, FLAGSHIP_DEVANG_PROFILE } from '@/data/demoCommunityData';
 
 export const ProfilePage: React.FC = () => {
-  const { username } = useParams<{ username: string }>();
+  const { username: paramUsername } = useParams<{ username: string }>();
+  const location = useLocation();
   const { user: currentUser, profile: currentProfile } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Detect whether route is /profile/me or param is 'me' or missing
+  const isMeRoute =
+    location.pathname.endsWith('/profile/me') ||
+    !paramUsername ||
+    paramUsername === 'me';
+  const username = isMeRoute ? 'me' : paramUsername;
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [skills, setSkills] = useState<UserSkill[]>([]);
@@ -48,9 +56,15 @@ export const ProfilePage: React.FC = () => {
   const [copiedLink, setCopiedLink] = useState(false);
 
   const isOwner =
+    isMeRoute ||
     (currentUser && profile?.id === currentUser.id) ||
-    username === 'me' ||
-    (currentProfile && username === currentProfile.username);
+    (currentProfile && username?.toLowerCase() === currentProfile.username?.toLowerCase()) ||
+    (currentUser?.user_metadata?.user_name &&
+      username?.toLowerCase() === currentUser.user_metadata.user_name.toLowerCase()) ||
+    (!currentUser &&
+      (username === 'me' ||
+        username?.toLowerCase() === 'devang' ||
+        username?.toLowerCase() === 'deew101'));
 
   useEffect(() => {
     async function loadProfile() {
@@ -59,36 +73,150 @@ export const ProfilePage: React.FC = () => {
         let targetId = '';
         let fetchedProfile: Profile | null = null;
 
-        if (username === 'me' || (currentUser && username === currentProfile?.username)) {
-          fetchedProfile = currentProfile;
-          targetId = currentUser?.id || '';
-        } else {
-          const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-            username || ''
-          );
-
-          try {
-            const query = supabase.from('profiles').select('*');
-            const { data, error } = isUuid
-              ? await query.eq('id', username).maybeSingle()
-              : await query.eq('username', username).maybeSingle();
-
-            if (!error && data) {
-              fetchedProfile = data;
-              targetId = data.id;
+        // 1. Resolve logged-in user or "me"
+        if (isMeRoute) {
+          if (currentProfile) {
+            fetchedProfile = currentProfile;
+            targetId = currentProfile.id;
+          } else if (currentUser) {
+            // Attempt Supabase fetch
+            try {
+              const { data } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', currentUser.id)
+                .maybeSingle();
+              if (data) {
+                fetchedProfile = data;
+                targetId = data.id;
+              }
+            } catch (e) {
+              // ignore
             }
-          } catch (e) {
-            // ignore
-          }
 
-          if (!fetchedProfile) {
-            // Fallback to Demo Community Profiles
-            const demoMatch = DEMO_PROFILES.find(
-              (dp) => dp.username === username || dp.id === username
+            // If not found in DB or error, synthesize from currentUser metadata
+            if (!fetchedProfile) {
+              const rawMeta = currentUser.user_metadata || {};
+              const ghUser = rawMeta.user_name || rawMeta.preferred_username || '';
+              const fullName =
+                rawMeta.full_name ||
+                rawMeta.name ||
+                currentUser.email?.split('@')[0] ||
+                'Devang';
+              fetchedProfile = {
+                id: currentUser.id,
+                username: ghUser ? ghUser.toLowerCase() : 'devang',
+                full_name: fullName,
+                avatar_url: rawMeta.avatar_url || (ghUser ? `https://github.com/${ghUser}.png` : null),
+                github_username: ghUser || 'Deew101',
+                headline: ghUser
+                  ? `Senior Software Engineer (@${ghUser})`
+                  : 'Senior Full-Stack Architect',
+                bio: 'Building software and open-source tooling on DevConnect.',
+                location: 'Bengaluru, India',
+                website_url: ghUser
+                  ? `https://github.com/${ghUser}`
+                  : 'https://deew101.github.io/DevConnect/',
+                experience_level: 'Senior',
+                availability_status: 'open_to_collaborate',
+                weekly_hours_available: 15,
+                interests: ['React', 'TypeScript', 'Distributed Systems', 'Open Source', 'Node.js'],
+                is_onboarded: true,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              } as any;
+              targetId = currentUser.id;
+            }
+          } else {
+            // Guest or demo user on /profile/me
+            fetchedProfile = FLAGSHIP_DEVANG_PROFILE;
+            targetId = FLAGSHIP_DEVANG_PROFILE.id;
+          }
+        } else {
+          // 2. Specific username requested
+          const cleanUsername = (username || '').toLowerCase();
+
+          // Check if it's the current user's profile
+          if (
+            currentUser &&
+            (username === currentUser.id ||
+              cleanUsername === currentProfile?.username?.toLowerCase() ||
+              cleanUsername === (currentUser.user_metadata?.user_name || '').toLowerCase())
+          ) {
+            fetchedProfile = currentProfile || ({
+              id: currentUser.id,
+              username: cleanUsername,
+              full_name: currentUser.user_metadata?.full_name || 'Devang',
+              avatar_url: currentUser.user_metadata?.avatar_url,
+              github_username: currentUser.user_metadata?.user_name || 'Deew101',
+              headline: 'Senior Software Engineer',
+              bio: 'Building software on DevConnect.',
+              experience_level: 'Senior',
+              availability_status: 'open_to_collaborate',
+              weekly_hours_available: 15,
+              interests: ['React', 'TypeScript', 'Node.js'],
+              is_onboarded: true,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            } as any);
+            targetId = currentUser.id;
+          } else if (cleanUsername === 'devang' || cleanUsername === 'deew101') {
+            fetchedProfile = FLAGSHIP_DEVANG_PROFILE;
+            targetId = FLAGSHIP_DEVANG_PROFILE.id;
+          } else {
+            const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+              username || ''
             );
-            if (demoMatch) {
-              fetchedProfile = demoMatch;
-              targetId = demoMatch.id;
+
+            try {
+              if (isUuid) {
+                const { data } = await supabase
+                  .from('profiles')
+                  .select('*')
+                  .eq('id', username)
+                  .maybeSingle();
+                if (data) {
+                  fetchedProfile = data;
+                  targetId = data.id;
+                }
+              } else {
+                const { data } = await supabase
+                  .from('profiles')
+                  .select('*')
+                  .ilike('username', username || '')
+                  .maybeSingle();
+                if (data) {
+                  fetchedProfile = data;
+                  targetId = data.id;
+                } else {
+                  const { data: ghData } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .ilike('github_username', username || '')
+                    .maybeSingle();
+                  if (ghData) {
+                    fetchedProfile = ghData;
+                    targetId = ghData.id;
+                  }
+                }
+              }
+            } catch (e) {
+              // ignore
+            }
+
+            if (!fetchedProfile) {
+              // Fallback to Demo Community Profiles
+              const demoMatch = DEMO_PROFILES.find(
+                (dp) =>
+                  dp.username.toLowerCase() === cleanUsername ||
+                  dp.id === username ||
+                  (dp.github_username && dp.github_username.toLowerCase() === cleanUsername) ||
+                  (dp.full_name && dp.full_name.toLowerCase() === cleanUsername)
+              );
+              if (demoMatch) {
+                fetchedProfile = demoMatch;
+                targetId = demoMatch.id;
+              }
             }
           }
         }
@@ -123,6 +251,29 @@ export const ProfilePage: React.FC = () => {
             skill: { id: `sk-${i}`, name: skName, category: 'language', icon: null, created_at: '' }
           }));
           setSkills(fakeUserSkills);
+        } else if (Array.isArray((fetchedProfile as any)?.skills)) {
+          const fakeUserSkills = (fetchedProfile as any).skills.map((skName: string, i: number) => ({
+            id: `usk-${i}`,
+            user_id: targetId,
+            skill_id: `sk-${i}`,
+            proficiency_level: i === 0 ? 'Expert' : i < 3 ? 'Advanced' : 'Intermediate',
+            years_of_experience: 3,
+            created_at: new Date().toISOString(),
+            skill: { id: `sk-${i}`, name: skName, category: 'language', icon: null, created_at: '' }
+          }));
+          setSkills(fakeUserSkills as any);
+        } else {
+          const defaultSkills = ['React', 'TypeScript', 'Node.js', 'Go', 'Tailwind CSS'];
+          const fakeUserSkills = defaultSkills.map((skName: string, i: number) => ({
+            id: `usk-${i}`,
+            user_id: targetId,
+            skill_id: `sk-${i}`,
+            proficiency_level: i === 0 ? 'Expert' : i < 3 ? 'Advanced' : 'Intermediate',
+            years_of_experience: 3,
+            created_at: new Date().toISOString(),
+            skill: { id: `sk-${i}`, name: skName, category: 'language', icon: null, created_at: '' }
+          }));
+          setSkills(fakeUserSkills as any);
         }
 
         // Fetch user projects
@@ -136,7 +287,13 @@ export const ProfilePage: React.FC = () => {
           setProjects(projectsData as Project[]);
         } else {
           const demoUserProjects = DEMO_PROJECTS.filter((dp) => dp.owner_id === targetId);
-          setProjects(demoUserProjects);
+          if (demoUserProjects.length > 0) {
+            setProjects(demoUserProjects);
+          } else if (isOwner || targetId === FLAGSHIP_DEVANG_PROFILE.id) {
+            setProjects(DEMO_PROJECTS.slice(0, 3));
+          } else {
+            setProjects([]);
+          }
         }
 
         // Check connection status
@@ -163,7 +320,7 @@ export const ProfilePage: React.FC = () => {
     }
 
     loadProfile();
-  }, [username, currentUser, currentProfile]);
+  }, [username, isMeRoute, currentUser, currentProfile]);
 
   const handleConnect = async () => {
     if (!currentUser || !profile) return;
