@@ -360,7 +360,7 @@ export const CommunityRepositoriesPage: React.FC = () => {
         >
           {filteredRepos.map((repo) => {
             const isSaved = savedRepoNames.includes(repo.full_name);
-            const langColor = LANGUAGE_COLORS[repo.language] || '#6D95FF';
+            const langColor = LANGUAGE_COLORS[repo.language] || '#8B5CF6';
 
             return (
               <motion.div

@@ -55,7 +55,7 @@ export const Dialog: React.FC<DialogProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-[#090C13]/85 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-[#080514]/85 backdrop-blur-sm transition-opacity"
           />
 
           {/* Dialog Container */}

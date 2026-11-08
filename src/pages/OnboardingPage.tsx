@@ -129,17 +129,17 @@ export const OnboardingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#090C13] flex flex-col justify-center items-center p-4 sm:p-6 text-[#F1F5FC]">
+    <div className="min-h-screen bg-[#080514] flex flex-col justify-center items-center p-4 sm:p-6 text-[#F8F7FF]">
       <div className="max-w-2xl w-full">
         {/* Logo and Progress */}
         <div className="text-center mb-8">
-          <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-[#6D95FF] to-[#9D83FF] items-center justify-center shadow-lg shadow-[#6D95FF]/20 mb-3 border border-white/10">
-            <Layers className="h-6 w-6 text-white" />
+          <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-[#8B5CF6] to-[#D946EF] items-center justify-center shadow-lg shadow-[#8B5CF6]/25 mb-3 border border-[rgba(167,139,250,0.30)]">
+            <Layers className="h-6 w-6 text-[#F8F7FF]" />
           </div>
-          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold mb-1">
+          <div className="text-[10px] font-mono tracking-widest text-[#A855F7] uppercase font-semibold mb-1">
             PROFILE ONBOARDING
           </div>
-          <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F8F7FF] tracking-tight">
             Set Up Your DevConnect Profile
           </h1>
           <p className="text-xs text-[#B8ACD9] mt-1 font-mono">

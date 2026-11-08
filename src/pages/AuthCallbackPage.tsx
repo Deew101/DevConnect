@@ -152,9 +152,9 @@ export const AuthCallbackPage: React.FC = () => {
   }, [searchParams, navigate, refreshProfile]);
 
   return (
-    <div className="min-h-screen bg-[#090C13] flex flex-col justify-center items-center p-4 sm:p-6 text-[#F1F5FC] relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#080514] flex flex-col justify-center items-center p-4 sm:p-6 text-[#F8F7FF] relative overflow-hidden font-sans">
       <GridPattern className="opacity-15" />
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[320px] bg-gradient-to-tr from-[#6D95FF]/10 to-[#9D83FF]/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[320px] bg-gradient-to-tr from-[#8B5CF6]/15 to-[#D946EF]/15 rounded-full blur-[140px] pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}

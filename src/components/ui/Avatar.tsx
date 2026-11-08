@@ -32,10 +32,10 @@ export const Avatar: React.FC<AvatarProps> = ({
   };
 
   const statusColors: Record<AvailabilityStatus, string> = {
-    available: 'bg-emerald-400 ring-[#090C13]',
-    open_to_collaborate: 'bg-[#6D95FF] ring-[#090C13]',
-    busy: 'bg-amber-400 ring-[#090C13]',
-    offline: 'bg-slate-500 ring-[#090C13]',
+    available: 'bg-emerald-400 ring-[#080514]',
+    open_to_collaborate: 'bg-[#8B5CF6] ring-[#080514]',
+    busy: 'bg-amber-400 ring-[#080514]',
+    offline: 'bg-slate-500 ring-[#080514]',
   };
 
   const statusSizes = {
