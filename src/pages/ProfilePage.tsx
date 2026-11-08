@@ -422,11 +422,11 @@ export const ProfilePage: React.FC = () => {
       className="space-y-6 max-w-7xl mx-auto pb-12 font-sans"
     >
       {/* Editorial Hero Profile Banner Card */}
-      <div className="relative rounded-2xl border border-[rgba(167,139,250,0.25)] bg-[#160E30]/80 backdrop-blur-xl shadow-2xl overflow-hidden">
+      <div className="relative rounded-2xl border border-[rgba(167,139,250,0.25)] bg-[#160E30]/85 backdrop-blur-xl shadow-2xl overflow-hidden">
         {/* Cover Graphic with Mesh & Grid Pattern */}
-        <div className="h-44 sm:h-52 relative overflow-hidden bg-gradient-to-r from-[#160E30] via-[#100A24] to-[#1E1442] border-b border-[rgba(167,139,250,0.20)]">
+        <div className="h-40 sm:h-48 relative overflow-hidden bg-gradient-to-r from-[#160E30] via-[#100A24] to-[#1E1442]">
           <GridPattern className="opacity-20" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#160E30]/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#160E30]/40 to-[#160E30]" />
           <div className="absolute -top-24 left-1/4 w-96 h-96 bg-[#8B5CF6]/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -top-24 right-1/4 w-96 h-96 bg-[#D946EF]/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -437,7 +437,7 @@ export const ProfilePage: React.FC = () => {
             </span>
           </div>
 
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-4 right-4 z-20">
             <button
               onClick={handleCopyProfile}
               className="px-3 py-1.5 rounded-xl bg-[#100A24]/90 hover:bg-[#8B5CF6]/20 text-[#F8F7FF] border border-[rgba(167,139,250,0.25)] backdrop-blur-md text-xs font-mono flex items-center gap-1.5 transition-all shadow-md active:scale-95"
@@ -458,42 +458,45 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {/* Profile Details Container */}
-        <div className="px-6 sm:px-8 pb-8 pt-0 relative">
-          <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-5 -mt-16 sm:-mt-20 mb-6">
-            <div className="flex items-end gap-5">
-              <div className="relative">
+        <div className="px-6 sm:px-8 pb-8 pt-0 relative z-10">
+          <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-5 -mt-14 sm:-mt-16 mb-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5">
+              {/* Avatar with clean squircle frame */}
+              <div className="relative flex-shrink-0">
                 <Avatar
                   src={profile.avatar_url}
                   name={profile.full_name}
-                  size="xl"
+                  size="3xl"
                   status={profile.availability_status}
-                  className="ring-4 ring-[#100A24] shadow-2xl w-24 h-24 sm:w-28 sm:h-28 text-2xl rounded-2xl"
+                  className="ring-4 ring-[#160E30] bg-[#160E30] shadow-2xl w-24 h-24 sm:w-28 sm:h-28 rounded-2xl"
                 />
               </div>
-              <div className="mb-1">
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[#F8F7FF] tracking-tight">
+
+              {/* Name, Badges, and Handle */}
+              <div className="pb-1">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[#FAF7FF] tracking-tight">
                     {profile.full_name}
                   </h1>
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-[#8B5CF6]/15 text-[#C4B5FD] border border-[rgba(167,139,250,0.25)]">
                     {profile.experience_level}
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20 shadow-[0_0_8px_rgba(52,211,153,0.15)]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse" />
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-[#00E6A0]/10 text-[#00E6A0] border border-[#00E6A0]/25 shadow-[0_0_8px_rgba(0,230,160,0.15)]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00E6A0] animate-pulse" />
                     {profile.availability_status?.replace(/_/g, ' ') || 'Available'}
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-[#A855F7] font-mono mt-0.5">
+                <p className="text-xs sm:text-sm text-[#A855F7] font-mono mt-1 font-medium">
                   @{profile.username}
                 </p>
               </div>
             </div>
 
             {/* Profile Action Buttons */}
-            <div className="flex items-center gap-2.5 w-full sm:w-auto self-end">
+            <div className="flex items-center gap-2.5 w-full sm:w-auto self-start sm:self-end sm:mb-1">
               {isOwner ? (
                 <Link to="/profile/edit" className="w-full sm:w-auto">
-                  <Button variant="primary" size="sm" className="w-full sm:w-auto text-xs font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-white shadow-md shadow-[#8B5CF6]/25">
+                  <Button variant="primary" size="sm" className="w-full sm:w-auto text-xs font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-white shadow-md shadow-[#8B5CF6]/25 hover:brightness-110 transition-all">
                     <Edit className="h-3.5 w-3.5 mr-1.5" /> Edit Profile
                   </Button>
                 </Link>
@@ -539,19 +542,29 @@ export const ProfilePage: React.FC = () => {
           </div>
 
           {/* Headline & Bio */}
-          <div className="space-y-3 max-w-3xl">
-            <h3 className="font-display text-base font-bold text-[#F4F6FC] tracking-tight">
+          <div className="space-y-2.5 max-w-3xl">
+            <h2 className="font-display text-base font-bold text-[#FAF7FF] tracking-tight">
               {profile.headline || 'Software Developer & Open Source Contributor'}
-            </h3>
-            <p className="text-xs sm:text-sm text-[#929DB2] leading-relaxed whitespace-pre-line">
+            </h2>
+            <p className="text-xs sm:text-sm text-[#B9A8D6] leading-relaxed whitespace-pre-line">
               {profile.bio || 'Building collaborative software and networking on DevConnect.'}
             </p>
 
             {/* Meta Tags Row */}
-            <div className="flex flex-wrap items-center gap-y-2 gap-x-5 text-xs text-[#B8ACD9] pt-3 border-t border-[rgba(167,139,250,0.20)] font-mono">
+            <div className="flex flex-wrap items-center gap-y-2.5 gap-x-5 text-xs text-[#B9A8D6] pt-4 mt-4 border-t border-[rgba(167,139,250,0.20)] font-mono">
+              {profile.github_username && (
+                <a
+                  href={`https://github.com/${profile.github_username}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-[#FAF7FF] hover:text-[#A855F7] transition-colors"
+                >
+                  <Github className="h-3.5 w-3.5 text-[#A855F7]" /> {profile.github_username}
+                </a>
+              )}
               {profile.location && (
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-[#B8ACD9]" /> {profile.location}
+                  <MapPin className="h-3.5 w-3.5 text-[#B9A8D6]" /> {profile.location}
                 </span>
               )}
               {profile.website_url && (
@@ -564,21 +577,11 @@ export const ProfilePage: React.FC = () => {
                   <Globe className="h-3.5 w-3.5" /> Portfolio <ArrowUpRight className="w-3 h-3" />
                 </a>
               )}
-              {profile.github_username && (
-                <a
-                  href={`https://github.com/${profile.github_username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-[#F8F7FF] hover:text-[#A855F7] transition-colors"
-                >
-                  <Github className="h-3.5 w-3.5" /> {profile.github_username}
-                </a>
-              )}
-              <span className="flex items-center gap-1.5 text-[#34D399]">
-                <Clock className="h-3.5 w-3.5 text-[#34D399]" /> {profile.weekly_hours_available || 15} hrs/wk available
+              <span className="flex items-center gap-1.5 text-[#00E6A0]">
+                <Clock className="h-3.5 w-3.5 text-[#00E6A0]" /> {profile.weekly_hours_available || 15} hrs/wk available
               </span>
-              <span className="flex items-center gap-1.5 text-[#B8ACD9]">
-                <Calendar className="h-3.5 w-3.5" /> Joined {formatDate(profile.created_at)}
+              <span className="flex items-center gap-1.5 text-[#B9A8D6]">
+                <Calendar className="h-3.5 w-3.5 text-[#B9A8D6]" /> Joined {formatDate(profile.created_at)}
               </span>
             </div>
           </div>
