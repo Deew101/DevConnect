@@ -153,23 +153,37 @@ export const NotificationsPage: React.FC = () => {
           <div className="flex rounded-xl bg-[#100A24] border border-[rgba(167,139,250,0.20)] p-0.5 text-xs">
             <button
               onClick={() => setFilter('all')}
-              className={`px-3 py-1 rounded-lg font-semibold font-mono transition-all duration-200 ${
+              className={`relative px-3 py-1 rounded-lg font-semibold font-mono transition-colors duration-200 ${
                 filter === 'all'
-                  ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_12px_rgba(139,92,246,0.25)]'
+                  ? 'text-[#F8F7FF]'
                   : 'text-[#B8ACD9] hover:text-[#F8F7FF]'
               }`}
             >
-              All
+              {filter === 'all' && (
+                <motion.div
+                  layoutId="notifTabIndicator"
+                  transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                  className="absolute inset-0 rounded-lg bg-[#8B5CF6]/25 border border-[#8B5CF6]/50 shadow-[0_0_10px_rgba(139,92,246,0.3)] z-0"
+                />
+              )}
+              <span className="relative z-10">All</span>
             </button>
             <button
               onClick={() => setFilter('unread')}
-              className={`px-3 py-1 rounded-lg font-semibold font-mono transition-all duration-200 ${
+              className={`relative px-3 py-1 rounded-lg font-semibold font-mono transition-colors duration-200 ${
                 filter === 'unread'
-                  ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_12px_rgba(139,92,246,0.25)]'
+                  ? 'text-[#F8F7FF]'
                   : 'text-[#B8ACD9] hover:text-[#F8F7FF]'
               }`}
             >
-              Unread
+              {filter === 'unread' && (
+                <motion.div
+                  layoutId="notifTabIndicator"
+                  transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                  className="absolute inset-0 rounded-lg bg-[#8B5CF6]/25 border border-[#8B5CF6]/50 shadow-[0_0_10px_rgba(139,92,246,0.3)] z-0"
+                />
+              )}
+              <span className="relative z-10">Unread</span>
             </button>
           </div>
         </div>
@@ -188,9 +202,16 @@ export const NotificationsPage: React.FC = () => {
             </p>
           </div>
         ) : (
-          filteredNotifications.map((notif) => (
-            <div
+          filteredNotifications.map((notif, idx) => (
+            <motion.div
               key={notif.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.3,
+                delay: Math.min(idx * 0.035, 0.2),
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className={`p-4 sm:p-5 flex items-start justify-between gap-4 transition-colors ${
                 notif.is_read ? 'hover:bg-[#100A24]/40' : 'bg-[#8B5CF6]/10 hover:bg-[#8B5CF6]/15'
               }`}
@@ -288,7 +309,7 @@ export const NotificationsPage: React.FC = () => {
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))
         )}
       </Card>

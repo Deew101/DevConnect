@@ -87,11 +87,18 @@ export const TeamsPage: React.FC = () => {
 
       {/* Teams Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {teams.map((team) => {
+        {teams.map((team, idx) => {
           const isMember = joinedTeamIds.includes(team.id);
           return (
-            <div
+            <motion.div
               key={team.id}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.36,
+                delay: Math.min(idx * 0.05, 0.25),
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className="h-full"
             >
               <CardSpotlight className="h-full flex flex-col justify-between overflow-hidden bg-[#160E30]/75 backdrop-blur-xl border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300">
@@ -197,7 +204,7 @@ export const TeamsPage: React.FC = () => {
                   </Button>
                 </div>
               </CardSpotlight>
-            </div>
+            </motion.div>
           );
         })}
       </div>

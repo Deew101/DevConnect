@@ -33,9 +33,9 @@ export const AppLayout: React.FC = () => {
               <ErrorBoundary>
                 <motion.div
                   key={location.pathname}
-                  initial={shouldReduceMotion ? false : { opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 22, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
                   className="w-full"
                 >
                   <Outlet />

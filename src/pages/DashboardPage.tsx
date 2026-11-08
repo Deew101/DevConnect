@@ -35,6 +35,7 @@ import { Project, Profile, Milestone, ActivityLog } from '@/types/database.types
 import { formatDate } from '@/lib/utils';
 import { DEMO_PROFILES, DEMO_PROJECTS } from '@/data/demoCommunityData';
 import { BorderBeam } from '@/components/galaxy';
+import { motion } from 'framer-motion';
 
 export const DashboardPage: React.FC = () => {
   const { profile, user } = useAuth();
@@ -251,7 +252,12 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 font-sans">
       {/* Editorial Meta Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[rgba(167,139,250,0.20)] text-[11px] font-mono text-[#B8ACD9]">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[rgba(167,139,250,0.20)] text-[11px] font-mono text-[#B8ACD9]"
+      >
         <div className="flex items-center gap-3">
           <span className="text-[#C4B5FD] font-semibold tracking-wider flex items-center gap-1.5">
             <Terminal className="h-3.5 w-3.5 text-[#A855F7]" /> DEVCONNECT — VOL. 2026
@@ -264,10 +270,15 @@ export const DashboardPage: React.FC = () => {
           <span className="text-[#F8F7FF] font-semibold">STATUS: NOMINAL</span>
           <span className="text-[#B8ACD9]">({new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })})</span>
         </div>
-      </div>
+      </motion.div>
 
       {/* 1. HERO SECTION: Galaxy Flow Welcome Section */}
-      <div className="relative overflow-hidden rounded-2xl border border-[rgba(167,139,250,0.25)] bg-gradient-to-r from-[#160E30]/90 via-[#100A24]/90 to-[#1E1442]/90 p-6 sm:p-8 shadow-2xl backdrop-blur-xl group">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.38, delay: 0.04, ease: [0.16, 1, 0.3, 1] }}
+        className="relative overflow-hidden rounded-2xl border border-[rgba(167,139,250,0.25)] bg-gradient-to-r from-[#160E30]/90 via-[#100A24]/90 to-[#1E1442]/90 p-6 sm:p-8 shadow-2xl backdrop-blur-xl group"
+      >
         <BorderBeam size={280} duration={14} colorFrom="#8B5CF6" colorTo="#D946EF" />
         <GridPattern className="opacity-15" />
         <div className="absolute right-0 top-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-[#8B5CF6]/15 blur-3xl pointer-events-none" />
@@ -345,12 +356,17 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* 2. STAT TILES: 4 Distinct Asymmetric Editorial KPIs with Animated NumberTicker */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Tile 1: Verified Collaborators */}
-        <div className="h-full">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+          className="h-full"
+        >
           <CardSpotlight className="p-5 flex flex-col justify-between bg-[#160E30]/75 backdrop-blur-xl border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(139,92,246,0.15)] transition-all duration-300 rounded-2xl group h-full">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono tracking-widest text-[#B8ACD9] uppercase font-bold">
@@ -372,10 +388,15 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
           </CardSpotlight>
-        </div>
+        </motion.div>
 
         {/* Tile 2: Active Projects */}
-        <div className="h-full">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+          className="h-full"
+        >
           <CardSpotlight className="p-5 flex flex-col justify-between bg-[#160E30]/75 backdrop-blur-xl border-[rgba(167,139,250,0.20)] hover:border-[#A855F7]/50 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(168,85,247,0.15)] transition-all duration-300 rounded-2xl group h-full">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono tracking-widest text-[#B8ACD9] uppercase font-bold">
@@ -397,10 +418,15 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
           </CardSpotlight>
-        </div>
+        </motion.div>
 
         {/* Tile 3: Pending Invites */}
-        <div className="h-full">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+          className="h-full"
+        >
           <CardSpotlight className="p-5 flex flex-col justify-between bg-[#160E30]/75 backdrop-blur-xl border-[rgba(167,139,250,0.20)] hover:border-[#D946EF]/50 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(217,70,239,0.15)] transition-all duration-300 rounded-2xl group h-full">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono tracking-widest text-[#B8ACD9] uppercase font-bold">
@@ -424,10 +450,15 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
           </CardSpotlight>
-        </div>
+        </motion.div>
 
         {/* Tile 4: Productivity Index */}
-        <div className="h-full">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, delay: 0.20, ease: [0.16, 1, 0.3, 1] }}
+          className="h-full"
+        >
           <CardSpotlight className="p-5 flex flex-col justify-between bg-[#160E30]/75 backdrop-blur-xl border-[rgba(167,139,250,0.20)] hover:border-[#34D399]/50 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(52,211,153,0.15)] transition-all duration-300 rounded-2xl group h-full">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono tracking-widest text-[#B8ACD9] uppercase font-bold">
@@ -448,11 +479,16 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
           </CardSpotlight>
-        </div>
+        </motion.div>
       </div>
 
       {/* 3. MIDDLE SECTION: Asymmetrical Layout (Analytics Chart 65% + Milestones 35%) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.38, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+      >
         {/* Weekly Collaboration Analytics Chart */}
         <CardSpotlight className="lg:col-span-2 p-6 flex flex-col justify-between bg-[#160E30]/75 backdrop-blur-xl border-[rgba(167,139,250,0.20)] hover:border-[rgba(167,139,250,0.40)] rounded-2xl shadow-xl transition-all duration-300">
           <div>
@@ -631,10 +667,15 @@ export const DashboardPage: React.FC = () => {
             </Link>
           </div>
         </CardSpotlight>
-      </div>
+      </motion.div>
 
       {/* 4. BOTTOM SECTION: Recommended Developers & Active Projects */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+      >
         {/* Recommended Engineers */}
         <CardSpotlight className="p-6 bg-[#160E30]/75 backdrop-blur-xl border-[rgba(167,139,250,0.20)] hover:border-[rgba(167,139,250,0.40)] rounded-2xl shadow-xl transition-all duration-300">
           <div className="flex items-center justify-between mb-4 pb-3 border-b border-[rgba(167,139,250,0.20)]">
@@ -735,7 +776,7 @@ export const DashboardPage: React.FC = () => {
             )}
           </div>
         </CardSpotlight>
-      </div>
+      </motion.div>
     </div>
   );
 };

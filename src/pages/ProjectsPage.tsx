@@ -211,14 +211,21 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => 
                   setSearchParams({ filter: tab.id });
                 }
               }}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold font-mono transition-all duration-200 ${
+              className={`relative flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold font-mono transition-colors duration-200 ${
                 isActive
-                  ? 'bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_12px_rgba(139,92,246,0.25)]'
-                  : 'text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30]'
+                  ? 'text-[#F8F7FF]'
+                  : 'text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30]/60'
               }`}
             >
-              <tab.icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#C4B5FD]' : 'text-[#B8ACD9]'}`} />
-              <span>{tab.label}</span>
+              {isActive && (
+                <motion.div
+                  layoutId="projectsTabIndicator"
+                  transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                  className="absolute inset-0 rounded-xl bg-[#8B5CF6]/25 border border-[#8B5CF6]/50 shadow-[0_0_12px_rgba(139,92,246,0.3)] z-0"
+                />
+              )}
+              <tab.icon className={`w-3.5 h-3.5 relative z-10 ${isActive ? 'text-[#C4B5FD]' : 'text-[#B8ACD9]'}`} />
+              <span className="relative z-10">{tab.label}</span>
             </button>
           );
         })}
@@ -288,10 +295,23 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => 
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {projects.map((project) => (
-            <div
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.28 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+        >
+          {projects.map((project, idx) => (
+            <motion.div
               key={project.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.35,
+                delay: Math.min(idx * 0.045, 0.25),
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className="h-full"
             >
               <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300 group">
@@ -358,9 +378,9 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ defaultFilter }) => 
                   </Link>
                 </div>
               </CardSpotlight>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </div>
   );
