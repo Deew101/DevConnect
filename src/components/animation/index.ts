@@ -7,3 +7,4 @@ export * from './HoverCard';
 export * from './AnimatedProgress';
 export * from './AnimatedTimeline';
 export * from './PageTransition';
+export * from './motionVariants';

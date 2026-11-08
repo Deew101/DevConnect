@@ -19,6 +19,11 @@ import { Badge } from '@/components/ui/Badge';
 import { Avatar } from '@/components/ui/Avatar';
 import { formatTimeAgo } from '@/lib/utils';
 import { useToast } from '@/components/ui/Toast';
+import {
+  staggerContainerVariants,
+  staggerItemVariants,
+  cardVariants,
+} from '@/components/animation';
 
 export const NotificationsPage: React.FC = () => {
   const {
@@ -115,13 +120,13 @@ export const NotificationsPage: React.FC = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      variants={staggerContainerVariants}
+      initial="hidden"
+      animate="show"
       className="max-w-4xl mx-auto space-y-6 pb-12 font-sans"
     >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <motion.div variants={staggerItemVariants} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[11px] font-mono tracking-wider text-[#A855F7] uppercase font-semibold">
@@ -178,7 +183,7 @@ export const NotificationsPage: React.FC = () => {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Notifications List */}
       <Card className="border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl overflow-hidden divide-y divide-[rgba(167,139,250,0.15)] rounded-2xl">
@@ -194,8 +199,9 @@ export const NotificationsPage: React.FC = () => {
           </div>
         ) : (
           filteredNotifications.map((notif) => (
-            <div
+            <motion.div
               key={notif.id}
+              variants={cardVariants}
               className={`p-4 sm:p-5 flex items-start justify-between gap-4 transition-colors ${
                 notif.is_read ? 'hover:bg-[#100A24]/40' : 'bg-[#8B5CF6]/10 hover:bg-[#8B5CF6]/15'
               }`}
@@ -293,7 +299,7 @@ export const NotificationsPage: React.FC = () => {
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))
         )}
       </Card>

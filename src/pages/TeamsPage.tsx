@@ -20,6 +20,11 @@ import { Badge } from '@/components/ui/Badge';
 import { DEMO_TEAMS, Team } from '@/data/demoCommunityData';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/components/ui/Toast';
+import {
+  staggerContainerVariants,
+  staggerItemVariants,
+  cardVariants,
+} from '@/components/animation';
 
 export const TeamsPage: React.FC = () => {
   const { toast } = useToast();
@@ -59,9 +64,14 @@ export const TeamsPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-16 font-sans">
+    <motion.div
+      variants={staggerContainerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-6 max-w-7xl mx-auto pb-16 font-sans"
+    >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(167,139,250,0.20)] pb-6">
+      <motion.div variants={staggerItemVariants} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(167,139,250,0.20)] pb-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold flex items-center gap-1.5">
@@ -83,18 +93,16 @@ export const TeamsPage: React.FC = () => {
         <Badge variant="cyan" className="text-xs font-mono py-1.5 px-3 bg-[#8B5CF6]/15 border border-[#8B5CF6]/30 text-[#C4B5FD]">
           <Sparkles className="w-3.5 h-3.5 mr-1 text-[#A855F7]" /> Active Sprints Underway
         </Badge>
-      </div>
+      </motion.div>
 
       {/* Teams Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {teams.map((team, idx) => {
+      <motion.div variants={staggerContainerVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {teams.map((team) => {
           const isMember = joinedTeamIds.includes(team.id);
           return (
             <motion.div
               key={team.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
+              variants={cardVariants}
             >
               <CardSpotlight className="h-full flex flex-col justify-between overflow-hidden bg-[#160E30]/75 backdrop-blur-xl border border-[rgba(167,139,250,0.20)] hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300">
                 <div className="space-y-5">
@@ -202,7 +210,7 @@ export const TeamsPage: React.FC = () => {
             </motion.div>
           );
         })}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };

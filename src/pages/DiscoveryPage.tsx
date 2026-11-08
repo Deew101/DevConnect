@@ -33,6 +33,11 @@ import { useToast } from '@/components/ui/Toast';
 import { DEMO_PROFILES } from '@/data/demoCommunityData';
 import { ExternalGitHubDeveloper, EXTERNAL_GITHUB_DEVELOPERS } from '@/data/githubData';
 import { githubService } from '@/services/githubService';
+import {
+  staggerContainerVariants,
+  staggerItemVariants,
+  cardVariants,
+} from '@/components/animation';
 
 export const DiscoveryPage: React.FC = () => {
   const { user } = useAuth();
@@ -305,9 +310,14 @@ export const DiscoveryPage: React.FC = () => {
     });
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto font-sans pb-16">
+    <motion.div
+      variants={staggerContainerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-6 max-w-7xl mx-auto font-sans pb-16"
+    >
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[rgba(167,139,250,0.20)]">
+      <motion.div variants={staggerItemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[rgba(167,139,250,0.20)]">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold flex items-center gap-1.5">
@@ -332,10 +342,10 @@ export const DiscoveryPage: React.FC = () => {
             <FolderGit2 className="w-3.5 h-3.5 mr-1.5 text-[#A855F7]" /> Community Repositories (40+)
           </Button>
         </Link>
-      </div>
+      </motion.div>
 
       {/* Directory Tab Switcher */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#100A24]/90 border border-[rgba(167,139,250,0.20)] w-fit backdrop-blur-xl">
+      <motion.div variants={staggerItemVariants} className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#100A24]/90 border border-[rgba(167,139,250,0.20)] w-fit backdrop-blur-xl">
         <Link
           to="/developers"
           className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold font-mono bg-[#8B5CF6]/25 text-[#F8F7FF] border border-[#8B5CF6]/40 shadow-[0_0_15px_rgba(139,92,246,0.25)]"
@@ -357,7 +367,7 @@ export const DiscoveryPage: React.FC = () => {
             {externalDevs.length} Public Stars
           </span>
         </Link>
-      </div>
+      </motion.div>
 
       {/* ========================================================================= */}
       {/* TAB 1: DEVCONNECT ENGINEERS                                               */}
@@ -365,7 +375,7 @@ export const DiscoveryPage: React.FC = () => {
       {activeTab === 'devconnect' && (
         <div className="space-y-6">
           {/* Filter and Search Bar */}
-          <div className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
+          <motion.div variants={staggerItemVariants} className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
             <form onSubmit={handleSearchSubmit} className="flex gap-2">
               <Input
                 value={searchQuery}
@@ -451,7 +461,7 @@ export const DiscoveryPage: React.FC = () => {
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* DevConnect Grid */}
           {loading ? (
@@ -486,6 +496,7 @@ export const DiscoveryPage: React.FC = () => {
           ) : (
             <motion.div
               layout
+              variants={staggerContainerVariants}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
             >
               <AnimatePresence>
@@ -493,10 +504,9 @@ export const DiscoveryPage: React.FC = () => {
                   <motion.div
                     key={dev.id}
                     layout
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    variants={cardVariants}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.25 }}
                   >
                     <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300 group">
                       <div>
@@ -837,6 +847,6 @@ export const DiscoveryPage: React.FC = () => {
           )}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };

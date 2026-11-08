@@ -23,6 +23,11 @@ import { Avatar } from '@/components/ui/Avatar';
 import { SkeletonCard } from '@/components/ui/Skeleton';
 import { ExternalGitHubDeveloper, EXTERNAL_GITHUB_DEVELOPERS } from '@/data/githubData';
 import { githubService } from '@/services/githubService';
+import {
+  staggerContainerVariants,
+  staggerItemVariants,
+  cardVariants,
+} from '@/components/animation';
 
 export const GitHubDevelopersPage: React.FC = () => {
   const [externalDevs, setExternalDevs] = useState<ExternalGitHubDeveloper[]>(EXTERNAL_GITHUB_DEVELOPERS);
@@ -72,9 +77,14 @@ export const GitHubDevelopersPage: React.FC = () => {
     });
 
   return (
-    <div className="space-y-6 font-sans pb-16">
+    <motion.div
+      variants={staggerContainerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-6 font-sans pb-16"
+    >
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[rgba(167,139,250,0.20)]">
+      <motion.div variants={staggerItemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[rgba(167,139,250,0.20)]">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] font-mono tracking-widest text-[#C4B5FD] uppercase font-semibold flex items-center gap-1.5">
@@ -110,10 +120,10 @@ export const GitHubDevelopersPage: React.FC = () => {
             </Button>
           </Link>
         </div>
-      </div>
+      </motion.div>
 
       {/* Official Attribution Banner */}
-      <div className="p-4 sm:p-5 rounded-2xl border border-emerald-500/30 bg-[#160E30]/75 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+      <motion.div variants={staggerItemVariants} className="p-4 sm:p-5 rounded-2xl border border-emerald-500/30 bg-[#160E30]/75 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
         <div className="flex items-start gap-3">
           <ShieldAlert className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
           <div>
@@ -132,10 +142,10 @@ export const GitHubDevelopersPage: React.FC = () => {
             <Github className="w-3 h-3" /> Official REST API Synced
           </span>
         </div>
-      </div>
+      </motion.div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
+      <motion.div variants={staggerItemVariants} className="p-4 sm:p-5 rounded-2xl border border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row gap-2.5">
           <div className="flex-1 relative">
             <Input
@@ -162,7 +172,7 @@ export const GitHubDevelopersPage: React.FC = () => {
             </select>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Grid */}
       {loading ? (
@@ -188,16 +198,15 @@ export const GitHubDevelopersPage: React.FC = () => {
           </Button>
         </div>
       ) : (
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <motion.div layout variants={staggerContainerVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           <AnimatePresence>
             {filteredDevs.map((dev) => (
               <motion.div
                 key={dev.username}
                 layout
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
+                variants={cardVariants}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.25 }}
               >
                 <CardSpotlight className="h-full flex flex-col justify-between p-5 space-y-4 border-[rgba(167,139,250,0.20)] bg-[#160E30]/75 backdrop-blur-xl hover:border-[#8B5CF6]/50 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(139,92,246,0.18)] rounded-2xl transition-all duration-300 group">
                   <div>
@@ -299,7 +308,7 @@ export const GitHubDevelopersPage: React.FC = () => {
           </AnimatePresence>
         </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
