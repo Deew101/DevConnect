@@ -167,8 +167,8 @@ export const AuthCallbackPage: React.FC = () => {
           <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-[#6D95FF] to-[#9D83FF] items-center justify-center shadow-lg shadow-[#6D95FF]/20 mb-3 border border-white/10">
             <Layers className="h-6 w-6 text-white" />
           </div>
-          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold mb-1">
-            NETWORK // AUTHENTICATION EXCHANGE
+          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold mb-1">
+            AUTHENTICATION EXCHANGE
           </div>
           <h1 className="text-2xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
             DevConnect Session Gateway

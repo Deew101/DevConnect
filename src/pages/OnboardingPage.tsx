@@ -136,8 +136,8 @@ export const OnboardingPage: React.FC = () => {
           <div className="inline-flex h-12 w-12 rounded-xl bg-gradient-to-tr from-[#6D95FF] to-[#9D83FF] items-center justify-center shadow-lg shadow-[#6D95FF]/20 mb-3 border border-white/10">
             <Layers className="h-6 w-6 text-white" />
           </div>
-          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold mb-1">
-            INITIALIZATION // DOSSIER SETUP
+          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold mb-1">
+            PROFILE ONBOARDING
           </div>
           <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
             Set Up Your DevConnect Profile

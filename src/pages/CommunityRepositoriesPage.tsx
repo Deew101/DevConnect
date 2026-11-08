@@ -179,8 +179,8 @@ export const CommunityRepositoriesPage: React.FC = () => {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 border-b border-[#273249]/60 pb-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold">
-              OFFICIAL GITHUB INTEGRATION // ECOSYSTEM CATALOG
+            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold">
+              GITHUB OPEN SOURCE CATALOG
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-xs font-mono text-[#929DB2]">

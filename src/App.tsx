@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
@@ -33,6 +33,31 @@ const queryClient = new QueryClient({
   },
 });
 
+/**
+ * Intercepts OAuth code or error if redirected to root or any path other than /auth/callback
+ */
+function OAuthRedirectHandler() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  React.useEffect(() => {
+    // If already on /auth/callback, let AuthCallbackPage handle it
+    if (location.pathname.endsWith('/auth/callback')) return;
+
+    const searchParams = new URLSearchParams(location.search);
+    const hasCode = searchParams.has('code');
+    const hasError = searchParams.has('error') || searchParams.has('error_description');
+    const hasHashToken = location.hash.includes('access_token');
+
+    if (hasCode || hasError || hasHashToken) {
+      console.log('🔄 OAuth authorization parameter detected outside callback route, routing to /auth/callback');
+      navigate(`/auth/callback${location.search}${location.hash}`, { replace: true });
+    }
+  }, [location, navigate]);
+
+  return null;
+}
+
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -41,6 +66,7 @@ export function App() {
           <NotificationProvider>
             <ToastProvider>
               <BrowserRouter basename={import.meta.env.BASE_URL}>
+                <OAuthRedirectHandler />
                 <Routes>
                   {/* Public Authentication Route */}
                   <Route

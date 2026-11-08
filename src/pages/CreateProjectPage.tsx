@@ -137,8 +137,8 @@ export const CreateProjectPage: React.FC = () => {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold mb-1">
-            INITIATIVE // NEW REPOSITORY
+          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold mb-1">
+            NEW PROJECT
           </div>
           <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
             Launch Collaborative Workspace

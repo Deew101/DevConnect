@@ -302,8 +302,8 @@ export const DiscoveryPage: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#273249]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold flex items-center gap-1.5">
-              <Terminal className="h-3 w-3" /> TALENT INDEX // DIRECTORY
+            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold">
+              TALENT DIRECTORY
             </span>
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-[#F4F6FC] tracking-tight flex items-center gap-3">
@@ -569,7 +569,7 @@ export const DiscoveryPage: React.FC = () => {
                         {/* Professional Description: Current Goal */}
                         {dev.professional_description?.current_goals && (
                           <div className="mt-2.5 p-2 rounded-lg bg-[#101725] border border-[#273249]/60 text-[11px] text-[#929DB2] line-clamp-2 leading-relaxed font-sans">
-                            <span className="font-mono text-[#6D95FF] text-[10px] font-bold mr-1">// FOCUS:</span>
+                            <span className="font-mono text-[#6D95FF] text-[10px] font-bold mr-1">FOCUS:</span>
                             {dev.professional_description.current_goals}
                           </div>
                         )}

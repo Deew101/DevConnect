@@ -8,44 +8,47 @@
 @layer base {
   :root,
   .dark {
-    --background: #090C13;
-    --background-secondary: #101725;
+    --background: #080B13;
+    --background-secondary: #0D1320;
     --foreground: #F4F6FC;
-    --card: #151F30;
+    --card: #131D2D;
     --card-foreground: #F4F6FC;
-    --popover: #151F30;
+    --card-raised: #19253A;
+    --popover: #131D2D;
     --popover-foreground: #F4F6FC;
-    --primary: #6D95FF;
-    --primary-foreground: #090C13;
-    --secondary: #101725;
+    --primary: #638DFF;
+    --primary-foreground: #080B13;
+    --secondary: #0D1320;
     --secondary-foreground: #F4F6FC;
-    --muted: #101725;
-    --muted-foreground: #929DB2;
-    --accent: #9D83FF;
-    --accent-foreground: #090C13;
-    --success: #35C98A;
+    --muted: #0D1320;
+    --muted-foreground: #98A6BD;
+    --accent: #9875FF;
+    --accent-foreground: #080B13;
+    --cyan: #55D9FF;
+    --success: #31D69A;
+    --warning: #FFBD59;
     --destructive: #F43F5E;
     --destructive-foreground: #FFFFFF;
-    --border: #273249;
-    --input: #273249;
-    --ring: #6D95FF;
+    --border: #27334B;
+    --input: #27334B;
+    --ring: #638DFF;
     --radius: 0.625rem;
-    --sidebar: #090C13;
+    --sidebar: #080B13;
     --sidebar-foreground: #F4F6FC;
-    --sidebar-primary: #6D95FF;
-    --sidebar-primary-foreground: #090C13;
-    --sidebar-accent: #151F30;
+    --sidebar-primary: #638DFF;
+    --sidebar-primary-foreground: #080B13;
+    --sidebar-accent: #131D2D;
     --sidebar-accent-foreground: #F4F6FC;
-    --sidebar-border: #273249;
-    --sidebar-ring: #6D95FF;
+    --sidebar-border: #27334B;
+    --sidebar-ring: #638DFF;
   }
 
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-[#6D95FF]/30 selection:text-[#F4F6FC];
-    background-color: #090C13;
+    @apply bg-background text-foreground antialiased selection:bg-[#638DFF]/30 selection:text-[#F4F6FC];
+    background-color: #080B13;
     color: #F4F6FC;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
@@ -64,16 +67,28 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #273249;
+  background: #27334B;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #6D95FF;
+  background: #638DFF;
 }
 
 /* Dark Editorial Utilities */
 .editorial-rule {
-  border-color: #273249;
+  border-color: #27334B;
+}
+
+/* Accessibility: prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 .editorial-tag {

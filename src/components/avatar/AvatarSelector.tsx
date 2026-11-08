@@ -146,8 +146,8 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[#273249]/60 pb-4 mb-5">
         <div>
-          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold">
-            IDENTITY // AVATAR SYSTEM
+          <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold">
+            AVATAR SELECTION
           </div>
           <h2 className="text-xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
             Select Profile Avatar

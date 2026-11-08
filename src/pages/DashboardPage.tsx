@@ -253,9 +253,9 @@ export const DashboardPage: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#273249] text-[11px] font-mono text-[#929DB2]">
         <div className="flex items-center gap-3">
           <span className="text-[#6D95FF] font-semibold tracking-wider flex items-center gap-1.5">
-            <Terminal className="h-3.5 w-3.5" /> DEVCONNECT // VOL. 2026
+            <Terminal className="h-3.5 w-3.5" /> DEVCONNECT — VOL. 2026
           </span>
-          <span className="hidden sm:inline text-[#273249]">|</span>
+          <span className="hidden sm:inline text-[#273249] font-bold">·</span>
           <span className="hidden sm:inline">ISSUE 04 — EDITORIAL NETWORK DISPATCH</span>
         </div>
         <div className="flex items-center gap-2">

@@ -154,8 +154,8 @@ export const ProjectsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#273249]/60 pb-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold">
-              WORKSPACES // REPOSITORY CATALOG
+            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold">
+              PROJECT WORKSPACES
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-[#6D95FF] animate-pulse" />
             <span className="text-xs font-mono text-[#929DB2]">{projects.length} Active Hubs</span>

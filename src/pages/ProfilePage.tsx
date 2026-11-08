@@ -273,7 +273,9 @@ export const ProfilePage: React.FC = () => {
 
           {/* Editorial Label & Quick Share button */}
           <div className="absolute top-4 left-6 hidden sm:flex items-center gap-2 text-[10px] font-mono tracking-widest text-[#929DB2] uppercase">
-            <Terminal className="h-3.5 w-3.5 text-[#6D95FF]" /> DOSSIER // ARCHIVE RECORD
+            <span className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold">
+              ENGINEER PROFILE
+            </span>
           </div>
 
           <div className="absolute top-4 right-4">

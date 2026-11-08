@@ -6,12 +6,36 @@ import { Profile } from '@/types/database.types';
 /**
  * Resolves canonical OAuth callback URL based on environment:
  * - Production GitHub Pages: https://deew101.github.io/DevConnect/auth/callback
- * - Localhost dev server: http://localhost:5173/auth/callback
+ * - Localhost dev server: http://localhost:5173/DevConnect/auth/callback (or http://localhost:5173/auth/callback)
  */
 export function getOAuthRedirectUrl(): string {
-  const origin = window.location.origin;
-  const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-  return `${origin}${base}/auth/callback`;
+  if (typeof window !== 'undefined') {
+    const origin = window.location.origin;
+    const hostname = window.location.hostname;
+    const pathname = window.location.pathname;
+
+    // 1. Production on GitHub Pages
+    if (hostname.includes('github.io')) {
+      return 'https://deew101.github.io/DevConnect/auth/callback';
+    }
+
+    // 2. Local development on localhost / 127.0.0.1
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      const port = window.location.port || '5173';
+      // If opened under /DevConnect/ locally, preserve that base
+      if (pathname.startsWith('/DevConnect')) {
+        return `http://localhost:${port}/DevConnect/auth/callback`;
+      }
+      const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+      return `http://localhost:${port}${base}/auth/callback`;
+    }
+
+    // 3. Dynamic resolution fallback for custom hosts
+    const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+    return `${origin}${base}/auth/callback`;
+  }
+
+  return 'https://deew101.github.io/DevConnect/auth/callback';
 }
 
 interface AuthContextType {

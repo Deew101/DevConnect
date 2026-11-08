@@ -33,7 +33,8 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
 
   const navigationSections = [
     {
-      title: 'WORKSPACE // 01',
+      id: 'workspace',
+      title: 'WORKSPACE',
       items: [
         { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
         { label: 'Discover Developers', path: '/developers', icon: Users },
@@ -45,7 +46,8 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
       ],
     },
     {
-      title: 'COMMUNICATION // 02',
+      id: 'communication',
+      title: 'COMMUNICATION',
       items: [
         { label: 'Messages', path: '/messages', icon: MessageSquare },
         {
@@ -58,7 +60,8 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
       ],
     },
     {
-      title: 'PREFERENCES // 03',
+      id: 'preferences',
+      title: 'PREFERENCES',
       items: [
         { label: 'Settings & Skills', path: '/profile/edit', icon: Settings },
       ],
@@ -89,12 +92,15 @@ export const Sidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({
           </button>
         </div>
 
-        {navigationSections.map((section) => (
-          <div key={section.title} className="space-y-1">
+        {navigationSections.map((section, idx) => (
+          <div key={section.id} className="space-y-1">
+            {idx > 0 && <div className="h-px bg-[#273249]/50 my-2 mx-2" />}
             {!isCollapsed && (
-              <span className="px-2.5 text-[9px] font-mono font-bold tracking-widest text-[#929DB2]/70 uppercase">
-                {section.title}
-              </span>
+              <div className="px-2.5 pt-2 pb-1">
+                <span className="text-[10px] font-mono font-semibold tracking-wider text-[#6D95FF]/90 uppercase">
+                  {section.title}
+                </span>
+              </div>
             )}
             <div className="space-y-0.5 pt-0.5">
               {section.items.map((item) => {

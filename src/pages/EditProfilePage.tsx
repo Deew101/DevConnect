@@ -213,8 +213,8 @@ export const EditProfilePage: React.FC = () => {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-bold mb-1">
-              ARCHIVE // PROFILE METADATA
+            <div className="text-[10px] font-mono tracking-widest text-[#6D95FF] uppercase font-semibold mb-1">
+              PROFILE SETTINGS
             </div>
             <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#F4F6FC] tracking-tight">
               Edit Developer Profile
@@ -492,7 +492,7 @@ export const EditProfilePage: React.FC = () => {
         {/* Technical Skills Catalog Management */}
         <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
           <CardTitle className="text-xs font-bold text-[#6D95FF] uppercase tracking-wider font-mono flex items-center gap-2">
-            <Code2 className="h-4 w-4 text-[#6D95FF]" /> // Technical Skills Catalog
+            <Code2 className="h-4 w-4 text-[#6D95FF]" /> Technical Skills Catalog
           </CardTitle>
           <p className="text-xs text-[#929DB2]">
             Select technologies from the canonical dictionary to showcase on your profile and boost your AI matching score.
@@ -549,7 +549,7 @@ export const EditProfilePage: React.FC = () => {
         {/* Interests */}
         <Card className="border-[#273249] bg-[#101725] p-6 shadow-xl space-y-4">
           <CardTitle className="text-xs font-bold text-[#9D83FF] uppercase tracking-wider font-mono flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-[#9D83FF]" /> // Focus Areas & Topics
+            <Sparkles className="h-4 w-4 text-[#9D83FF]" /> Focus Areas & Topics
           </CardTitle>
           <div>
             <Input
