@@ -105,6 +105,7 @@ export function App() {
                     <Route path="/github-developers" element={<GitHubDevelopersPage />} />
                     <Route path="/profile/me" element={<ProfilePage />} />
                     <Route path="/profile/edit" element={<EditProfilePage />} />
+                    <Route path="/settings" element={<Navigate to="/profile/edit" replace />} />
                     <Route path="/profile/:username" element={<ProfilePage />} />
                     <Route path="/projects" element={<ProjectsPage />} />
                     <Route path="/my-projects" element={<ProjectsPage defaultFilter="my-projects" />} />

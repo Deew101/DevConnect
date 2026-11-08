@@ -54,38 +54,30 @@ export const Navbar: React.FC<{ onToggleSidebar?: () => void }> = ({ onToggleSid
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[rgba(167,139,250,0.20)] bg-[#080514]/90 backdrop-blur-xl">
       <div className="flex h-14 items-center justify-between px-4 sm:px-6">
-        {/* Left: Mobile Toggle & Editorial Brand */}
-        <div className="flex items-center gap-3">
+        {/* Left: Mobile Toggle & Brand */}
+        <div className="flex items-center gap-3 min-w-0 sm:min-w-[180px]">
           {onToggleSidebar && (
             <button
               onClick={onToggleSidebar}
-              className="md:hidden p-1.5 rounded-lg text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30] transition-colors"
+              className="md:hidden p-1.5 rounded-lg text-[#B8ACD9] hover:text-[#F8F7FF] hover:bg-[#160E30] transition-colors flex-shrink-0"
+              aria-label="Toggle navigation menu"
             >
               <Menu className="h-4 w-4" />
             </button>
           )}
 
-          <Link to="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-[#8B5CF6] via-[#A855F7] to-[#D946EF] flex items-center justify-center shadow-lg shadow-[#8B5CF6]/30 group-hover:scale-105 transition-transform border border-white/20">
+          <Link to="/dashboard" className="flex items-center gap-2.5 group flex-shrink-0">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-[#8B5CF6] via-[#A855F7] to-[#D946EF] flex items-center justify-center shadow-lg shadow-[#8B5CF6]/30 group-hover:scale-105 transition-transform border border-white/20 flex-shrink-0">
               <Layers className="h-4 w-4 text-[#080514]" />
             </div>
-            <div className="flex items-baseline gap-2">
-              <span className="font-display font-bold text-lg tracking-tight text-[#F8F7FF]">
-                Dev<span className="text-[#A855F7]">Connect</span>
-              </span>
-              <span className="hidden sm:inline-block text-[10px] font-mono tracking-wider text-[#C4B5FD] border border-[rgba(167,139,250,0.25)] px-2 py-0.5 rounded bg-[#160E30]/80 uppercase font-medium">
-                EDITION 2026
-              </span>
-              <span className="hidden md:inline-flex items-center gap-1.5 text-[10px] font-mono tracking-wider text-[#D946EF] border border-[#D946EF]/30 px-2 py-0.5 rounded-full bg-[#D946EF]/10 uppercase" title="Populated demonstration community data for practical showcase">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#D946EF] animate-pulse" />
-                DEMO COMMUNITY DATA
-              </span>
-            </div>
+            <span className="font-display font-bold text-lg tracking-tight text-[#F8F7FF] select-none">
+              Dev<span className="text-[#A855F7]">Connect</span>
+            </span>
           </Link>
         </div>
 
         {/* Center: Command Bar / Search Input */}
-        <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
+        <div className="hidden md:flex items-center justify-center flex-1 max-w-lg mx-6">
           <form onSubmit={handleSearchSubmit} className="relative w-full">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B8ACD9]" />
             <input
@@ -102,7 +94,7 @@ export const Navbar: React.FC<{ onToggleSidebar?: () => void }> = ({ onToggleSid
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center justify-end gap-1.5 sm:gap-2 flex-shrink-0">
           {/* Quick Create Project Pill */}
           <Link to="/projects/new" className="hidden sm:block">
             <Button variant="secondary" size="sm" className="h-7 text-xs gap-1.5 font-medium border-[rgba(167,139,250,0.20)] bg-[#160E30] hover:bg-[#1E1442] hover:border-[#8B5CF6]/40 text-[#F8F7FF] transition-all">

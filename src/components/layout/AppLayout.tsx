@@ -19,13 +19,13 @@ export const AppLayout: React.FC = () => {
         <SupabaseConfigBanner />
         <Navbar onToggleSidebar={() => setIsMobileSidebarOpen(true)} />
 
-        <div className="flex-1 flex max-w-full overflow-hidden">
+        <div className="flex-1 flex max-w-full min-w-0">
           <Sidebar
             isOpen={isMobileSidebarOpen}
             onClose={() => setIsMobileSidebarOpen(false)}
           />
 
-          <main className="flex-1 overflow-y-auto min-h-[calc(100vh-3.5rem)] px-4 sm:px-6 lg:px-8 py-6 relative">
+          <main className="flex-1 min-w-0 min-h-[calc(100vh-3.5rem)] px-4 sm:px-6 lg:px-8 py-6 relative">
             <div className="max-w-7xl mx-auto w-full">
               <ErrorBoundary>
                 <Outlet />
